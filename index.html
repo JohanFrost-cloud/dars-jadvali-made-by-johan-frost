@@ -617,7 +617,7 @@
         }
 
         /* ============================================================
-                   WATERMARK — VISIBLE + GLOW + SUBSCRIBE
+                   WATERMARK — TAPPABLE CTA (NO PLANE EMOJI)
                    ============================================================ */
         .watermark {
             max-width: 1100px;
@@ -625,110 +625,160 @@
             text-align: center;
             position: relative;
             z-index: 1;
-            padding: 20px 0 16px;
+            padding: 18px 0 14px;
             border-top: 1px solid var(--border);
         }
 
-        .watermark .main {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text);
-            opacity: 0.9;
-            letter-spacing: 1px;
-            text-shadow: 0 0 60px rgba(108, 140, 255, 0.15);
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            flex-wrap: wrap;
-        }
-
-        .watermark .main .icon {
-            color: var(--gold);
-            opacity: 0.7;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
-        }
-
-        .watermark .main .telegram-icon {
+        /* CTA BUTTON — Telegram Icon + Cool Icons */
+        .cta-button {
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            color: var(--accent);
-            font-size: 1.3rem;
-            text-shadow: 0 0 40px rgba(108, 140, 255, 0.2);
-            transition: 0.3s;
-            text-decoration: none;
-            padding: 4px 12px;
-            border-radius: 30px;
-            background: rgba(108, 140, 255, 0.06);
-            border: 1px solid rgba(108, 140, 255, 0.08);
-        }
-
-        .watermark .main .telegram-icon:hover {
-            background: rgba(108, 140, 255, 0.12);
-            transform: scale(1.05);
-            box-shadow: 0 0 60px rgba(108, 140, 255, 0.2);
-        }
-
-        .watermark .main .telegram-icon .sub-text {
-            font-size: 0.7rem;
+            gap: 14px;
+            padding: 10px 30px;
+            border-radius: 50px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            font-size: 0.95rem;
             font-weight: 700;
-            color: var(--gold);
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.2);
+            text-decoration: none;
+            letter-spacing: 0.5px;
+            box-shadow: 0 0 40px rgba(108, 140, 255, 0.15), 0 0 80px rgba(108, 140, 255, 0.05);
+            transition: 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-button::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.15) 0%, transparent 60%);
+            pointer-events: none;
+            animation: ctaGlow 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes ctaGlow {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 0.3;
+            }
+            100% {
+                transform: translate(5%, 5%) scale(1.2);
+                opacity: 0.6;
+            }
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 80px rgba(108, 140, 255, 0.3), 0 0 160px rgba(108, 140, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .cta-button:active {
+            transform: scale(0.97);
+        }
+
+        /* Icon Group — Telegram + Sparkle */
+        .cta-button .icon-group {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1.4rem;
+        }
+
+        .cta-button .icon-group .tg {
+            color: #fff;
+            opacity: 0.9;
+            font-size: 1.5rem;
+        }
+
+        .cta-button .icon-group .sparkle {
+            color: #ffd700;
+            opacity: 0.6;
+            font-size: 0.8rem;
+            animation: sparklePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes sparklePulse {
+            0%,
+            100% {
+                opacity: 0.3;
+                transform: scale(0.8);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
+        }
+
+        .cta-button .text {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+
+        .cta-button .text .main {
+            font-size: 0.95rem;
+            font-weight: 700;
+        }
+
+        .cta-button .text .sub {
+            font-size: 0.6rem;
+            font-weight: 400;
+            opacity: 0.6;
             letter-spacing: 0.5px;
         }
 
-        .watermark .main a {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 700;
+        .cta-button .arrow {
+            font-size: 1.2rem;
+            opacity: 0.6;
             transition: 0.3s;
-            text-shadow: 0 0 20px rgba(108, 140, 255, 0.1);
+            margin-left: 4px;
         }
 
-        .watermark .main a:hover {
-            text-shadow: 0 0 60px rgba(108, 140, 255, 0.4);
+        .cta-button:hover .arrow {
+            transform: translateX(4px);
             opacity: 1;
         }
 
-        /* ===== SUBTEXT — BILINGUAL VISIBLE ===== */
+        /* Bilingual subtitles */
         .watermark .sub {
             margin-top: 10px;
             display: flex;
             flex-direction: column;
-            gap: 4px;
+            gap: 3px;
             align-items: center;
         }
 
         .watermark .sub .en {
-            font-size: 0.7rem;
+            font-size: 0.6rem;
             color: var(--text2);
-            opacity: 0.5;
+            opacity: 0.25;
             letter-spacing: 0.5px;
-            font-weight: 400;
         }
 
         .watermark .sub .uz {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             font-weight: 500;
             color: var(--gold);
-            opacity: 0.9;
+            opacity: 0.5;
             letter-spacing: 0.5px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15), 0 0 60px rgba(255, 215, 0, 0.05);
-            background: rgba(255, 215, 0, 0.04);
-            padding: 4px 16px;
-            border-radius: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.06);
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.05);
         }
 
         .watermark .glow-line {
             width: 60px;
             height: 2px;
             margin: 10px auto 0;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            background: linear-gradient(90deg, transparent, var(--accent), transparent);
             border-radius: 4px;
-            opacity: 0.3;
+            opacity: 0.2;
             animation: glowPulse 3s ease-in-out infinite;
         }
 
@@ -739,7 +789,7 @@
                 width: 40px;
             }
             50% {
-                opacity: 0.5;
+                opacity: 0.4;
                 width: 100px;
             }
         }
@@ -809,18 +859,25 @@
             #loadingOverlay .loader-timer .icon {
                 font-size: 1.6rem;
             }
-            .watermark .main {
-                font-size: 0.85rem;
+            .cta-button {
+                padding: 8px 20px;
+                font-size: 0.8rem;
+                gap: 10px;
             }
-            .watermark .main .telegram-icon {
-                font-size: 1.1rem;
-                padding: 3px 10px;
+            .cta-button .icon-group {
+                font-size: 1.2rem;
             }
-            .watermark .main .telegram-icon .sub-text {
-                font-size: 0.6rem;
+            .cta-button .icon-group .tg {
+                font-size: 1.2rem;
             }
-            .watermark .sub .uz {
-                font-size: 0.65rem;
+            .cta-button .text .main {
+                font-size: 0.8rem;
+            }
+            .cta-button .text .sub {
+                font-size: 0.5rem;
+            }
+            .cta-button .arrow {
+                font-size: 1rem;
             }
         }
 
@@ -847,19 +904,30 @@
                 font-size: 0.45rem;
                 padding: 3px 8px;
             }
-            .watermark .main {
+            .cta-button {
+                padding: 6px 16px;
+                font-size: 0.7rem;
+                gap: 8px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .cta-button .icon-group {
+                font-size: 1rem;
+            }
+            .cta-button .icon-group .tg {
+                font-size: 1rem;
+            }
+            .cta-button .text .main {
                 font-size: 0.7rem;
             }
-            .watermark .main .telegram-icon {
-                font-size: 0.9rem;
-                padding: 2px 8px;
+            .cta-button .text .sub {
+                font-size: 0.45rem;
             }
-            .watermark .main .telegram-icon .sub-text {
-                font-size: 0.5rem;
+            .cta-button .arrow {
+                font-size: 0.9rem;
             }
             .watermark .sub .uz {
                 font-size: 0.55rem;
-                padding: 2px 12px;
             }
             #loadingOverlay .loader-info .line {
                 font-size: 0.55rem;
@@ -1056,22 +1124,27 @@
         </div>
 
         <!-- ============================================================
-        WATERMARK — VISIBLE + GLOW + SUBSCRIBE
+        WATERMARK — TAPPABLE CTA (NO PLANE EMOJI)
         ============================================================ -->
         <div class="watermark">
-            <div class="main">
-                <span class="icon">✦</span>
-                made by
-                <a href="https://t.me/qwastur" target="_blank" class="telegram-icon">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span class="sub-text">Subscribe!!</span>
-                </a>
-                <span class="icon">✦</span>
-            </div>
 
+            <!-- CTA BUTTON — Telegram Icon + Sparkle -->
+            <a href="https://t.me/qwastur" target="_blank" class="cta-button">
+                <span class="icon-group">
+                    <i class="fab fa-telegram-plane tg"></i>
+                    <span class="sparkle">✦</span>
+                </span>
+                <span class="text">
+                    <span class="main">Join @qwastur</span>
+                    <span class="sub">Premium content · Custom profiles</span>
+                </span>
+                <span class="arrow">→</span>
+            </a>
+
+            <!-- Bilingual subtitles -->
             <div class="sub">
-                <div class="en">This content is made by Johan Frost · Subscribe to @qwastur</div>
-                <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
+                <div class="en">This content is made by Johan Frost · Subscribe for more</div>
+                <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · Ko'proq uchun obuna bo'ling ✦</div>
             </div>
 
             <div class="glow-line"></div>
