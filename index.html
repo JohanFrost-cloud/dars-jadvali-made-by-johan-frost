@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
+    <title>✦ Weekly Schedule</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ============================================================
+                   LOADING OVERLAY
+                   ============================================================ */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #060a16;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Inter', sans-serif;
+            transition: opacity 0.8s ease, visibility 0.8s ease;
+            padding: 20px;
+        }
+
+        #loadingOverlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        #loadingOverlay .loader-ring {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            border: 3px solid rgba(255, 255, 255, 0.04);
+            border-top-color: #6c8cff;
+            border-right-color: #6c8cff;
+            animation: spin 0.9s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+            box-shadow: 0 0 60px rgba(108, 140, 255, 0.15);
+            margin-bottom: 28px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #loadingOverlay .loader-timer {
+            font-size: 2.8rem;
+            font-weight: 800;
+            color: #f0edff;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            text-shadow: 0 0 40px rgba(108, 140, 255, 0.2);
+            transition: 0.3s;
+            font-variant-numeric: tabular-nums;
+        }
+
+        #loadingOverlay .loader-timer .icon {
+            font-size: 2rem;
+            opacity: 0.4;
+            margin-right: 6px;
+        }
+
+        #loadingOverlay .loader-timer .glow {
+            color: #6c8cff;
+            text-shadow: 0 0 60px rgba(108, 140, 255, 0.3), 0 0 120px rgba(108, 140, 255, 0.1);
+        }
+
+        #loadingOverlay .loader-sub {
+            font-size: 0.85rem;
+            color: #9a9ac0;
+            opacity: 0.3;
+            letter-spacing: 3px;
+            font-weight: 300;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        #loadingOverlay .loader-info {
+            padding: 16px 24px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            text-align: center;
+            max-width: 420px;
+            width: 100%;
+            backdrop-filter: blur(10px);
+        }
+
+        #loadingOverlay .loader-info .line {
+            font-size: 0.75rem;
+            color: #9a9ac0;
+            opacity: 0.6;
+            line-height: 1.9;
+            letter-spacing: 0.3px;
+        }
+
+        #loadingOverlay .loader-info .line .highlight {
+            color: #6c8cff;
+            opacity: 1;
+            font-weight: 600;
+        }
+
+        #loadingOverlay .loader-info .line .gold {
+            color: #ffd700;
+            opacity: 0.7;
+        }
+
+        #loadingOverlay .loader-info .line a {
+            color: #6c8cff;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        #loadingOverlay .loader-info .line a:hover {
+            text-shadow: 0 0 30px rgba(108, 140, 255, 0.3);
+        }
+
+        #loadingOverlay .loader-info .line .uz {
+            opacity: 0.3;
+            font-size: 0.65rem;
+        }
+
+        /* ============================================================
+                   7 RE:ZERO THEMES
+                   ============================================================ */
+        :root {
+            --bg: #060a16;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --border: rgba(255, 255, 255, 0.06);
+            --text: #f0edff;
+            --text2: #9a9ac0;
+            --accent: #6c8cff;
+            --accent2: #a78bfa;
+            --glow: rgba(108, 140, 255, 0.2);
+            --glow2: rgba(167, 139, 250, 0.15);
+            --radius: 20px;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            --gold: #ffd700;
+        }
+
+        [data-theme="emilia"] {
+            --bg: #0a0e1a;
+            --accent: #7ec8e3;
+            --accent2: #a8d8ea;
+            --glow: rgba(126, 200, 227, 0.25);
+            --glow2: rgba(168, 216, 234, 0.15);
+            --text: #f0f8ff;
+            --text2: #a0c4d4;
+        }
+        [data-theme="rem"] {
+            --bg: #0a0e1a;
+            --accent: #4a90d9;
+            --accent2: #6aafe6;
+            --glow: rgba(74, 144, 217, 0.25);
+            --glow2: rgba(106, 175, 230, 0.15);
+            --text: #e8f0ff;
+            --text2: #8aa8d0;
+        }
+        [data-theme="ram"] {
+            --bg: #1a0a0a;
+            --accent: #e86a8a;
+            --accent2: #f08aa6;
+            --glow: rgba(232, 106, 138, 0.25);
+            --glow2: rgba(240, 138, 166, 0.15);
+            --text: #ffe8ee;
+            --text2: #c08a9a;
+        }
+        [data-theme="beatrice"] {
+            --bg: #1a1208;
+            --accent: #e8c84a;
+            --accent2: #f0d86a;
+            --glow: rgba(232, 200, 74, 0.25);
+            --glow2: rgba(240, 216, 106, 0.15);
+            --text: #fff8e0;
+            --text2: #c0b08a;
+        }
+        [data-theme="roswaal"] {
+            --bg: #120a1a;
+            --accent: #aa44ff;
+            --accent2: #cc66ff;
+            --glow: rgba(170, 68, 255, 0.25);
+            --glow2: rgba(204, 102, 255, 0.15);
+            --text: #f0e8ff;
+            --text2: #b08ad0;
+        }
+        [data-theme="echidna"] {
+            --bg: #080e0a;
+            --accent: #44dd88;
+            --accent2: #66eeaa;
+            --glow: rgba(68, 221, 136, 0.25);
+            --glow2: rgba(102, 238, 170, 0.15);
+            --text: #e8fff0;
+            --text2: #8ac0a0;
+        }
+        [data-theme="satella"] {
+            --bg: #0a050a;
+            --accent: #cc00aa;
+            --accent2: #ee44cc;
+            --glow: rgba(204, 0, 170, 0.25);
+            --glow2: rgba(238, 68, 204, 0.15);
+            --text: #f0e0f0;
+            --text2: #b08ab0;
+        }
+
+        /* ============================================================
+                   BODY
+                   ============================================================ */
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.6s ease, color 0.6s ease;
+            background-image:
+                radial-gradient(ellipse at 20% 30%, var(--glow) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 70%, var(--glow2) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 50%, var(--glow) 0%, transparent 70%);
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 30% 40%, var(--glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, var(--glow2) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.4;
+            animation: orbFloat 20s ease-in-out infinite alternate;
+            transition: background 0.6s;
+        }
+
+        @keyframes orbFloat {
+            0% {
+                transform: translate(0, 0) scale(1);
+            }
+            50% {
+                transform: translate(2%, -2%) scale(1.05);
+            }
+            100% {
+                transform: translate(-2%, 2%) scale(0.95);
+            }
+        }
+
+        /* ============================================================
+                   HEADER — CLEAN & ATTRACTIVE
+                   ============================================================ */
+        .header {
+            max-width: 1100px;
+            margin: 0 auto 30px;
+            text-align: center;
+            padding: 30px 20px 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header .icon {
+            font-size: 2.4rem;
+            display: block;
+            margin-bottom: 6px;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-8px);
+            }
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 40%, var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px;
+            transition: background 0.6s;
+        }
+
+        .header .sub {
+            color: var(--text2);
+            font-size: 0.9rem;
+            opacity: 0.4;
+            margin-top: 4px;
+            letter-spacing: 1px;
+            font-weight: 300;
+        }
+
+        .header .sub span {
+            color: var(--accent);
+            opacity: 1;
+            transition: color 0.6s;
+        }
+
+        .header .telegram-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--text2);
+            font-size: 1.2rem;
+            opacity: 0.3;
+            transition: 0.3s;
+            text-decoration: none;
+        }
+
+        .header .telegram-link:hover {
+            opacity: 0.8;
+            color: var(--accent);
+            transform: scale(1.1);
+        }
+
+        .today-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 6px 20px;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border);
+            font-size: 0.75rem;
+            color: var(--text2);
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+            margin-left: 8px;
+        }
+
+        .today-badge .day-highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+
+        /* ============================================================
+                   THEME SWITCHER
+                   ============================================================ */
+        .theme-switcher {
+            max-width: 1100px;
+            margin: 0 auto 24px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            justify-content: center;
+            z-index: 1;
+            position: relative;
+        }
+
+        .theme-btn {
+            padding: 6px 14px;
+            border-radius: 30px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text2);
+            font-size: 0.65rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            cursor: pointer;
+            transition: 0.3s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .theme-btn:hover {
+            background: rgba(255, 255, 255, 0.06);
+            transform: translateY(-2px);
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .theme-btn.active {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+            box-shadow: 0 0 40px var(--glow);
+        }
+
+        .theme-btn .icon {
+            font-size: 0.8rem;
+        }
+
+        /* ============================================================
+                   GRID
+                   ============================================================ */
+        .grid {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .day-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 20px 18px 18px;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--shadow);
+            transition: 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .day-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: var(--radius);
+            padding: 1px;
+            background: linear-gradient(135deg, var(--accent), transparent, var(--accent2));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0.3;
+            transition: 0.4s;
+        }
+
+        .day-card:hover::before {
+            opacity: 0.8;
+        }
+
+        .day-card:hover {
+            transform: translateY(-6px);
+            border-color: rgba(108, 140, 255, 0.15);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px var(--glow);
+        }
+
+        .day-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .day-header .day-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.3px;
+        }
+
+        .day-header .day-name .uz {
+            font-weight: 400;
+            color: var(--text2);
+            font-size: 0.7rem;
+            opacity: 0.4;
+            margin-left: 6px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .day-header .day-count {
+            font-size: 0.7rem;
+            color: var(--text2);
+            opacity: 0.2;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 12px;
+            border-radius: 20px;
+        }
+
+        .day-card.today {
+            border-color: var(--accent);
+            box-shadow: 0 0 60px var(--glow), 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .day-card.today .day-name {
+            color: var(--accent);
+        }
+
+        .day-card.today::before {
+            opacity: 0.8;
+            background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent));
+            animation: borderPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes borderPulse {
+            0%,
+            100% {
+                opacity: 0.4;
+            }
+            50% {
+                opacity: 1;
+            }
+        }
+
+        .lesson-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .lesson-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            transition: 0.2s;
+        }
+
+        .lesson-item:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 30px var(--glow);
+        }
+
+        .lesson-item .time {
+            font-size: 0.6rem;
+            font-weight: 600;
+            color: var(--text2);
+            opacity: 0.3;
+            min-width: 52px;
+            letter-spacing: 0.3px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .lesson-item .num {
+            font-size: 0.55rem;
+            font-weight: 700;
+            color: var(--text2);
+            opacity: 0.15;
+            min-width: 18px;
+            text-align: center;
+        }
+
+        .lesson-item .name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            color: var(--text);
+            flex: 1;
+        }
+
+        /* ============================================================
+                   STATS BAR
+                   ============================================================ */
+        .stats-bar {
+            max-width: 1100px;
+            margin: 30px auto 0;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 16px;
+            justify-content: center;
+            padding: 16px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            backdrop-filter: blur(20px);
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-bar .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text2);
+            font-size: 0.75rem;
+            font-weight: 400;
+        }
+
+        .stats-bar .stat .num {
+            color: #fff;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .stats-bar .stat .label {
+            opacity: 0.4;
+        }
+
+        .stats-bar .divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border);
+        }
+
+        /* ============================================================
+                   WATERMARK — ATTRACTIVE & TAPPABLE (@qwastur)
+                   ============================================================ */
+        .watermark {
+            max-width: 1100px;
+            margin: 24px auto 0;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            padding: 20px 0 16px;
+            border-top: 1px solid var(--border);
+        }
+
+        .watermark .main {
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--text);
+            opacity: 0.9;
+            letter-spacing: 1px;
+            text-shadow: 0 0 60px rgba(108, 140, 255, 0.15);
+            transition: 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .watermark .main .icon {
+            color: var(--gold);
+            opacity: 0.7;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+        }
+
+        .watermark .main .telegram-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-size: 1.4rem;
+            text-shadow: 0 0 40px rgba(108, 140, 255, 0.2);
+            transition: 0.3s;
+            text-decoration: none;
+            padding: 6px 18px;
+            border-radius: 30px;
+            background: rgba(108, 140, 255, 0.06);
+            border: 1px solid rgba(108, 140, 255, 0.08);
+        }
+
+        .watermark .main .telegram-icon:hover {
+            background: rgba(108, 140, 255, 0.15);
+            transform: scale(1.05);
+            box-shadow: 0 0 60px rgba(108, 140, 255, 0.2);
+        }
+
+        .watermark .main .telegram-icon .handle {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .watermark .main a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 700;
+            transition: 0.3s;
+            text-shadow: 0 0 20px rgba(108, 140, 255, 0.1);
+        }
+
+        .watermark .main a:hover {
+            text-shadow: 0 0 60px rgba(108, 140, 255, 0.4);
+            opacity: 1;
+        }
+
+        /* ===== SUBTEXT — BILINGUAL VISIBLE ===== */
+        .watermark .sub {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            align-items: center;
+        }
+
+        .watermark .sub .en {
+            font-size: 0.7rem;
+            color: var(--text2);
+            opacity: 0.5;
+            letter-spacing: 0.5px;
+            font-weight: 400;
+        }
+
+        .watermark .sub .uz {
+            font-size: 0.75rem;
+            font-weight: 500;
+            color: var(--gold);
+            opacity: 0.9;
+            letter-spacing: 0.5px;
+            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15), 0 0 60px rgba(255, 215, 0, 0.05);
+            background: rgba(255, 215, 0, 0.04);
+            padding: 4px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 215, 0, 0.06);
+        }
+
+        .watermark .glow-line {
+            width: 60px;
+            height: 2px;
+            margin: 10px auto 0;
+            background: linear-gradient(90deg, transparent, var(--gold), transparent);
+            border-radius: 4px;
+            opacity: 0.3;
+            animation: glowPulse 3s ease-in-out infinite;
+        }
+
+        @keyframes glowPulse {
+            0%,
+            100% {
+                opacity: 0.1;
+                width: 40px;
+            }
+            50% {
+                opacity: 0.5;
+                width: 100px;
+            }
+        }
+
+        /* ============================================================
+                   RESPONSIVE
+                   ============================================================ */
+        @media (max-width: 768px) {
+            body {
+                padding: 12px;
+            }
+            .header h1 {
+                font-size: 1.6rem;
+            }
+            .header .icon {
+                font-size: 1.8rem;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+                gap: 14px;
+            }
+            .day-card {
+                padding: 16px 14px;
+            }
+            .lesson-item {
+                padding: 6px 10px;
+                flex-wrap: wrap;
+                gap: 4px;
+            }
+            .lesson-item .time {
+                min-width: 44px;
+                font-size: 0.5rem;
+            }
+            .lesson-item .name {
+                font-size: 0.75rem;
+                flex: 1 0 60%;
+            }
+            .stats-bar {
+                flex-direction: column;
+                align-items: center;
+                gap: 8px;
+                padding: 14px 16px;
+            }
+            .stats-bar .divider {
+                display: none;
+            }
+            .theme-switcher {
+                gap: 5px;
+            }
+            .theme-btn {
+                font-size: 0.55rem;
+                padding: 4px 10px;
+            }
+            .header-top {
+                flex-direction: column;
+                gap: 6px;
+            }
+            #loadingOverlay .loader-info {
+                padding: 12px 16px;
+            }
+            #loadingOverlay .loader-info .line {
+                font-size: 0.65rem;
+            }
+            #loadingOverlay .loader-timer {
+                font-size: 2.2rem;
+            }
+            #loadingOverlay .loader-timer .icon {
+                font-size: 1.6rem;
+            }
+            .watermark .main {
+                font-size: 0.85rem;
+            }
+            .watermark .main .telegram-icon {
+                font-size: 1.1rem;
+                padding: 4px 14px;
+            }
+            .watermark .main .telegram-icon .handle {
+                font-size: 0.75rem;
+            }
+            .watermark .sub .uz {
+                font-size: 0.65rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .header h1 {
+                font-size: 1.3rem;
+            }
+            .day-header .day-name {
+                font-size: 0.95rem;
+            }
+            .lesson-item .name {
+                font-size: 0.7rem;
+                flex: 1 0 100%;
+            }
+            .lesson-item .time {
+                min-width: 38px;
+                font-size: 0.45rem;
+            }
+            .lesson-item .num {
+                min-width: 14px;
+                font-size: 0.45rem;
+            }
+            .theme-btn {
+                font-size: 0.45rem;
+                padding: 3px 8px;
+            }
+            .watermark .main {
+                font-size: 0.7rem;
+            }
+            .watermark .main .telegram-icon {
+                font-size: 0.9rem;
+                padding: 3px 10px;
+            }
+            .watermark .main .telegram-icon .handle {
+                font-size: 0.65rem;
+            }
+            .watermark .sub .uz {
+                font-size: 0.55rem;
+                padding: 2px 12px;
+            }
+            #loadingOverlay .loader-info .line {
+                font-size: 0.55rem;
+            }
+            #loadingOverlay .loader-timer {
+                font-size: 1.8rem;
+            }
+            #loadingOverlay .loader-timer .icon {
+                font-size: 1.2rem;
+            }
+            #loadingOverlay .loader-ring {
+                width: 48px;
+                height: 48px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    LOADING OVERLAY
+    ============================================================ -->
+    <div id="loadingOverlay">
+        <div class="loader-ring"></div>
+
+        <div class="loader-timer">
+            <span class="icon">⏳</span>
+            <span class="glow" id="timerDisplay">5</span><span class="glow">s</span>
+        </div>
+
+        <div class="loader-sub">Loading schedule</div>
+
+        <div class="loader-info">
+            <div class="line">
+                <span class="highlight">✦</span> This content is made by <strong>Johan Frost</strong>
+                <span class="uz">· Bu kontent <strong>Johan Frost</strong> tomonidan yaratilgan</span>
+            </div>
+            <div class="line">
+                <span class="gold">✦</span> Subscribe to <a href="https://t.me/qwastur" target="_blank">@qwastur</a> for more
+                <span class="uz">· Ko'proq uchun <a href="https://t.me/qwastur" target="_blank">@qwastur</a> ga obuna bo'ling</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    MAIN CONTENT
+    ============================================================ -->
+    <div id="mainContent" style="opacity:0;transition:opacity 0.6s ease;">
+
+        <!-- HEADER -->
+        <div class="header">
+            <span class="icon">📚</span>
+            <h1>Weekly Schedule</h1>
+            <div class="sub">Dars jadvali · <span id="yearDisplay">2026</span></div>
+
+            <div class="header-top">
+                <a href="https://t.me/qwastur" target="_blank" class="telegram-link" title="Telegram: @qwastur">
+                    <i class="fab fa-telegram-plane"></i>
+                </a>
+                <div class="today-badge" id="todayBadge">
+                    📅 <span id="todayDate"></span> — <span class="day-highlight" id="todayDay">Today</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- THEME SWITCHER -->
+        <div class="theme-switcher" id="themeSwitcher">
+            <button class="theme-btn active" data-theme="emilia"><span class="icon">❄️</span> Emilia</button>
+            <button class="theme-btn" data-theme="rem"><span class="icon">💎</span> Rem</button>
+            <button class="theme-btn" data-theme="ram"><span class="icon">🌸</span> Ram</button>
+            <button class="theme-btn" data-theme="beatrice"><span class="icon">📖</span> Beatrice</button>
+            <button class="theme-btn" data-theme="roswaal"><span class="icon">🎭</span> Roswaal</button>
+            <button class="theme-btn" data-theme="echidna"><span class="icon">🍵</span> Echidna</button>
+            <button class="theme-btn" data-theme="satella"><span class="icon">🌑</span> Satella</button>
+        </div>
+
+        <!-- GRID -->
+        <div class="grid" id="scheduleGrid">
+
+            <!-- MONDAY -->
+            <div class="day-card" data-day="monday">
+                <div class="day-header">
+                    <span class="day-name">Dushanba <span class="uz">Monday</span></span>
+                    <span class="day-count">5 dars</span>
+                </div>
+                <div class="lesson-list">
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kelajak soati</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Adabiyot</span></div>
+                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ona tili</span></div>
+                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Rus tili</span></div>
+                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Matematika</span></div>
+                </div>
+            </div>
+
+            <!-- TUESDAY -->
+            <div class="day-card" data-day="tuesday">
+                <div class="day-header">
+                    <span class="day-name">Seshanba <span class="uz">Tuesday</span></span>
+                    <span class="day-count">5 dars</span>
+                </div>
+                <div class="lesson-list">
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Matematika</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Matematika</span></div>
+                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ingliz tili</span></div>
+                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Tarix</span></div>
+                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Biologiya</span></div>
+                </div>
+            </div>
+
+            <!-- WEDNESDAY -->
+            <div class="day-card" data-day="wednesday">
+                <div class="day-header">
+                    <span class="day-name">Chorshanba <span class="uz">Wednesday</span></span>
+                    <span class="day-count">6 dars</span>
+                </div>
+                <div class="lesson-list">
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarix</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span></div>
+                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Informatika</span></div>
+                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Jismoniy tarbiya</span></div>
+                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span></div>
+                    <div class="lesson-item"><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Ingliz tili</span></div>
+                </div>
+            </div>
+
+            <!-- THURSDAY -->
+            <div class="day-card" data-day="thursday">
+                <div class="day-header">
+                    <span class="day-name">Payshanba <span class="uz">Thursday</span></span>
+                    <span class="day-count">5 dars</span>
+                </div>
+                <div class="lesson-list">
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarbiya</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Ona tili</span></div>
+                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Geografiya</span></div>
+                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Adabiyot</span></div>
+                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span></div>
+                </div>
+            </div>
+
+            <!-- FRIDAY -->
+            <div class="day-card" data-day="friday">
+                <div class="day-header">
+                    <span class="day-name">Juma <span class="uz">Friday</span></span>
+                    <span class="day-count">6 dars</span>
+                </div>
+                <div class="lesson-list">
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kimyo</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Fizika</span></div>
+                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Informatika</span></div>
+                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Huquq</span></div>
+                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Jismoniy tarbiya</span></div>
+                    <div class="lesson-item"><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Geografiya</span></div>
+                </div>
+            </div>
+
+            <!-- SATURDAY -->
+            <div class="day-card" data-day="saturday">
+                <div class="day-header">
+                    <span class="day-name">Shanba <span class="uz">Saturday</span></span>
+                    <span class="day-count">4 dars</span>
+                </div>
+                <div class="lesson-list">
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Matematika</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Matematika</span></div>
+                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Kimyo</span></div>
+                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Fizika</span></div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- STATS BAR -->
+        <div class="stats-bar">
+            <div class="stat">
+                <span class="num">31</span>
+                <span class="label">total lessons</span>
+            </div>
+            <div class="divider"></div>
+            <div class="stat">
+                <span class="num">6</span>
+                <span class="label">subjects</span>
+            </div>
+            <div class="divider"></div>
+            <div class="stat">
+                <span class="num">6</span>
+                <span class="label">days</span>
+            </div>
+            <div class="divider"></div>
+            <div class="stat">
+                <span class="num">08:00</span>
+                <span class="label">start</span>
+            </div>
+        </div>
+
+        <!-- ============================================================
+        WATERMARK — ATTRACTIVE & TAPPABLE (@qwastur)
+        ============================================================ -->
+        <div class="watermark">
+            <div class="main">
+                <span class="icon">✦</span>
+                made by
+                <a href="https://t.me/qwastur" target="_blank" class="telegram-icon">
+                    <i class="fab fa-telegram-plane"></i>
+                    <span class="handle">@qwastur</span>
+                </a>
+                <span class="icon">✦</span>
+            </div>
+
+            <div class="sub">
+                <div class="en">This content is made by Johan Frost · Subscribe to @qwastur</div>
+                <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
+            </div>
+
+            <div class="glow-line"></div>
+        </div>
+
+    </div>
+
+    <!-- ============================================================
+    JAVASCRIPT
+    ============================================================ -->
+    <script>
+        // LOADING TIMER
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const mainContent = document.getElementById('mainContent');
+        const timerDisplay = document.getElementById('timerDisplay');
+
+        let seconds = 5;
+        const timerInterval = setInterval(() => {
+            seconds--;
+            if (seconds > 0) {
+                timerDisplay.textContent = seconds;
+            } else {
+                clearInterval(timerInterval);
+                timerDisplay.textContent = '✦';
+                setTimeout(() => {
+                    loadingOverlay.classList.add('hidden');
+                    mainContent.style.opacity = '1';
+                }, 500);
+            }
+        }, 1000);
+
+        // TODAY'S DATE
+        const today = new Date();
+        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        const uzDays = ['Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
+
+        const dayName = days[today.getDay()];
+        const uzDayName = uzDays[today.getDay()];
+        const dateStr = today.toLocaleDateString('en-US', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+
+        document.getElementById('todayDate').textContent = dateStr;
+        document.getElementById('todayDay').textContent = uzDayName + ' (' + dayName + ')';
+        document.getElementById('yearDisplay').textContent = today.getFullYear();
+
+        const dayMap = {
+            'Monday': 'monday',
+            'Tuesday': 'tuesday',
+            'Wednesday': 'wednesday',
+            'Thursday': 'thursday',
+            'Friday': 'friday',
+            'Saturday': 'saturday',
+            'Sunday': 'sunday'
+        };
+
+        const todayKey = dayMap[dayName];
+        if (todayKey) {
+            document.querySelectorAll('.day-card').forEach(card => {
+                if (card.dataset.day === todayKey) card.classList.add('today');
+            });
+        }
+
+        // THEME SWITCHER
+        const themeBtns = document.querySelectorAll('.theme-btn');
+        const body = document.body;
+
+        function setTheme(theme) {
+            body.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+            themeBtns.forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
+        }
+
+        themeBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                setTheme(this.dataset.theme);
+            });
+        });
+
+        const savedTheme = localStorage.getItem('theme') || 'emilia';
+        setTheme(savedTheme);
+    </script>
+
+</body>
+</html>
