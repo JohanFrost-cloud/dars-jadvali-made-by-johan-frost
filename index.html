@@ -265,7 +265,7 @@
         }
 
         /* ============================================================
-                   HEADER — CLEAN & ATTRACTIVE
+                   HEADER
                    ============================================================ */
         .header {
             max-width: 1100px;
@@ -617,7 +617,7 @@
         }
 
         /* ============================================================
-                   WATERMARK — ATTRACTIVE & TAPPABLE (@qwastur)
+                   WATERMARK — WITH COPIED ICONS
                    ============================================================ */
         .watermark {
             max-width: 1100px;
@@ -629,69 +629,96 @@
             border-top: 1px solid var(--border);
         }
 
-        .watermark .main {
-            font-size: 1rem;
-            font-weight: 700;
-            color: var(--text);
-            opacity: 0.9;
-            letter-spacing: 1px;
-            text-shadow: 0 0 60px rgba(108, 140, 255, 0.15);
-            transition: 0.3s;
+        .watermark .icons-row {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 6px;
+            gap: 24px;
             flex-wrap: wrap;
+            margin-bottom: 12px;
         }
 
-        .watermark .main .icon {
-            color: var(--gold);
-            opacity: 0.7;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+        /* --- Atom Icon --- */
+        .atom-icon {
+            width: 40px;
+            height: 40px;
+            filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.4));
+            transition: 0.3s;
+        }
+        .atom-icon:hover {
+            filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.8));
+            transform: scale(1.1);
         }
 
-        .watermark .main .telegram-icon {
-            display: inline-flex;
+        /* --- Layers Icon --- */
+        .layers-icon {
+            width: 40px;
+            height: 40px;
+            fill: none;
+            stroke: #8a2be2;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: 0.3s;
+            filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.3));
+        }
+        .layers-icon:hover {
+            filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.7));
+            transform: scale(1.1);
+        }
+
+        /* --- Connect Card --- */
+        .connect-card {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 10px 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            text-align: center;
+            transition: 0.3s;
+            display: flex;
             align-items: center;
-            gap: 8px;
-            color: var(--accent);
-            font-size: 1.4rem;
-            text-shadow: 0 0 40px rgba(108, 140, 255, 0.2);
-            transition: 0.3s;
-            text-decoration: none;
-            padding: 6px 18px;
-            border-radius: 30px;
-            background: rgba(108, 140, 255, 0.06);
-            border: 1px solid rgba(108, 140, 255, 0.08);
+            gap: 12px;
+        }
+        .connect-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: var(--accent);
+            box-shadow: 0 0 40px var(--glow);
         }
 
-        .watermark .main .telegram-icon:hover {
-            background: rgba(108, 140, 255, 0.15);
-            transform: scale(1.05);
-            box-shadow: 0 0 60px rgba(108, 140, 255, 0.2);
+        .connect-card .user-icon {
+            width: 32px;
+            height: 32px;
+            fill: none;
+            stroke: #9d4edd;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .watermark .main .telegram-icon .handle {
-            font-size: 0.9rem;
+        .connect-card .connect-title {
+            font-size: 0.8rem;
             font-weight: 700;
-            color: #fff;
-            letter-spacing: 0.5px;
+            color: var(--text);
+            letter-spacing: 0.3px;
         }
 
-        .watermark .main a {
+        .connect-card .connect-subtitle {
+            font-size: 0.6rem;
+            color: var(--text2);
+            opacity: 0.4;
+        }
+
+        .connect-card .connect-link {
             color: var(--accent);
             text-decoration: none;
-            font-weight: 700;
+            font-weight: 600;
             transition: 0.3s;
-            text-shadow: 0 0 20px rgba(108, 140, 255, 0.1);
+        }
+        .connect-card .connect-link:hover {
+            text-shadow: 0 0 30px var(--glow);
         }
 
-        .watermark .main a:hover {
-            text-shadow: 0 0 60px rgba(108, 140, 255, 0.4);
-            opacity: 1;
-        }
-
-        /* ===== SUBTEXT — BILINGUAL VISIBLE ===== */
+        /* ===== SUBTEXT — BILINGUAL ===== */
         .watermark .sub {
             margin-top: 10px;
             display: flex;
@@ -808,15 +835,24 @@
             #loadingOverlay .loader-timer .icon {
                 font-size: 1.6rem;
             }
-            .watermark .main {
-                font-size: 0.85rem;
+            .watermark .icons-row {
+                gap: 14px;
             }
-            .watermark .main .telegram-icon {
-                font-size: 1.1rem;
-                padding: 4px 14px;
+            .atom-icon,
+            .layers-icon {
+                width: 30px;
+                height: 30px;
             }
-            .watermark .main .telegram-icon .handle {
-                font-size: 0.75rem;
+            .connect-card {
+                padding: 6px 14px;
+                gap: 8px;
+            }
+            .connect-card .user-icon {
+                width: 24px;
+                height: 24px;
+            }
+            .connect-card .connect-title {
+                font-size: 0.7rem;
             }
             .watermark .sub .uz {
                 font-size: 0.65rem;
@@ -846,15 +882,25 @@
                 font-size: 0.45rem;
                 padding: 3px 8px;
             }
-            .watermark .main {
-                font-size: 0.7rem;
+            .watermark .icons-row {
+                gap: 10px;
+                flex-direction: column;
+                align-items: center;
             }
-            .watermark .main .telegram-icon {
-                font-size: 0.9rem;
-                padding: 3px 10px;
+            .atom-icon,
+            .layers-icon {
+                width: 28px;
+                height: 28px;
             }
-            .watermark .main .telegram-icon .handle {
-                font-size: 0.65rem;
+            .connect-card {
+                padding: 6px 12px;
+            }
+            .connect-card .user-icon {
+                width: 20px;
+                height: 20px;
+            }
+            .connect-card .connect-title {
+                font-size: 0.6rem;
             }
             .watermark .sub .uz {
                 font-size: 0.55rem;
@@ -938,7 +984,7 @@
         <!-- GRID -->
         <div class="grid" id="scheduleGrid">
 
-            <!-- MONDAY -->
+            <!-- ===== MONDAY ===== -->
             <div class="day-card" data-day="monday">
                 <div class="day-header">
                     <span class="day-name">Dushanba <span class="uz">Monday</span></span>
@@ -949,33 +995,33 @@
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Adabiyot</span></div>
                     <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ona tili</span></div>
                     <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Rus tili</span></div>
-                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Matematika</span></div>
+                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Algebra</span></div>
                 </div>
             </div>
 
-            <!-- TUESDAY -->
+            <!-- ===== TUESDAY ===== -->
             <div class="day-card" data-day="tuesday">
                 <div class="day-header">
                     <span class="day-name">Seshanba <span class="uz">Tuesday</span></span>
                     <span class="day-count">5 dars</span>
                 </div>
                 <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Matematika</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Matematika</span></div>
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Algebra</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Geometriya</span></div>
                     <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ingliz tili</span></div>
-                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Tarix</span></div>
+                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">O'zbekiston tarixi</span></div>
                     <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Biologiya</span></div>
                 </div>
             </div>
 
-            <!-- WEDNESDAY -->
+            <!-- ===== WEDNESDAY ===== -->
             <div class="day-card" data-day="wednesday">
                 <div class="day-header">
                     <span class="day-name">Chorshanba <span class="uz">Wednesday</span></span>
                     <span class="day-count">6 dars</span>
                 </div>
                 <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarix</span></div>
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Jahon tarixi</span></div>
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span></div>
                     <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Informatika</span></div>
                     <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Jismoniy tarbiya</span></div>
@@ -984,7 +1030,7 @@
                 </div>
             </div>
 
-            <!-- THURSDAY -->
+            <!-- ===== THURSDAY ===== -->
             <div class="day-card" data-day="thursday">
                 <div class="day-header">
                     <span class="day-name">Payshanba <span class="uz">Thursday</span></span>
@@ -999,7 +1045,7 @@
                 </div>
             </div>
 
-            <!-- FRIDAY -->
+            <!-- ===== FRIDAY ===== -->
             <div class="day-card" data-day="friday">
                 <div class="day-header">
                     <span class="day-name">Juma <span class="uz">Friday</span></span>
@@ -1015,15 +1061,15 @@
                 </div>
             </div>
 
-            <!-- SATURDAY -->
+            <!-- ===== SATURDAY ===== -->
             <div class="day-card" data-day="saturday">
                 <div class="day-header">
                     <span class="day-name">Shanba <span class="uz">Saturday</span></span>
                     <span class="day-count">4 dars</span>
                 </div>
                 <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Matematika</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Matematika</span></div>
+                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Algebra</span></div>
+                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Geometriya</span></div>
                     <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Kimyo</span></div>
                     <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Fizika</span></div>
                 </div>
@@ -1055,19 +1101,43 @@
         </div>
 
         <!-- ============================================================
-        WATERMARK — ATTRACTIVE & TAPPABLE (@qwastur)
+        WATERMARK — WITH COPIED ICONS
         ============================================================ -->
         <div class="watermark">
-            <div class="main">
-                <span class="icon">✦</span>
-                made by
-                <a href="https://t.me/qwastur" target="_blank" class="telegram-icon">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span class="handle">@qwastur</span>
-                </a>
-                <span class="icon">✦</span>
+
+            <!-- ICONS ROW -->
+            <div class="icons-row">
+
+                <!-- Atom Icon -->
+                <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="10" fill="#00bfff" />
+                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(0 50 50)" />
+                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(60 50 50)" />
+                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(120 50 50)" />
+                </svg>
+
+                <!-- Layers Icon -->
+                <svg class="layers-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 20 L80 35 L50 50 L20 35 Z" />
+                    <path d="M50 40 L80 55 L50 70 L20 55 Z" stroke="#6a0dad" />
+                </svg>
+
+                <!-- Connect Card -->
+                <div class="connect-card">
+                    <svg class="user-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="40" cy="30" r="20" />
+                        <path d="M10 85 Q10 60 40 60 Q50 60 55 65" />
+                        <path d="M70 70 L75 60 L85 60 L78 52 L80 42 L70 47 L60 42 L62 52 L55 60 L65 60 Z" fill="#9d4edd" stroke="none" />
+                    </svg>
+                    <div>
+                        <div class="connect-title">Join <a href="https://t.me/qwastur" target="_blank" class="connect-link">@qwastur</a></div>
+                        <div class="connect-subtitle">Premium content · Custom profiles</div>
+                    </div>
+                </div>
+
             </div>
 
+            <!-- Bilingual subtitles -->
             <div class="sub">
                 <div class="en">This content is made by Johan Frost · Subscribe to @qwastur</div>
                 <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
