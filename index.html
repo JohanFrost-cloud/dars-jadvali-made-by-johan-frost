@@ -6,6 +6,8 @@
     <title>✦ Weekly Schedule</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <style>
@@ -68,6 +70,7 @@
             text-shadow: 0 0 40px rgba(108, 140, 255, 0.2);
             transition: 0.3s;
             font-variant-numeric: tabular-nums;
+            font-family: 'JetBrains Mono', monospace;
         }
 
         #loadingOverlay .loader-timer .icon {
@@ -121,6 +124,16 @@
             opacity: 0.7;
         }
 
+        #loadingOverlay .loader-info .line .pink {
+            color: #ff6b9d;
+            opacity: 0.7;
+        }
+
+        #loadingOverlay .loader-info .line .green {
+            color: #44dd88;
+            opacity: 0.7;
+        }
+
         #loadingOverlay .loader-info .line a {
             color: #6c8cff;
             text-decoration: none;
@@ -153,8 +166,14 @@
             --radius: 20px;
             --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             --gold: #ffd700;
+            --pink: #ff6b9d;
+            --green: #44dd88;
+            --font-family: 'Inter', sans-serif;
+            --heading-font: 'Inter', sans-serif;
+            --mono-font: 'JetBrains Mono', monospace;
         }
 
+        /* --- Theme-specific colors --- */
         [data-theme="emilia"] {
             --bg: #0a0e1a;
             --accent: #7ec8e3;
@@ -223,7 +242,7 @@
                    BODY
                    ============================================================ */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: var(--font-family);
             background: var(--bg);
             color: var(--text);
             min-height: 100vh;
@@ -265,7 +284,7 @@
         }
 
         /* ============================================================
-                   HEADER
+                   HEADER — WITH TELEGRAM BUTTON
                    ============================================================ */
         .header {
             max-width: 1100px;
@@ -301,6 +320,7 @@
             -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px;
             transition: background 0.6s;
+            font-family: var(--heading-font);
         }
 
         .header .sub {
@@ -318,20 +338,58 @@
             transition: color 0.6s;
         }
 
-        .header .telegram-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: var(--text2);
-            font-size: 1.2rem;
-            opacity: 0.3;
-            transition: 0.3s;
+        .header .telegram-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 16px 6px 14px;
+            border-radius: 30px;
+            background: rgba(108, 140, 255, 0.08);
+            border: 1px solid rgba(108, 140, 255, 0.12);
+            color: var(--text);
             text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            transition: 0.3s ease;
+            box-shadow: 0 0 20px rgba(108, 140, 255, 0.05);
+            cursor: pointer;
         }
 
-        .header .telegram-link:hover {
-            opacity: 0.8;
+        .header .telegram-btn:hover {
+            background: rgba(108, 140, 255, 0.15);
+            border-color: var(--accent);
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 0 40px rgba(108, 140, 255, 0.15);
+        }
+
+        .header .telegram-btn i {
+            font-size: 1.2rem;
             color: var(--accent);
-            transform: scale(1.1);
+        }
+
+        .header .telegram-btn .handle {
+            color: var(--text);
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+
+        .header .telegram-btn .sparkle {
+            color: #ffd700;
+            font-size: 0.7rem;
+            opacity: 0.6;
+            animation: sparklePulse 2s ease-in-out infinite;
+        }
+
+        @keyframes sparklePulse {
+            0%,
+            100% {
+                opacity: 0.4;
+                transform: scale(0.9);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.2);
+            }
         }
 
         .today-badge {
@@ -554,6 +612,7 @@
             min-width: 52px;
             letter-spacing: 0.3px;
             font-variant-numeric: tabular-nums;
+            font-family: var(--mono-font);
         }
 
         .lesson-item .num {
@@ -604,6 +663,7 @@
             color: #fff;
             font-weight: 700;
             font-size: 0.9rem;
+            font-family: var(--mono-font);
         }
 
         .stats-bar .stat .label {
@@ -617,7 +677,7 @@
         }
 
         /* ============================================================
-                   WATERMARK — WITH COPIED ICONS
+                   WATERMARK — WITH TAPPABLE CARD
                    ============================================================ */
         .watermark {
             max-width: 1100px;
@@ -638,7 +698,6 @@
             margin-bottom: 12px;
         }
 
-        /* --- Atom Icon --- */
         .atom-icon {
             width: 40px;
             height: 40px;
@@ -650,7 +709,6 @@
             transform: scale(1.1);
         }
 
-        /* --- Layers Icon --- */
         .layers-icon {
             width: 40px;
             height: 40px;
@@ -667,7 +725,7 @@
             transform: scale(1.1);
         }
 
-        /* --- Connect Card --- */
+        /* ===== TAPPABLE CARD — ENTIRE THING OPENS LINK ===== */
         .connect-card {
             background: rgba(255, 255, 255, 0.03);
             padding: 10px 20px;
@@ -678,11 +736,15 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none !important;
+            cursor: pointer;
         }
+
         .connect-card:hover {
             background: rgba(255, 255, 255, 0.06);
             border-color: var(--accent);
             box-shadow: 0 0 40px var(--glow);
+            transform: translateY(-2px);
         }
 
         .connect-card .user-icon {
@@ -708,17 +770,6 @@
             opacity: 0.4;
         }
 
-        .connect-card .connect-link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
-        }
-        .connect-card .connect-link:hover {
-            text-shadow: 0 0 30px var(--glow);
-        }
-
-        /* ===== SUBTEXT — BILINGUAL ===== */
         .watermark .sub {
             margin-top: 10px;
             display: flex;
@@ -768,6 +819,35 @@
                 opacity: 0.5;
                 width: 100px;
             }
+        }
+
+        /* ============================================================
+                   FONT & GLOW VARIATIONS
+                   ============================================================ */
+        .glow-blue {
+            text-shadow: 0 0 20px rgba(108, 140, 255, 0.3), 0 0 60px rgba(108, 140, 255, 0.1);
+        }
+        .glow-gold {
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 60px rgba(255, 215, 0, 0.1);
+        }
+        .glow-pink {
+            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3), 0 0 60px rgba(255, 107, 157, 0.1);
+        }
+        .glow-green {
+            text-shadow: 0 0 20px rgba(68, 221, 136, 0.3), 0 0 60px rgba(68, 221, 136, 0.1);
+        }
+        .glow-purple {
+            text-shadow: 0 0 20px rgba(170, 68, 255, 0.3), 0 0 60px rgba(170, 68, 255, 0.1);
+        }
+
+        .font-playfair {
+            font-family: 'Playfair Display', serif;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .font-inter {
+            font-family: 'Inter', sans-serif;
         }
 
         /* ============================================================
@@ -822,6 +902,16 @@
             .header-top {
                 flex-direction: column;
                 gap: 6px;
+            }
+            .header .telegram-btn {
+                padding: 4px 12px 4px 10px;
+                font-size: 0.7rem;
+            }
+            .header .telegram-btn i {
+                font-size: 1rem;
+            }
+            .header .telegram-btn .sparkle {
+                display: none;
             }
             #loadingOverlay .loader-info {
                 padding: 12px 16px;
@@ -961,9 +1051,12 @@
             <div class="sub">Dars jadvali · <span id="yearDisplay">2026</span></div>
 
             <div class="header-top">
-                <a href="https://t.me/qwastur" target="_blank" class="telegram-link" title="Telegram: @qwastur">
+                <a href="https://t.me/qwastuy/s/4" target="_blank" class="telegram-btn">
                     <i class="fab fa-telegram-plane"></i>
+                    <span class="handle">@qwastuy</span>
+                    <span class="sparkle">✦</span>
                 </a>
+
                 <div class="today-badge" id="todayBadge">
                     📅 <span id="todayDate"></span> — <span class="day-highlight" id="todayDay">Today</span>
                 </div>
@@ -984,7 +1077,7 @@
         <!-- GRID -->
         <div class="grid" id="scheduleGrid">
 
-            <!-- ===== MONDAY ===== -->
+            <!-- MONDAY -->
             <div class="day-card" data-day="monday">
                 <div class="day-header">
                     <span class="day-name">Dushanba <span class="uz">Monday</span></span>
@@ -999,7 +1092,7 @@
                 </div>
             </div>
 
-            <!-- ===== TUESDAY ===== -->
+            <!-- TUESDAY -->
             <div class="day-card" data-day="tuesday">
                 <div class="day-header">
                     <span class="day-name">Seshanba <span class="uz">Tuesday</span></span>
@@ -1014,7 +1107,7 @@
                 </div>
             </div>
 
-            <!-- ===== WEDNESDAY ===== -->
+            <!-- WEDNESDAY -->
             <div class="day-card" data-day="wednesday">
                 <div class="day-header">
                     <span class="day-name">Chorshanba <span class="uz">Wednesday</span></span>
@@ -1030,7 +1123,7 @@
                 </div>
             </div>
 
-            <!-- ===== THURSDAY ===== -->
+            <!-- THURSDAY -->
             <div class="day-card" data-day="thursday">
                 <div class="day-header">
                     <span class="day-name">Payshanba <span class="uz">Thursday</span></span>
@@ -1045,7 +1138,7 @@
                 </div>
             </div>
 
-            <!-- ===== FRIDAY ===== -->
+            <!-- FRIDAY -->
             <div class="day-card" data-day="friday">
                 <div class="day-header">
                     <span class="day-name">Juma <span class="uz">Friday</span></span>
@@ -1061,7 +1154,7 @@
                 </div>
             </div>
 
-            <!-- ===== SATURDAY ===== -->
+            <!-- SATURDAY -->
             <div class="day-card" data-day="saturday">
                 <div class="day-header">
                     <span class="day-name">Shanba <span class="uz">Saturday</span></span>
@@ -1101,11 +1194,10 @@
         </div>
 
         <!-- ============================================================
-        WATERMARK — WITH COPIED ICONS
+        WATERMARK — WITH TAPPABLE CARD
         ============================================================ -->
         <div class="watermark">
 
-            <!-- ICONS ROW -->
             <div class="icons-row">
 
                 <!-- Atom Icon -->
@@ -1122,18 +1214,18 @@
                     <path d="M50 40 L80 55 L50 70 L20 55 Z" stroke="#6a0dad" />
                 </svg>
 
-                <!-- Connect Card -->
-                <div class="connect-card">
+                <!-- TAPPABLE CARD — ENTIRE THING OPENS LINK -->
+                <a href="https://t.me/qwastur" target="_blank" class="connect-card">
                     <svg class="user-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="40" cy="30" r="20" />
                         <path d="M10 85 Q10 60 40 60 Q50 60 55 65" />
                         <path d="M70 70 L75 60 L85 60 L78 52 L80 42 L70 47 L60 42 L62 52 L55 60 L65 60 Z" fill="#9d4edd" stroke="none" />
                     </svg>
                     <div>
-                        <div class="connect-title">Join <a href="https://t.me/qwastur" target="_blank" class="connect-link">@qwastur</a></div>
+                        <div class="connect-title">Join @qwastur</div>
                         <div class="connect-subtitle">Premium content · Custom profiles</div>
                     </div>
-                </div>
+                </a>
 
             </div>
 
