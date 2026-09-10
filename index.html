@@ -124,16 +124,6 @@
             opacity: 0.7;
         }
 
-        #loadingOverlay .loader-info .line .pink {
-            color: #ff6b9d;
-            opacity: 0.7;
-        }
-
-        #loadingOverlay .loader-info .line .green {
-            color: #44dd88;
-            opacity: 0.7;
-        }
-
         #loadingOverlay .loader-info .line a {
             color: #6c8cff;
             text-decoration: none;
@@ -166,14 +156,11 @@
             --radius: 20px;
             --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             --gold: #ffd700;
-            --pink: #ff6b9d;
-            --green: #44dd88;
             --font-family: 'Inter', sans-serif;
             --heading-font: 'Inter', sans-serif;
             --mono-font: 'JetBrains Mono', monospace;
         }
 
-        /* --- Theme-specific colors --- */
         [data-theme="emilia"] {
             --bg: #0a0e1a;
             --accent: #7ec8e3;
@@ -272,19 +259,13 @@
         }
 
         @keyframes orbFloat {
-            0% {
-                transform: translate(0, 0) scale(1);
-            }
-            50% {
-                transform: translate(2%, -2%) scale(1.05);
-            }
-            100% {
-                transform: translate(-2%, 2%) scale(0.95);
-            }
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(2%, -2%) scale(1.05); }
+            100% { transform: translate(-2%, 2%) scale(0.95); }
         }
 
         /* ============================================================
-                   HEADER — WITH TELEGRAM BUTTON
+                   HEADER
                    ============================================================ */
         .header {
             max-width: 1100px;
@@ -303,13 +284,8 @@
         }
 
         @keyframes float {
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-8px);
-            }
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         .header h1 {
@@ -381,15 +357,8 @@
         }
 
         @keyframes sparklePulse {
-            0%,
-            100% {
-                opacity: 0.4;
-                transform: scale(0.9);
-            }
-            50% {
-                opacity: 1;
-                transform: scale(1.2);
-            }
+            0%, 100% { opacity: 0.4; transform: scale(0.9); }
+            50% { opacity: 1; transform: scale(1.2); }
         }
 
         .today-badge {
@@ -508,9 +477,7 @@
             transition: 0.4s;
         }
 
-        .day-card:hover::before {
-            opacity: 0.8;
-        }
+        .day-card:hover::before { opacity: 0.8; }
 
         .day-card:hover {
             transform: translateY(-6px);
@@ -559,9 +526,7 @@
             box-shadow: 0 0 60px var(--glow), 0 20px 60px rgba(0, 0, 0, 0.5);
         }
 
-        .day-card.today .day-name {
-            color: var(--accent);
-        }
+        .day-card.today .day-name { color: var(--accent); }
 
         .day-card.today::before {
             opacity: 0.8;
@@ -570,13 +535,8 @@
         }
 
         @keyframes borderPulse {
-            0%,
-            100% {
-                opacity: 0.4;
-            }
-            50% {
-                opacity: 1;
-            }
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 1; }
         }
 
         .lesson-list {
@@ -666,9 +626,7 @@
             font-family: var(--mono-font);
         }
 
-        .stats-bar .stat .label {
-            opacity: 0.4;
-        }
+        .stats-bar .stat .label { opacity: 0.4; }
 
         .stats-bar .divider {
             width: 1px;
@@ -677,7 +635,7 @@
         }
 
         /* ============================================================
-                   WATERMARK — WITH TAPPABLE CARD
+                   WATERMARK
                    ============================================================ */
         .watermark {
             max-width: 1100px;
@@ -725,7 +683,6 @@
             transform: scale(1.1);
         }
 
-        /* ===== TAPPABLE CARD — ENTIRE THING OPENS LINK ===== */
         .connect-card {
             background: rgba(255, 255, 255, 0.03);
             padding: 10px 20px;
@@ -810,205 +767,59 @@
         }
 
         @keyframes glowPulse {
-            0%,
-            100% {
-                opacity: 0.1;
-                width: 40px;
-            }
-            50% {
-                opacity: 0.5;
-                width: 100px;
-            }
-        }
-
-        /* ============================================================
-                   FONT & GLOW VARIATIONS
-                   ============================================================ */
-        .glow-blue {
-            text-shadow: 0 0 20px rgba(108, 140, 255, 0.3), 0 0 60px rgba(108, 140, 255, 0.1);
-        }
-        .glow-gold {
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.3), 0 0 60px rgba(255, 215, 0, 0.1);
-        }
-        .glow-pink {
-            text-shadow: 0 0 20px rgba(255, 107, 157, 0.3), 0 0 60px rgba(255, 107, 157, 0.1);
-        }
-        .glow-green {
-            text-shadow: 0 0 20px rgba(68, 221, 136, 0.3), 0 0 60px rgba(68, 221, 136, 0.1);
-        }
-        .glow-purple {
-            text-shadow: 0 0 20px rgba(170, 68, 255, 0.3), 0 0 60px rgba(170, 68, 255, 0.1);
-        }
-
-        .font-playfair {
-            font-family: 'Playfair Display', serif;
-        }
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .font-inter {
-            font-family: 'Inter', sans-serif;
+            0%, 100% { opacity: 0.1; width: 40px; }
+            50% { opacity: 0.5; width: 100px; }
         }
 
         /* ============================================================
                    RESPONSIVE
                    ============================================================ */
         @media (max-width: 768px) {
-            body {
-                padding: 12px;
-            }
-            .header h1 {
-                font-size: 1.6rem;
-            }
-            .header .icon {
-                font-size: 1.8rem;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-                gap: 14px;
-            }
-            .day-card {
-                padding: 16px 14px;
-            }
-            .lesson-item {
-                padding: 6px 10px;
-                flex-wrap: wrap;
-                gap: 4px;
-            }
-            .lesson-item .time {
-                min-width: 44px;
-                font-size: 0.5rem;
-            }
-            .lesson-item .name {
-                font-size: 0.75rem;
-                flex: 1 0 60%;
-            }
-            .stats-bar {
-                flex-direction: column;
-                align-items: center;
-                gap: 8px;
-                padding: 14px 16px;
-            }
-            .stats-bar .divider {
-                display: none;
-            }
-            .theme-switcher {
-                gap: 5px;
-            }
-            .theme-btn {
-                font-size: 0.55rem;
-                padding: 4px 10px;
-            }
-            .header-top {
-                flex-direction: column;
-                gap: 6px;
-            }
-            .header .telegram-btn {
-                padding: 4px 12px 4px 10px;
-                font-size: 0.7rem;
-            }
-            .header .telegram-btn i {
-                font-size: 1rem;
-            }
-            .header .telegram-btn .sparkle {
-                display: none;
-            }
-            #loadingOverlay .loader-info {
-                padding: 12px 16px;
-            }
-            #loadingOverlay .loader-info .line {
-                font-size: 0.65rem;
-            }
-            #loadingOverlay .loader-timer {
-                font-size: 2.2rem;
-            }
-            #loadingOverlay .loader-timer .icon {
-                font-size: 1.6rem;
-            }
-            .watermark .icons-row {
-                gap: 14px;
-            }
-            .atom-icon,
-            .layers-icon {
-                width: 30px;
-                height: 30px;
-            }
-            .connect-card {
-                padding: 6px 14px;
-                gap: 8px;
-            }
-            .connect-card .user-icon {
-                width: 24px;
-                height: 24px;
-            }
-            .connect-card .connect-title {
-                font-size: 0.7rem;
-            }
-            .watermark .sub .uz {
-                font-size: 0.65rem;
-            }
+            body { padding: 12px; }
+            .header h1 { font-size: 1.6rem; }
+            .header .icon { font-size: 1.8rem; }
+            .grid { grid-template-columns: 1fr; gap: 14px; }
+            .day-card { padding: 16px 14px; }
+            .lesson-item { padding: 6px 10px; flex-wrap: wrap; gap: 4px; }
+            .lesson-item .time { min-width: 44px; font-size: 0.5rem; }
+            .lesson-item .name { font-size: 0.75rem; flex: 1 0 60%; }
+            .stats-bar { flex-direction: column; align-items: center; gap: 8px; padding: 14px 16px; }
+            .stats-bar .divider { display: none; }
+            .theme-switcher { gap: 5px; }
+            .theme-btn { font-size: 0.55rem; padding: 4px 10px; }
+            .header-top { flex-direction: column; gap: 6px; }
+            .header .telegram-btn { padding: 4px 12px 4px 10px; font-size: 0.7rem; }
+            .header .telegram-btn i { font-size: 1rem; }
+            .header .telegram-btn .sparkle { display: none; }
+            #loadingOverlay .loader-info { padding: 12px 16px; }
+            #loadingOverlay .loader-info .line { font-size: 0.65rem; }
+            #loadingOverlay .loader-timer { font-size: 2.2rem; }
+            #loadingOverlay .loader-timer .icon { font-size: 1.6rem; }
+            .watermark .icons-row { gap: 14px; }
+            .atom-icon, .layers-icon { width: 30px; height: 30px; }
+            .connect-card { padding: 6px 14px; gap: 8px; }
+            .connect-card .user-icon { width: 24px; height: 24px; }
+            .connect-card .connect-title { font-size: 0.7rem; }
+            .watermark .sub .uz { font-size: 0.65rem; }
         }
 
         @media (max-width: 400px) {
-            .header h1 {
-                font-size: 1.3rem;
-            }
-            .day-header .day-name {
-                font-size: 0.95rem;
-            }
-            .lesson-item .name {
-                font-size: 0.7rem;
-                flex: 1 0 100%;
-            }
-            .lesson-item .time {
-                min-width: 38px;
-                font-size: 0.45rem;
-            }
-            .lesson-item .num {
-                min-width: 14px;
-                font-size: 0.45rem;
-            }
-            .theme-btn {
-                font-size: 0.45rem;
-                padding: 3px 8px;
-            }
-            .watermark .icons-row {
-                gap: 10px;
-                flex-direction: column;
-                align-items: center;
-            }
-            .atom-icon,
-            .layers-icon {
-                width: 28px;
-                height: 28px;
-            }
-            .connect-card {
-                padding: 6px 12px;
-            }
-            .connect-card .user-icon {
-                width: 20px;
-                height: 20px;
-            }
-            .connect-card .connect-title {
-                font-size: 0.6rem;
-            }
-            .watermark .sub .uz {
-                font-size: 0.55rem;
-                padding: 2px 12px;
-            }
-            #loadingOverlay .loader-info .line {
-                font-size: 0.55rem;
-            }
-            #loadingOverlay .loader-timer {
-                font-size: 1.8rem;
-            }
-            #loadingOverlay .loader-timer .icon {
-                font-size: 1.2rem;
-            }
-            #loadingOverlay .loader-ring {
-                width: 48px;
-                height: 48px;
-            }
+            .header h1 { font-size: 1.3rem; }
+            .day-header .day-name { font-size: 0.95rem; }
+            .lesson-item .name { font-size: 0.7rem; flex: 1 0 100%; }
+            .lesson-item .time { min-width: 38px; font-size: 0.45rem; }
+            .lesson-item .num { min-width: 14px; font-size: 0.45rem; }
+            .theme-btn { font-size: 0.45rem; padding: 3px 8px; }
+            .watermark .icons-row { gap: 10px; flex-direction: column; align-items: center; }
+            .atom-icon, .layers-icon { width: 28px; height: 28px; }
+            .connect-card { padding: 6px 12px; }
+            .connect-card .user-icon { width: 20px; height: 20px; }
+            .connect-card .connect-title { font-size: 0.6rem; }
+            .watermark .sub .uz { font-size: 0.55rem; padding: 2px 12px; }
+            #loadingOverlay .loader-info .line { font-size: 0.55rem; }
+            #loadingOverlay .loader-timer { font-size: 1.8rem; }
+            #loadingOverlay .loader-timer .icon { font-size: 1.2rem; }
+            #loadingOverlay .loader-ring { width: 48px; height: 48px; }
         }
     </style>
 </head>
@@ -1123,11 +934,11 @@
                 </div>
             </div>
 
-            <!-- THURSDAY -->
+            <!-- THURSDAY — UPDATED: 6 lessons -->
             <div class="day-card" data-day="thursday">
                 <div class="day-header">
                     <span class="day-name">Payshanba <span class="uz">Thursday</span></span>
-                    <span class="day-count">5 dars</span>
+                    <span class="day-count">6 dars</span>
                 </div>
                 <div class="lesson-list">
                     <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarbiya</span></div>
@@ -1135,6 +946,7 @@
                     <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Geografiya</span></div>
                     <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Adabiyot</span></div>
                     <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span></div>
+                    <div class="lesson-item"><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Biologiya</span></div>
                 </div>
             </div>
 
@@ -1170,10 +982,10 @@
 
         </div>
 
-        <!-- STATS BAR -->
+        <!-- STATS BAR — total lessons updated to 32 -->
         <div class="stats-bar">
             <div class="stat">
-                <span class="num">31</span>
+                <span class="num">32</span>
                 <span class="label">total lessons</span>
             </div>
             <div class="divider"></div>
@@ -1194,13 +1006,12 @@
         </div>
 
         <!-- ============================================================
-        WATERMARK — WITH TAPPABLE CARD
+        WATERMARK
         ============================================================ -->
         <div class="watermark">
 
             <div class="icons-row">
 
-                <!-- Atom Icon -->
                 <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="50" cy="50" r="10" fill="#00bfff" />
                     <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(0 50 50)" />
@@ -1208,13 +1019,11 @@
                     <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(120 50 50)" />
                 </svg>
 
-                <!-- Layers Icon -->
                 <svg class="layers-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <path d="M50 20 L80 35 L50 50 L20 35 Z" />
                     <path d="M50 40 L80 55 L50 70 L20 55 Z" stroke="#6a0dad" />
                 </svg>
 
-                <!-- TAPPABLE CARD — ENTIRE THING OPENS LINK -->
                 <a href="https://t.me/qwastur" target="_blank" class="connect-card">
                     <svg class="user-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="40" cy="30" r="20" />
@@ -1229,7 +1038,6 @@
 
             </div>
 
-            <!-- Bilingual subtitles -->
             <div class="sub">
                 <div class="en">This content is made by Johan Frost · Subscribe to @qwastur</div>
                 <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
@@ -1244,7 +1052,6 @@
     JAVASCRIPT
     ============================================================ -->
     <script>
-        // LOADING TIMER
         const loadingOverlay = document.getElementById('loadingOverlay');
         const mainContent = document.getElementById('mainContent');
         const timerDisplay = document.getElementById('timerDisplay');
@@ -1264,7 +1071,6 @@
             }
         }, 1000);
 
-        // TODAY'S DATE
         const today = new Date();
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const uzDays = ['Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
@@ -1299,7 +1105,6 @@
             });
         }
 
-        // THEME SWITCHER
         const themeBtns = document.querySelectorAll('.theme-btn');
         const body = document.body;
 
