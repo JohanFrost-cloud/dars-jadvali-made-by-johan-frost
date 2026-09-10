@@ -11,134 +11,66 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         /* ============================================================
                    LOADING OVERLAY
                    ============================================================ */
         #loadingOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: #060a16;
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #060a16; z-index: 99999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
             font-family: 'Inter', sans-serif;
             transition: opacity 0.8s ease, visibility 0.8s ease;
             padding: 20px;
         }
-
-        #loadingOverlay.hidden {
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-        }
+        #loadingOverlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
         #loadingOverlay .loader-ring {
-            width: 64px;
-            height: 64px;
-            border-radius: 50%;
+            width: 64px; height: 64px; border-radius: 50%;
             border: 3px solid rgba(255, 255, 255, 0.04);
-            border-top-color: #6c8cff;
-            border-right-color: #6c8cff;
+            border-top-color: #6c8cff; border-right-color: #6c8cff;
             animation: spin 0.9s cubic-bezier(0.6, 0, 0.4, 1) infinite;
             box-shadow: 0 0 60px rgba(108, 140, 255, 0.15);
             margin-bottom: 28px;
         }
-
-        @keyframes spin {
-            to {
-                transform: rotate(360deg);
-            }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         #loadingOverlay .loader-timer {
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: #f0edff;
-            letter-spacing: 2px;
-            margin-bottom: 12px;
+            font-size: 2.8rem; font-weight: 800; color: #f0edff;
+            letter-spacing: 2px; margin-bottom: 12px;
             text-shadow: 0 0 40px rgba(108, 140, 255, 0.2);
-            transition: 0.3s;
-            font-variant-numeric: tabular-nums;
+            transition: 0.3s; font-variant-numeric: tabular-nums;
             font-family: 'JetBrains Mono', monospace;
         }
-
-        #loadingOverlay .loader-timer .icon {
-            font-size: 2rem;
-            opacity: 0.4;
-            margin-right: 6px;
-        }
-
+        #loadingOverlay .loader-timer .icon { font-size: 2rem; opacity: 0.4; margin-right: 6px; }
         #loadingOverlay .loader-timer .glow {
             color: #6c8cff;
             text-shadow: 0 0 60px rgba(108, 140, 255, 0.3), 0 0 120px rgba(108, 140, 255, 0.1);
         }
-
         #loadingOverlay .loader-sub {
-            font-size: 0.85rem;
-            color: #9a9ac0;
-            opacity: 0.3;
-            letter-spacing: 3px;
-            font-weight: 300;
-            text-transform: uppercase;
+            font-size: 0.85rem; color: #9a9ac0; opacity: 0.3;
+            letter-spacing: 3px; font-weight: 300; text-transform: uppercase;
             margin-bottom: 20px;
         }
-
         #loadingOverlay .loader-info {
-            padding: 16px 24px;
-            border-radius: 12px;
+            padding: 16px 24px; border-radius: 12px;
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center;
-            max-width: 420px;
-            width: 100%;
+            text-align: center; max-width: 420px; width: 100%;
             backdrop-filter: blur(10px);
         }
-
         #loadingOverlay .loader-info .line {
-            font-size: 0.75rem;
-            color: #9a9ac0;
-            opacity: 0.6;
-            line-height: 1.9;
-            letter-spacing: 0.3px;
+            font-size: 0.75rem; color: #9a9ac0; opacity: 0.6;
+            line-height: 1.9; letter-spacing: 0.3px;
         }
-
-        #loadingOverlay .loader-info .line .highlight {
-            color: #6c8cff;
-            opacity: 1;
-            font-weight: 600;
-        }
-
-        #loadingOverlay .loader-info .line .gold {
-            color: #ffd700;
-            opacity: 0.7;
-        }
-
+        #loadingOverlay .loader-info .line .highlight { color: #6c8cff; opacity: 1; font-weight: 600; }
+        #loadingOverlay .loader-info .line .gold { color: #ffd700; opacity: 0.7; }
         #loadingOverlay .loader-info .line a {
-            color: #6c8cff;
-            text-decoration: none;
-            font-weight: 600;
-            transition: 0.3s;
+            color: #6c8cff; text-decoration: none; font-weight: 600; transition: 0.3s;
         }
-
-        #loadingOverlay .loader-info .line a:hover {
-            text-shadow: 0 0 30px rgba(108, 140, 255, 0.3);
-        }
-
-        #loadingOverlay .loader-info .line .uz {
-            opacity: 0.3;
-            font-size: 0.65rem;
-        }
+        #loadingOverlay .loader-info .line a:hover { text-shadow: 0 0 30px rgba(108, 140, 255, 0.3); }
+        #loadingOverlay .loader-info .line .uz { opacity: 0.3; font-size: 0.65rem; }
 
         /* ============================================================
                    7 RE:ZERO THEMES
@@ -156,73 +88,48 @@
             --radius: 20px;
             --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
             --gold: #ffd700;
+            --green: #44dd88;
+            --red: #ff4455;
+            --orange: #ff8833;
             --font-family: 'Inter', sans-serif;
             --heading-font: 'Inter', sans-serif;
             --mono-font: 'JetBrains Mono', monospace;
         }
 
         [data-theme="emilia"] {
-            --bg: #0a0e1a;
-            --accent: #7ec8e3;
-            --accent2: #a8d8ea;
-            --glow: rgba(126, 200, 227, 0.25);
-            --glow2: rgba(168, 216, 234, 0.15);
-            --text: #f0f8ff;
-            --text2: #a0c4d4;
+            --bg: #0a0e1a; --accent: #7ec8e3; --accent2: #a8d8ea;
+            --glow: rgba(126, 200, 227, 0.25); --glow2: rgba(168, 216, 234, 0.15);
+            --text: #f0f8ff; --text2: #a0c4d4;
         }
         [data-theme="rem"] {
-            --bg: #0a0e1a;
-            --accent: #4a90d9;
-            --accent2: #6aafe6;
-            --glow: rgba(74, 144, 217, 0.25);
-            --glow2: rgba(106, 175, 230, 0.15);
-            --text: #e8f0ff;
-            --text2: #8aa8d0;
+            --bg: #0a0e1a; --accent: #4a90d9; --accent2: #6aafe6;
+            --glow: rgba(74, 144, 217, 0.25); --glow2: rgba(106, 175, 230, 0.15);
+            --text: #e8f0ff; --text2: #8aa8d0;
         }
         [data-theme="ram"] {
-            --bg: #1a0a0a;
-            --accent: #e86a8a;
-            --accent2: #f08aa6;
-            --glow: rgba(232, 106, 138, 0.25);
-            --glow2: rgba(240, 138, 166, 0.15);
-            --text: #ffe8ee;
-            --text2: #c08a9a;
+            --bg: #1a0a0a; --accent: #e86a8a; --accent2: #f08aa6;
+            --glow: rgba(232, 106, 138, 0.25); --glow2: rgba(240, 138, 166, 0.15);
+            --text: #ffe8ee; --text2: #c08a9a;
         }
         [data-theme="beatrice"] {
-            --bg: #1a1208;
-            --accent: #e8c84a;
-            --accent2: #f0d86a;
-            --glow: rgba(232, 200, 74, 0.25);
-            --glow2: rgba(240, 216, 106, 0.15);
-            --text: #fff8e0;
-            --text2: #c0b08a;
+            --bg: #1a1208; --accent: #e8c84a; --accent2: #f0d86a;
+            --glow: rgba(232, 200, 74, 0.25); --glow2: rgba(240, 216, 106, 0.15);
+            --text: #fff8e0; --text2: #c0b08a;
         }
         [data-theme="roswaal"] {
-            --bg: #120a1a;
-            --accent: #aa44ff;
-            --accent2: #cc66ff;
-            --glow: rgba(170, 68, 255, 0.25);
-            --glow2: rgba(204, 102, 255, 0.15);
-            --text: #f0e8ff;
-            --text2: #b08ad0;
+            --bg: #120a1a; --accent: #aa44ff; --accent2: #cc66ff;
+            --glow: rgba(170, 68, 255, 0.25); --glow2: rgba(204, 102, 255, 0.15);
+            --text: #f0e8ff; --text2: #b08ad0;
         }
         [data-theme="echidna"] {
-            --bg: #080e0a;
-            --accent: #44dd88;
-            --accent2: #66eeaa;
-            --glow: rgba(68, 221, 136, 0.25);
-            --glow2: rgba(102, 238, 170, 0.15);
-            --text: #e8fff0;
-            --text2: #8ac0a0;
+            --bg: #080e0a; --accent: #44dd88; --accent2: #66eeaa;
+            --glow: rgba(68, 221, 136, 0.25); --glow2: rgba(102, 238, 170, 0.15);
+            --text: #e8fff0; --text2: #8ac0a0;
         }
         [data-theme="satella"] {
-            --bg: #0a050a;
-            --accent: #cc00aa;
-            --accent2: #ee44cc;
-            --glow: rgba(204, 0, 170, 0.25);
-            --glow2: rgba(238, 68, 204, 0.15);
-            --text: #f0e0f0;
-            --text2: #b08ab0;
+            --bg: #0a050a; --accent: #cc00aa; --accent2: #ee44cc;
+            --glow: rgba(204, 0, 170, 0.25); --glow2: rgba(238, 68, 204, 0.15);
+            --text: #f0e0f0; --text2: #b08ab0;
         }
 
         /* ============================================================
@@ -230,10 +137,8 @@
                    ============================================================ */
         body {
             font-family: var(--font-family);
-            background: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            padding: 20px;
+            background: var(--bg); color: var(--text);
+            min-height: 100vh; padding: 20px;
             transition: background 0.6s ease, color 0.6s ease;
             background-image:
                 radial-gradient(ellipse at 20% 30%, var(--glow) 0%, transparent 60%),
@@ -241,23 +146,16 @@
                 radial-gradient(ellipse at 50% 50%, var(--glow) 0%, transparent 70%);
             position: relative;
         }
-
         body::before {
             content: '';
-            position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            position: fixed; top: -50%; left: -50%;
+            width: 200%; height: 200%;
             background: radial-gradient(ellipse at 30% 40%, var(--glow) 0%, transparent 50%),
                 radial-gradient(ellipse at 70% 60%, var(--glow2) 0%, transparent 50%);
-            pointer-events: none;
-            z-index: 0;
-            opacity: 0.4;
+            pointer-events: none; z-index: 0; opacity: 0.4;
             animation: orbFloat 20s ease-in-out infinite alternate;
             transition: background 0.6s;
         }
-
         @keyframes orbFloat {
             0% { transform: translate(0, 0) scale(1); }
             50% { transform: translate(2%, -2%) scale(1.05); }
@@ -268,186 +166,108 @@
                    HEADER
                    ============================================================ */
         .header {
-            max-width: 1100px;
-            margin: 0 auto 30px;
-            text-align: center;
-            padding: 30px 20px 20px;
-            position: relative;
-            z-index: 1;
+            max-width: 1100px; margin: 0 auto 30px;
+            text-align: center; padding: 30px 20px 20px;
+            position: relative; z-index: 1;
         }
-
         .header .icon {
-            font-size: 2.4rem;
-            display: block;
-            margin-bottom: 6px;
+            font-size: 2.4rem; display: block; margin-bottom: 6px;
             animation: float 4s ease-in-out infinite;
         }
-
         @keyframes float {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-8px); }
         }
-
         .header h1 {
-            font-size: 2.2rem;
-            font-weight: 800;
+            font-size: 2.2rem; font-weight: 800;
             background: linear-gradient(135deg, #fff 40%, var(--accent));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
-            transition: background 0.6s;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            letter-spacing: -0.5px; transition: background 0.6s;
             font-family: var(--heading-font);
         }
-
         .header .sub {
-            color: var(--text2);
-            font-size: 0.9rem;
-            opacity: 0.4;
-            margin-top: 4px;
-            letter-spacing: 1px;
-            font-weight: 300;
+            color: var(--text2); font-size: 0.9rem; opacity: 0.4;
+            margin-top: 4px; letter-spacing: 1px; font-weight: 300;
         }
-
-        .header .sub span {
-            color: var(--accent);
-            opacity: 1;
-            transition: color 0.6s;
-        }
+        .header .sub span { color: var(--accent); opacity: 1; transition: color 0.6s; }
 
         .header .telegram-btn {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 6px 16px 6px 14px;
-            border-radius: 30px;
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 6px 16px 6px 14px; border-radius: 30px;
             background: rgba(108, 140, 255, 0.08);
             border: 1px solid rgba(108, 140, 255, 0.12);
-            color: var(--text);
-            text-decoration: none;
-            font-size: 0.85rem;
-            font-weight: 600;
-            transition: 0.3s ease;
-            box-shadow: 0 0 20px rgba(108, 140, 255, 0.05);
+            color: var(--text); text-decoration: none;
+            font-size: 0.85rem; font-weight: 600;
+            transition: 0.3s ease; box-shadow: 0 0 20px rgba(108, 140, 255, 0.05);
             cursor: pointer;
         }
-
         .header .telegram-btn:hover {
             background: rgba(108, 140, 255, 0.15);
             border-color: var(--accent);
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 0 40px rgba(108, 140, 255, 0.15);
         }
-
-        .header .telegram-btn i {
-            font-size: 1.2rem;
-            color: var(--accent);
-        }
-
-        .header .telegram-btn .handle {
-            color: var(--text);
-            font-weight: 700;
-            letter-spacing: 0.3px;
-        }
-
+        .header .telegram-btn i { font-size: 1.2rem; color: var(--accent); }
+        .header .telegram-btn .handle { color: var(--text); font-weight: 700; letter-spacing: 0.3px; }
         .header .telegram-btn .sparkle {
-            color: #ffd700;
-            font-size: 0.7rem;
-            opacity: 0.6;
+            color: #ffd700; font-size: 0.7rem; opacity: 0.6;
             animation: sparklePulse 2s ease-in-out infinite;
         }
-
         @keyframes sparklePulse {
             0%, 100% { opacity: 0.4; transform: scale(0.9); }
             50% { opacity: 1; transform: scale(1.2); }
         }
 
         .today-badge {
-            display: inline-block;
-            margin-top: 10px;
-            padding: 6px 20px;
-            border-radius: 30px;
+            display: inline-block; margin-top: 10px;
+            padding: 6px 20px; border-radius: 30px;
             background: rgba(255, 255, 255, 0.04);
             border: 1px solid var(--border);
-            font-size: 0.75rem;
-            color: var(--text2);
-            letter-spacing: 0.5px;
-            backdrop-filter: blur(10px);
+            font-size: 0.75rem; color: var(--text2);
+            letter-spacing: 0.5px; backdrop-filter: blur(10px);
             margin-left: 8px;
         }
-
-        .today-badge .day-highlight {
-            color: var(--accent);
-            font-weight: 600;
-        }
+        .today-badge .day-highlight { color: var(--accent); font-weight: 600; }
 
         .header-top {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 8px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px; flex-wrap: wrap; margin-top: 8px;
         }
 
         /* ============================================================
                    THEME SWITCHER
                    ============================================================ */
         .theme-switcher {
-            max-width: 1100px;
-            margin: 0 auto 24px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            justify-content: center;
-            z-index: 1;
-            position: relative;
+            max-width: 1100px; margin: 0 auto 24px;
+            display: flex; flex-wrap: wrap; gap: 8px;
+            justify-content: center; z-index: 1; position: relative;
         }
-
         .theme-btn {
-            padding: 6px 14px;
-            border-radius: 30px;
+            padding: 6px 14px; border-radius: 30px;
             border: 1px solid var(--border);
             background: rgba(255, 255, 255, 0.03);
-            color: var(--text2);
-            font-size: 0.65rem;
-            font-weight: 600;
-            font-family: 'Inter', sans-serif;
-            cursor: pointer;
-            transition: 0.3s ease;
-            backdrop-filter: blur(10px);
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            color: var(--text2); font-size: 0.65rem; font-weight: 600;
+            font-family: 'Inter', sans-serif; cursor: pointer;
+            transition: 0.3s ease; backdrop-filter: blur(10px);
+            display: flex; align-items: center; gap: 5px;
         }
-
         .theme-btn:hover {
             background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-2px);
-            box-shadow: 0 0 30px var(--glow);
+            transform: translateY(-2px); box-shadow: 0 0 30px var(--glow);
         }
-
         .theme-btn.active {
-            background: var(--accent);
-            color: #fff;
-            border-color: var(--accent);
-            box-shadow: 0 0 40px var(--glow);
+            background: var(--accent); color: #fff;
+            border-color: var(--accent); box-shadow: 0 0 40px var(--glow);
         }
-
-        .theme-btn .icon {
-            font-size: 0.8rem;
-        }
+        .theme-btn .icon { font-size: 0.8rem; }
 
         /* ============================================================
                    GRID
                    ============================================================ */
         .grid {
-            max-width: 1100px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px;
-            position: relative;
-            z-index: 1;
+            max-width: 1100px; margin: 0 auto;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px; position: relative; z-index: 1;
         }
 
         .day-card {
@@ -461,204 +281,209 @@
             position: relative;
             overflow: hidden;
         }
-
         .day-card::before {
             content: '';
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             border-radius: var(--radius);
             padding: 1px;
             background: linear-gradient(135deg, var(--accent), transparent, var(--accent2));
             -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
             -webkit-mask-composite: xor;
             mask-composite: exclude;
-            pointer-events: none;
-            opacity: 0.3;
-            transition: 0.4s;
+            pointer-events: none; opacity: 0.3; transition: 0.4s;
         }
-
         .day-card:hover::before { opacity: 0.8; }
-
         .day-card:hover {
             transform: translateY(-6px);
             border-color: rgba(108, 140, 255, 0.15);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px var(--glow);
         }
 
+        /* ===== BADGE — GAME STYLE ===== */
+        .day-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 0.55rem;
+            font-weight: 900;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            font-family: var(--mono-font);
+            z-index: 2;
+            box-shadow: 0 0 20px currentColor;
+            animation: badgePulse 2.5s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.85; transform: scale(1.04); }
+        }
+        .day-badge.chill {
+            background: rgba(68, 221, 136, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(68, 221, 136, 0.4);
+        }
+        .day-badge.easy {
+            background: rgba(68, 221, 136, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(68, 221, 136, 0.4);
+        }
+        .day-badge.brutal {
+            background: rgba(255, 68, 85, 0.15);
+            color: var(--red);
+            border: 1px solid rgba(255, 68, 85, 0.4);
+        }
+        .day-badge.hell {
+            background: rgba(255, 68, 85, 0.2);
+            color: var(--red);
+            border: 1px solid rgba(255, 68, 85, 0.5);
+            animation: hellPulse 1.2s ease-in-out infinite;
+        }
+        @keyframes hellPulse {
+            0%, 100% { box-shadow: 0 0 20px var(--red); opacity: 1; }
+            50% { box-shadow: 0 0 40px var(--red), 0 0 60px var(--red); opacity: 0.9; }
+        }
+        .day-badge.boss {
+            background: rgba(255, 136, 51, 0.15);
+            color: var(--orange);
+            border: 1px solid rgba(255, 136, 51, 0.4);
+            animation: bossPulse 1.8s ease-in-out infinite;
+        }
+        @keyframes bossPulse {
+            0%, 100% { box-shadow: 0 0 20px var(--orange); }
+            50% { box-shadow: 0 0 40px var(--orange); }
+        }
+        .day-badge.safe {
+            background: rgba(68, 221, 136, 0.15);
+            color: var(--green);
+            border: 1px solid rgba(68, 221, 136, 0.4);
+        }
+
         .day-header {
-            display: flex;
-            align-items: center;
+            display: flex; align-items: center;
             justify-content: space-between;
-            margin-bottom: 14px;
-            padding-bottom: 10px;
+            margin-bottom: 8px; padding-bottom: 10px;
             border-bottom: 1px solid var(--border);
         }
-
         .day-header .day-name {
-            font-size: 1.1rem;
-            font-weight: 700;
-            color: #fff;
-            letter-spacing: 0.3px;
+            font-size: 1.1rem; font-weight: 700;
+            color: #fff; letter-spacing: 0.3px;
         }
-
         .day-header .day-name .uz {
-            font-weight: 400;
-            color: var(--text2);
-            font-size: 0.7rem;
-            opacity: 0.4;
-            margin-left: 6px;
-            text-transform: uppercase;
+            font-weight: 400; color: var(--text2);
+            font-size: 0.7rem; opacity: 0.4;
+            margin-left: 6px; text-transform: uppercase;
             letter-spacing: 1px;
         }
-
         .day-header .day-count {
-            font-size: 0.7rem;
-            color: var(--text2);
-            opacity: 0.2;
-            font-weight: 500;
+            font-size: 0.7rem; color: var(--text2);
+            opacity: 0.2; font-weight: 500;
             background: rgba(255, 255, 255, 0.04);
-            padding: 2px 12px;
-            border-radius: 20px;
+            padding: 2px 12px; border-radius: 20px;
+            margin-right: 80px;
+        }
+
+        /* ===== ROAST SUBTITLE ===== */
+        .day-roast {
+            font-size: 0.6rem;
+            color: var(--text2);
+            opacity: 0.45;
+            font-style: italic;
+            letter-spacing: 0.3px;
+            margin-bottom: 12px;
+            padding: 0 2px;
+            font-weight: 400;
         }
 
         .day-card.today {
             border-color: var(--accent);
             box-shadow: 0 0 60px var(--glow), 0 20px 60px rgba(0, 0, 0, 0.5);
         }
-
         .day-card.today .day-name { color: var(--accent); }
-
         .day-card.today::before {
             opacity: 0.8;
             background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent));
             animation: borderPulse 3s ease-in-out infinite;
         }
-
         @keyframes borderPulse {
             0%, 100% { opacity: 0.4; }
             50% { opacity: 1; }
         }
 
         .lesson-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            position: relative;
-            z-index: 1;
+            display: flex; flex-direction: column;
+            gap: 8px; position: relative; z-index: 1;
         }
-
         .lesson-item {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 8px 12px;
-            border-radius: 12px;
+            display: flex; align-items: center; gap: 12px;
+            padding: 8px 12px; border-radius: 12px;
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: 0.2s;
         }
-
         .lesson-item:hover {
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.06);
             box-shadow: 0 0 30px var(--glow);
         }
-
         .lesson-item .time {
-            font-size: 0.6rem;
-            font-weight: 600;
-            color: var(--text2);
-            opacity: 0.3;
-            min-width: 52px;
-            letter-spacing: 0.3px;
+            font-size: 0.6rem; font-weight: 600;
+            color: var(--text2); opacity: 0.3;
+            min-width: 52px; letter-spacing: 0.3px;
             font-variant-numeric: tabular-nums;
             font-family: var(--mono-font);
         }
-
         .lesson-item .num {
-            font-size: 0.55rem;
-            font-weight: 700;
-            color: var(--text2);
-            opacity: 0.15;
-            min-width: 18px;
-            text-align: center;
+            font-size: 0.55rem; font-weight: 700;
+            color: var(--text2); opacity: 0.15;
+            min-width: 18px; text-align: center;
         }
-
         .lesson-item .name {
-            font-size: 0.85rem;
-            font-weight: 500;
-            color: var(--text);
-            flex: 1;
+            font-size: 0.85rem; font-weight: 500;
+            color: var(--text); flex: 1;
         }
 
         /* ============================================================
                    STATS BAR
                    ============================================================ */
         .stats-bar {
-            max-width: 1100px;
-            margin: 30px auto 0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 16px;
-            justify-content: center;
-            padding: 16px 20px;
+            max-width: 1100px; margin: 30px auto 0;
+            display: flex; flex-wrap: wrap; gap: 16px;
+            justify-content: center; padding: 16px 20px;
             background: var(--card-bg);
             border: 1px solid var(--border);
             border-radius: var(--radius);
             backdrop-filter: blur(20px);
-            position: relative;
-            z-index: 1;
+            position: relative; z-index: 1;
         }
-
         .stats-bar .stat {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text2);
-            font-size: 0.75rem;
-            font-weight: 400;
+            display: flex; align-items: center; gap: 8px;
+            color: var(--text2); font-size: 0.75rem; font-weight: 400;
         }
-
         .stats-bar .stat .num {
-            color: #fff;
-            font-weight: 700;
-            font-size: 0.9rem;
+            color: #fff; font-weight: 700; font-size: 0.9rem;
             font-family: var(--mono-font);
         }
-
         .stats-bar .stat .label { opacity: 0.4; }
-
         .stats-bar .divider {
-            width: 1px;
-            height: 24px;
-            background: var(--border);
+            width: 1px; height: 24px; background: var(--border);
         }
 
         /* ============================================================
                    WATERMARK
                    ============================================================ */
         .watermark {
-            max-width: 1100px;
-            margin: 24px auto 0;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            padding: 20px 0 16px;
-            border-top: 1px solid var(--border);
+            max-width: 1100px; margin: 24px auto 0;
+            text-align: center; position: relative; z-index: 1;
+            padding: 20px 0 16px; border-top: 1px solid var(--border);
         }
-
         .watermark .icons-row {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 24px;
-            flex-wrap: wrap;
-            margin-bottom: 12px;
+            display: flex; align-items: center; justify-content: center;
+            gap: 24px; flex-wrap: wrap; margin-bottom: 12px;
         }
-
         .atom-icon {
-            width: 40px;
-            height: 40px;
+            width: 40px; height: 40px;
             filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.4));
             transition: 0.3s;
         }
@@ -666,15 +491,10 @@
             filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.8));
             transform: scale(1.1);
         }
-
         .layers-icon {
-            width: 40px;
-            height: 40px;
-            fill: none;
-            stroke: #8a2be2;
-            stroke-width: 4;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            width: 40px; height: 40px;
+            fill: none; stroke: #8a2be2; stroke-width: 4;
+            stroke-linecap: round; stroke-linejoin: round;
             transition: 0.3s;
             filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.3));
         }
@@ -682,90 +502,56 @@
             filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.7));
             transform: scale(1.1);
         }
-
         .connect-card {
             background: rgba(255, 255, 255, 0.03);
-            padding: 10px 20px;
-            border-radius: 12px;
+            padding: 10px 20px; border-radius: 12px;
             border: 1px solid var(--border);
-            text-align: center;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-decoration: none !important;
-            cursor: pointer;
+            text-align: center; transition: 0.3s;
+            display: flex; align-items: center; gap: 12px;
+            text-decoration: none !important; cursor: pointer;
         }
-
         .connect-card:hover {
             background: rgba(255, 255, 255, 0.06);
             border-color: var(--accent);
             box-shadow: 0 0 40px var(--glow);
             transform: translateY(-2px);
         }
-
         .connect-card .user-icon {
-            width: 32px;
-            height: 32px;
-            fill: none;
-            stroke: #9d4edd;
-            stroke-width: 4;
-            stroke-linecap: round;
-            stroke-linejoin: round;
+            width: 32px; height: 32px;
+            fill: none; stroke: #9d4edd; stroke-width: 4;
+            stroke-linecap: round; stroke-linejoin: round;
         }
-
         .connect-card .connect-title {
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--text);
-            letter-spacing: 0.3px;
+            font-size: 0.8rem; font-weight: 700;
+            color: var(--text); letter-spacing: 0.3px;
         }
-
         .connect-card .connect-subtitle {
-            font-size: 0.6rem;
-            color: var(--text2);
-            opacity: 0.4;
+            font-size: 0.6rem; color: var(--text2); opacity: 0.4;
         }
 
         .watermark .sub {
-            margin-top: 10px;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            align-items: center;
+            margin-top: 10px; display: flex; flex-direction: column;
+            gap: 4px; align-items: center;
         }
-
         .watermark .sub .en {
-            font-size: 0.7rem;
-            color: var(--text2);
-            opacity: 0.5;
-            letter-spacing: 0.5px;
-            font-weight: 400;
+            font-size: 0.7rem; color: var(--text2); opacity: 0.5;
+            letter-spacing: 0.5px; font-weight: 400;
         }
-
         .watermark .sub .uz {
-            font-size: 0.75rem;
-            font-weight: 500;
-            color: var(--gold);
-            opacity: 0.9;
+            font-size: 0.75rem; font-weight: 500;
+            color: var(--gold); opacity: 0.9;
             letter-spacing: 0.5px;
             text-shadow: 0 0 30px rgba(255, 215, 0, 0.15), 0 0 60px rgba(255, 215, 0, 0.05);
             background: rgba(255, 215, 0, 0.04);
-            padding: 4px 16px;
-            border-radius: 20px;
+            padding: 4px 16px; border-radius: 20px;
             border: 1px solid rgba(255, 215, 0, 0.06);
         }
-
         .watermark .glow-line {
-            width: 60px;
-            height: 2px;
-            margin: 10px auto 0;
+            width: 60px; height: 2px; margin: 10px auto 0;
             background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            border-radius: 4px;
-            opacity: 0.3;
+            border-radius: 4px; opacity: 0.3;
             animation: glowPulse 3s ease-in-out infinite;
         }
-
         @keyframes glowPulse {
             0%, 100% { opacity: 0.1; width: 40px; }
             50% { opacity: 0.5; width: 100px; }
@@ -801,6 +587,8 @@
             .connect-card .user-icon { width: 24px; height: 24px; }
             .connect-card .connect-title { font-size: 0.7rem; }
             .watermark .sub .uz { font-size: 0.65rem; }
+            .day-header .day-count { margin-right: 70px; }
+            .day-badge { font-size: 0.5rem; padding: 3px 8px; top: 10px; right: 10px; }
         }
 
         @media (max-width: 400px) {
@@ -820,6 +608,7 @@
             #loadingOverlay .loader-timer { font-size: 1.8rem; }
             #loadingOverlay .loader-timer .icon { font-size: 1.2rem; }
             #loadingOverlay .loader-ring { width: 48px; height: 48px; }
+            .day-header .day-count { margin-right: 60px; }
         }
     </style>
 </head>
@@ -890,10 +679,12 @@
 
             <!-- MONDAY -->
             <div class="day-card" data-day="monday">
+                <div class="day-badge chill">Chill</div>
                 <div class="day-header">
                     <span class="day-name">Dushanba <span class="uz">Monday</span></span>
                     <span class="day-count">5 dars</span>
                 </div>
+                <div class="day-roast">Easy start. Enjoy it while it lasts.</div>
                 <div class="lesson-list">
                     <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kelajak soati</span></div>
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Adabiyot</span></div>
@@ -905,10 +696,12 @@
 
             <!-- TUESDAY -->
             <div class="day-card" data-day="tuesday">
+                <div class="day-badge easy">Easy</div>
                 <div class="day-header">
                     <span class="day-name">Seshanba <span class="uz">Tuesday</span></span>
                     <span class="day-count">5 dars</span>
                 </div>
+                <div class="day-roast">Still alive? Good. Wednesday is coming.</div>
                 <div class="lesson-list">
                     <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Algebra</span></div>
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Geometriya</span></div>
@@ -920,10 +713,12 @@
 
             <!-- WEDNESDAY -->
             <div class="day-card" data-day="wednesday">
+                <div class="day-badge brutal">Brutal</div>
                 <div class="day-header">
                     <span class="day-name">Chorshanba <span class="uz">Wednesday</span></span>
                     <span class="day-count">6 dars</span>
                 </div>
+                <div class="day-roast">Halfway through the week. Fully through your energy.</div>
                 <div class="lesson-list">
                     <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Jahon tarixi</span></div>
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span></div>
@@ -934,12 +729,14 @@
                 </div>
             </div>
 
-            <!-- THURSDAY — UPDATED: 6 lessons -->
+            <!-- THURSDAY -->
             <div class="day-card" data-day="thursday">
+                <div class="day-badge hell">Hell</div>
                 <div class="day-header">
                     <span class="day-name">Payshanba <span class="uz">Thursday</span></span>
                     <span class="day-count">6 dars</span>
                 </div>
+                <div class="day-roast">Thursday: where hope goes to die.</div>
                 <div class="lesson-list">
                     <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarbiya</span></div>
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Ona tili</span></div>
@@ -952,10 +749,12 @@
 
             <!-- FRIDAY -->
             <div class="day-card" data-day="friday">
+                <div class="day-badge boss">Boss</div>
                 <div class="day-header">
                     <span class="day-name">Juma <span class="uz">Friday</span></span>
                     <span class="day-count">6 dars</span>
                 </div>
+                <div class="day-roast">Friday: 6 dars of pure suffering.</div>
                 <div class="lesson-list">
                     <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kimyo</span></div>
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Fizika</span></div>
@@ -968,10 +767,12 @@
 
             <!-- SATURDAY -->
             <div class="day-card" data-day="saturday">
+                <div class="day-badge safe">Safe</div>
                 <div class="day-header">
                     <span class="day-name">Shanba <span class="uz">Saturday</span></span>
                     <span class="day-count">4 dars</span>
                 </div>
+                <div class="day-roast">Only 4. You made it.</div>
                 <div class="lesson-list">
                     <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Algebra</span></div>
                     <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Geometriya</span></div>
@@ -982,7 +783,7 @@
 
         </div>
 
-        <!-- STATS BAR — total lessons updated to 32 -->
+        <!-- STATS BAR -->
         <div class="stats-bar">
             <div class="stat">
                 <span class="num">32</span>
@@ -1011,7 +812,6 @@
         <div class="watermark">
 
             <div class="icons-row">
-
                 <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="50" cy="50" r="10" fill="#00bfff" />
                     <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(0 50 50)" />
@@ -1035,7 +835,6 @@
                         <div class="connect-subtitle">Premium content · Custom profiles</div>
                     </div>
                 </a>
-
             </div>
 
             <div class="sub">
@@ -1078,10 +877,7 @@
         const dayName = days[today.getDay()];
         const uzDayName = uzDays[today.getDay()];
         const dateStr = today.toLocaleDateString('en-US', {
-            weekday: 'long',
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
+            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
         });
 
         document.getElementById('todayDate').textContent = dateStr;
@@ -1089,13 +885,9 @@
         document.getElementById('yearDisplay').textContent = today.getFullYear();
 
         const dayMap = {
-            'Monday': 'monday',
-            'Tuesday': 'tuesday',
-            'Wednesday': 'wednesday',
-            'Thursday': 'thursday',
-            'Friday': 'friday',
-            'Saturday': 'saturday',
-            'Sunday': 'sunday'
+            'Monday': 'monday', 'Tuesday': 'tuesday',
+            'Wednesday': 'wednesday', 'Thursday': 'thursday',
+            'Friday': 'friday', 'Saturday': 'saturday', 'Sunday': 'sunday'
         };
 
         const todayKey = dayMap[dayName];
