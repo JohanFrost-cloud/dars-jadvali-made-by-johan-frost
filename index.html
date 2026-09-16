@@ -34,7 +34,7 @@
     --mono-font: 'JetBrains Mono', monospace;
 }
 
-/* ===== 7 RE:ZERO THEMES ===== */
+/* 7 RE:ZERO THEMES */
 [data-theme="emilia"] { --bg: #0a0e1a; --accent: #7ec8e3; --accent2: #a8d8ea; --glow: rgba(126,200,227,0.25); --glow2: rgba(168,216,234,0.15); --text: #f0f8ff; --text2: #a0c4d4; }
 [data-theme="rem"] { --bg: #0a0e1a; --accent: #4a90d9; --accent2: #6aafe6; --glow: rgba(74,144,217,0.25); --glow2: rgba(106,175,230,0.15); --text: #e8f0ff; --text2: #8aa8d0; }
 [data-theme="ram"] { --bg: #1a0a0a; --accent: #e86a8a; --accent2: #f08aa6; --glow: rgba(232,106,138,0.25); --glow2: rgba(240,138,166,0.15); --text: #ffe8ee; --text2: #c08a9a; }
@@ -268,30 +268,8 @@ body[data-theme="hacker"] #scanlines { opacity: 0.22; }
 }
 
 /* ============================================================
-   WATERMARKS
+   WATERMARK SUB (bottom glowing line — the ONLY watermark)
    ============================================================ */
-.watermark {
-    position: fixed;
-    font-family: var(--heading-font);
-    font-weight: 900;
-    color: var(--accent);
-    pointer-events: none;
-    z-index: 3;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    opacity: 0.06;
-    text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
-    user-select: none;
-}
-.wm-tl { top: 30px; left: 30px; font-size: 60px; transform: rotate(-8deg); }
-.wm-br { bottom: 60px; right: 30px; font-size: 80px; transform: rotate(8deg); }
-.wm-center {
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%) rotate(-20deg);
-    font-size: 140px;
-    opacity: 0.03;
-    letter-spacing: 12px;
-}
 .wm-sub {
     position: fixed;
     bottom: 12px; left: 50%;
@@ -299,13 +277,36 @@ body[data-theme="hacker"] #scanlines { opacity: 0.22; }
     font-family: var(--mono-font);
     font-size: 9px;
     color: var(--accent);
-    opacity: 0.3;
     letter-spacing: 3px;
     z-index: 3;
     pointer-events: none;
     text-transform: uppercase;
     white-space: nowrap;
-    text-shadow: 0 0 20px var(--accent);
+    text-shadow:
+        0 0 6px var(--accent),
+        0 0 12px var(--accent),
+        0 0 24px var(--accent),
+        0 0 48px var(--accent);
+    animation: sunGlow 3s ease-in-out infinite;
+}
+@keyframes sunGlow {
+    0%, 100% {
+        opacity: 0.5;
+        text-shadow:
+            0 0 6px var(--accent),
+            0 0 12px var(--accent),
+            0 0 24px var(--accent),
+            0 0 48px var(--accent);
+    }
+    50% {
+        opacity: 1;
+        text-shadow:
+            0 0 10px var(--accent),
+            0 0 20px var(--accent),
+            0 0 40px var(--accent),
+            0 0 80px var(--accent),
+            0 0 140px var(--accent);
+    }
 }
 
 /* ============================================================
@@ -789,7 +790,7 @@ body[data-theme="hacker"] { background-image: none; }
 .action-bar button i { font-size: 0.7rem; }
 
 /* ============================================================
-   WATERMARK BLOCK
+   WATERMARK BLOCK (bottom info card)
    ============================================================ */
 .watermark-block {
     max-width: 1100px; margin: 24px auto 0;
@@ -914,7 +915,7 @@ body[data-theme="hacker"] { background-image: none; }
 }
 
 /* ============================================================
-   RESPONSIVE — mobile-first fixes
+   RESPONSIVE
    ============================================================ */
 @media (max-width: 900px) {
     .grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
@@ -947,8 +948,7 @@ body[data-theme="hacker"] { background-image: none; }
     .day-header .day-count { margin-right: 68px; font-size: 0.6rem; padding: 2px 10px; }
     .day-badge { font-size: 0.5rem; padding: 3px 8px; top: 10px; right: 10px; }
     .countdown { font-size: 0.6rem; padding: 6px 14px; }
-    .wm-tl, .wm-br { font-size: 40px; }
-    .wm-center { font-size: 70px; }
+    .wm-sub { font-size: 8px; letter-spacing: 2px; }
     .ai-panel { padding: 14px; }
     .ai-messages { max-height: 240px; font-size: 0.7rem; }
     .ai-input button { padding: 10px 14px; font-size: 0.65rem; }
@@ -984,9 +984,6 @@ body[data-theme="hacker"] { background-image: none; }
     #loadingOverlay .loader-ring { width: 50px; height: 50px; margin-bottom: 20px; }
     #loadingOverlay .loader-sub { font-size: 0.7rem; letter-spacing: 2px; }
     .wm-sub { font-size: 7px; letter-spacing: 2px; bottom: 6px; }
-    .wm-center { font-size: 60px; letter-spacing: 6px; }
-    .wm-tl { top: 12px; left: 12px; font-size: 30px; }
-    .wm-br { bottom: 40px; right: 12px; font-size: 34px; }
     .hi-line.big { font-size: 17px; letter-spacing: 1.5px; }
     .hi-line.highlight { font-size: 12px; }
     .hi-line.gold { font-size: 13px; }
@@ -1030,10 +1027,7 @@ body[data-theme="hacker"] { background-image: none; }
 <canvas id="matrixCanvas"></canvas>
 <div id="scanlines"></div>
 
-<!-- WATERMARKS -->
-<div class="watermark wm-tl">SCHEDULE</div>
-<div class="watermark wm-br">@qwastur</div>
-<div class="watermark wm-center">10 A</div>
+<!-- FLOATING SUBTITLE (glowing) -->
 <div class="wm-sub">✦ Created by @qwastur · Subscribe · v3.0 ✦</div>
 
 <!-- LOADING OVERLAY -->
@@ -1312,18 +1306,13 @@ body[data-theme="hacker"] { background-image: none; }
 (function() {
 'use strict';
 
-/* ============================================================
-   LOW-END DETECTION
-   ============================================================ */
 var isLowEnd = (navigator.hardwareConcurrency || 4) <= 2 ||
                (navigator.deviceMemory || 4) <= 2;
 
 var MATRIX_INTERVAL = isLowEnd ? 90 : 55;
 var MAX_AI_MESSAGES = 50;
 
-/* ============================================================
-   LOADING TIMER — 5s
-   ============================================================ */
+/* LOADING TIMER */
 var loadingOverlay = document.getElementById('loadingOverlay');
 var mainContent = document.getElementById('mainContent');
 var timerDisplay = document.getElementById('timerDisplay');
@@ -1343,9 +1332,7 @@ var timerInterval = setInterval(function() {
     }
 }, 1000);
 
-/* ============================================================
-   DATE INFO
-   ============================================================ */
+/* DATE INFO */
 var today = new Date();
 var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
 var uzDays = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
@@ -1372,9 +1359,7 @@ if (todayKey) {
 var hiDay = document.getElementById('hiDay');
 if (hiDay) hiDay.textContent = '> Today is ' + (dayName || 'Monday');
 
-/* ============================================================
-   LAST UPDATED
-   ============================================================ */
+/* LAST UPDATED */
 var updateDateEl = document.getElementById('updateDate');
 var lastUpdated = localStorage.getItem('scheduleLastUpdated');
 if (!lastUpdated) {
@@ -1383,10 +1368,7 @@ if (!lastUpdated) {
 }
 updateDateEl.textContent = lastUpdated;
 
-/* ============================================================
-   THEME SWITCHER — instant, no animation
-   Only hacker theme runs the 5s intro
-   ============================================================ */
+/* THEME SWITCHER */
 var themeBtns = document.querySelectorAll('.theme-btn');
 var body = document.body;
 var hackerIntro = document.getElementById('hackerIntro');
@@ -1455,9 +1437,7 @@ for (var tb = 0; tb < themeBtns.length; tb++) {
     });
 }
 
-/* ============================================================
-   INITIAL THEME
-   ============================================================ */
+/* INITIAL THEME */
 var savedTheme = localStorage.getItem('theme') || 'emilia';
 if (savedTheme === 'hacker') {
     body.setAttribute('data-theme', 'hacker');
@@ -1473,9 +1453,7 @@ if (savedTheme === 'hacker') {
     }
 }
 
-/* ============================================================
-   LESSON CHECKS
-   ============================================================ */
+/* LESSON CHECKS */
 function todayStr() {
     var d = new Date();
     return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
@@ -1522,9 +1500,7 @@ function attachCheckHandlers() {
     }
 }
 
-/* ============================================================
-   DELETE LESSON
-   ============================================================ */
+/* DELETE LESSON */
 function attachDeleteHandlers() {
     var dels = document.querySelectorAll('.lesson-item .del');
     for (var i = 0; i < dels.length; i++) {
@@ -1555,9 +1531,7 @@ function renumberLessons() {
     }
 }
 
-/* ============================================================
-   ADD LESSON
-   ============================================================ */
+/* ADD LESSON */
 var addModal = document.getElementById('addModal');
 var addName = document.getElementById('addName');
 var addTime = document.getElementById('addTime');
@@ -1601,9 +1575,7 @@ document.getElementById('addConfirm').onclick = function() {
     addModal.classList.remove('open');
 };
 
-/* ============================================================
-   SAVE / LOAD SCHEDULE
-   ============================================================ */
+/* SAVE / LOAD SCHEDULE */
 function saveSchedule() {
     var schedule = {};
     var cards = document.querySelectorAll('.day-card');
@@ -1659,9 +1631,7 @@ function updateTotalLessons() {
     document.getElementById('totalLessons').textContent = document.querySelectorAll('.lesson-item').length;
 }
 
-/* ============================================================
-   EXPORT / IMPORT / RESET
-   ============================================================ */
+/* EXPORT / IMPORT / RESET */
 document.getElementById('exportBtn').onclick = function() {
     var data = localStorage.getItem('customSchedule') || '{}';
     var blob = new Blob([data], { type: 'application/json' });
@@ -1702,9 +1672,7 @@ document.getElementById('resetBtn').onclick = function() {
     }
 };
 
-/* ============================================================
-   COUNTDOWN
-   ============================================================ */
+/* COUNTDOWN */
 function updateCountdown() {
     var cd = document.getElementById('countdown');
     var cdLesson = document.getElementById('cdLesson');
@@ -1749,9 +1717,7 @@ function updateCountdown() {
     }
 }
 
-/* ============================================================
-   MATRIX RAIN — only runs when hacker theme active
-   ============================================================ */
+/* MATRIX RAIN */
 var matrixCanvas = document.getElementById('matrixCanvas');
 var matrixCtx = matrixCanvas.getContext('2d');
 
@@ -1809,9 +1775,7 @@ function syncMatrix() {
 
 syncMatrix();
 
-/* ============================================================
-   AI CHAT ENGINE
-   ============================================================ */
+/* AI CHAT ENGINE */
 var aiMessages = document.getElementById('aiMessages');
 var aiInput = document.getElementById('aiInput');
 
@@ -1887,7 +1851,6 @@ function fuzzyIncludes(text, keyword) {
     return false;
 }
 
-/* Knowledge Base */
 var KB = [
     { keys: ['who am i','whoami','kim man','men kimsan','kim ekanman'], reply: "I don't know you. But I am created by **@qwastur** — so subscribe. 🛡️" },
     { keys: ['who are you','who r u','what are you','sen kimsan','siz kimsiz','sen kim'], reply: "I am **NEXUS** — an AI operator terminal created by **@qwastur**. Subscribe for more. 🔥" },
@@ -2097,9 +2060,7 @@ function sendAI() {
     }, 400);
 }
 
-/* ============================================================
-   INIT
-   ============================================================ */
+/* INIT */
 loadSchedule();
 initChecks();
 attachCheckHandlers();
@@ -2109,7 +2070,6 @@ updateTotalLessons();
 updateCountdown();
 setInterval(updateCountdown, 60000);
 
-/* PWA */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', function() {
         navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){})').catch(function(){});
