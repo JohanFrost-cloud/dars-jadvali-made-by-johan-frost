@@ -6,9 +6,10 @@
     <title>✦ Weekly Schedule</title>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <link rel="manifest" href='data:application/manifest+json,{"name":"Weekly Schedule","short_name":"Schedule","start_url":"./","display":"standalone","background_color":"%23060a16","theme_color":"%236c8cff","icons":[{"src":"https://res.cloudinary.com/twrzshwl/image/upload/v1788623457/df69b7a0f847a4785d71f3134a640f7d.jpg","sizes":"512x512","type":"image/jpeg"}]}' />
 
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -132,6 +133,22 @@
             --text: #f0e0f0; --text2: #b08ab0;
         }
 
+        /* ===== AUTO LIGHT/DARK ===== */
+        body.light-mode {
+            --bg: #f5f5fa;
+            --card-bg: rgba(0, 0, 0, 0.03);
+            --border: rgba(0, 0, 0, 0.08);
+            --text: #1a1a2e;
+            --text2: #5a5a7a;
+            --glow: rgba(108, 140, 255, 0.15);
+            --glow2: rgba(167, 139, 250, 0.1);
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+        }
+        body.light-mode::before {
+            background: radial-gradient(ellipse at 30% 40%, var(--glow) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 60%, var(--glow2) 0%, transparent 50%);
+        }
+
         /* ============================================================
                    BODY
                    ============================================================ */
@@ -180,16 +197,29 @@
         }
         .header h1 {
             font-size: 2.2rem; font-weight: 800;
-            background: linear-gradient(135deg, #fff 40%, var(--accent));
+            background: linear-gradient(135deg, var(--text) 40%, var(--accent));
             -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             letter-spacing: -0.5px; transition: background 0.6s;
             font-family: var(--heading-font);
         }
         .header .sub {
-            color: var(--text2); font-size: 0.9rem; opacity: 0.4;
+            color: var(--text2); font-size: 0.9rem; opacity: 0.5;
             margin-top: 4px; letter-spacing: 1px; font-weight: 300;
         }
         .header .sub span { color: var(--accent); opacity: 1; transition: color 0.6s; }
+
+        /* ===== LAST UPDATED TAG ===== */
+        .last-updated {
+            display: inline-flex; align-items: center; gap: 6px;
+            margin-top: 10px; padding: 5px 16px;
+            border-radius: 20px;
+            background: rgba(255, 215, 0, 0.06);
+            border: 1px solid rgba(255, 215, 0, 0.12);
+            font-size: 0.55rem; font-weight: 600;
+            color: var(--gold); letter-spacing: 0.5px;
+            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
+        }
+        .last-updated i { font-size: 0.6rem; }
 
         .header .telegram-btn {
             display: inline-flex; align-items: center; gap: 8px;
@@ -233,6 +263,31 @@
             display: flex; align-items: center; justify-content: center;
             gap: 12px; flex-wrap: wrap; margin-top: 8px;
         }
+
+        /* ===== COUNTDOWN ===== */
+        .countdown {
+            display: flex; align-items: center; justify-content: center;
+            gap: 10px; margin-top: 12px; padding: 8px 20px;
+            border-radius: 30px;
+            background: rgba(108, 140, 255, 0.06);
+            border: 1px solid rgba(108, 140, 255, 0.1);
+            font-size: 0.7rem; font-weight: 600;
+            color: var(--text);
+            box-shadow: 0 0 30px var(--glow);
+            backdrop-filter: blur(10px);
+            max-width: fit-content;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .countdown .cd-label { color: var(--text2); opacity: 0.5; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; }
+        .countdown .cd-value { color: var(--accent); font-family: var(--mono-font); font-weight: 700; }
+        .countdown .cd-lesson { color: var(--text); opacity: 0.8; }
+        .countdown i { color: var(--accent); font-size: 0.8rem; animation: pulse 1.5s infinite; }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .countdown.idle .cd-value { color: var(--text2); }
 
         /* ============================================================
                    THEME SWITCHER
@@ -299,19 +354,13 @@
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px var(--glow);
         }
 
-        /* ===== BADGE — GAME STYLE ===== */
+        /* ===== BADGE ===== */
         .day-badge {
-            position: absolute;
-            top: 12px;
-            right: 12px;
-            padding: 4px 10px;
-            border-radius: 6px;
-            font-size: 0.55rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            font-family: var(--mono-font);
-            z-index: 2;
+            position: absolute; top: 12px; right: 12px;
+            padding: 4px 10px; border-radius: 6px;
+            font-size: 0.55rem; font-weight: 900;
+            letter-spacing: 1.5px; text-transform: uppercase;
+            font-family: var(--mono-font); z-index: 2;
             box-shadow: 0 0 20px currentColor;
             animation: badgePulse 2.5s ease-in-out infinite;
         }
@@ -320,23 +369,19 @@
             50% { opacity: 0.85; transform: scale(1.04); }
         }
         .day-badge.chill {
-            background: rgba(68, 221, 136, 0.15);
-            color: var(--green);
+            background: rgba(68, 221, 136, 0.15); color: var(--green);
             border: 1px solid rgba(68, 221, 136, 0.4);
         }
         .day-badge.easy {
-            background: rgba(68, 221, 136, 0.15);
-            color: var(--green);
+            background: rgba(68, 221, 136, 0.15); color: var(--green);
             border: 1px solid rgba(68, 221, 136, 0.4);
         }
         .day-badge.brutal {
-            background: rgba(255, 68, 85, 0.15);
-            color: var(--red);
+            background: rgba(255, 68, 85, 0.15); color: var(--red);
             border: 1px solid rgba(255, 68, 85, 0.4);
         }
         .day-badge.hell {
-            background: rgba(255, 68, 85, 0.2);
-            color: var(--red);
+            background: rgba(255, 68, 85, 0.2); color: var(--red);
             border: 1px solid rgba(255, 68, 85, 0.5);
             animation: hellPulse 1.2s ease-in-out infinite;
         }
@@ -345,8 +390,7 @@
             50% { box-shadow: 0 0 40px var(--red), 0 0 60px var(--red); opacity: 0.9; }
         }
         .day-badge.boss {
-            background: rgba(255, 136, 51, 0.15);
-            color: var(--orange);
+            background: rgba(255, 136, 51, 0.15); color: var(--orange);
             border: 1px solid rgba(255, 136, 51, 0.4);
             animation: bossPulse 1.8s ease-in-out infinite;
         }
@@ -355,8 +399,7 @@
             50% { box-shadow: 0 0 40px var(--orange); }
         }
         .day-badge.safe {
-            background: rgba(68, 221, 136, 0.15);
-            color: var(--green);
+            background: rgba(68, 221, 136, 0.15); color: var(--green);
             border: 1px solid rgba(68, 221, 136, 0.4);
         }
 
@@ -368,7 +411,7 @@
         }
         .day-header .day-name {
             font-size: 1.1rem; font-weight: 700;
-            color: #fff; letter-spacing: 0.3px;
+            color: var(--text); letter-spacing: 0.3px;
         }
         .day-header .day-name .uz {
             font-weight: 400; color: var(--text2);
@@ -378,7 +421,7 @@
         }
         .day-header .day-count {
             font-size: 0.7rem; color: var(--text2);
-            opacity: 0.2; font-weight: 500;
+            opacity: 0.3; font-weight: 500;
             background: rgba(255, 255, 255, 0.04);
             padding: 2px 12px; border-radius: 20px;
             margin-right: 80px;
@@ -386,14 +429,10 @@
 
         /* ===== ROAST SUBTITLE ===== */
         .day-roast {
-            font-size: 0.6rem;
-            color: var(--text2);
-            opacity: 0.45;
-            font-style: italic;
-            letter-spacing: 0.3px;
-            margin-bottom: 12px;
-            padding: 0 2px;
-            font-weight: 400;
+            font-size: 0.6rem; color: var(--text2);
+            opacity: 0.45; font-style: italic;
+            letter-spacing: 0.3px; margin-bottom: 12px;
+            padding: 0 2px; font-weight: 400;
         }
 
         .day-card.today {
@@ -421,11 +460,29 @@
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.03);
             transition: 0.2s;
+            position: relative;
         }
         .lesson-item:hover {
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.06);
             box-shadow: 0 0 30px var(--glow);
+        }
+        .lesson-item .check {
+            width: 16px; height: 16px; border-radius: 5px;
+            border: 1.5px solid var(--border);
+            background: rgba(255,255,255,0.02);
+            cursor: pointer; transition: 0.2s;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0;
+        }
+        .lesson-item .check:hover { border-color: var(--accent); }
+        .lesson-item .check.done {
+            background: var(--green);
+            border-color: var(--green);
+            box-shadow: 0 0 15px rgba(68, 221, 136, 0.4);
+        }
+        .lesson-item .check.done::after {
+            content: '✓'; color: #fff; font-size: 10px; font-weight: 900;
         }
         .lesson-item .time {
             font-size: 0.6rem; font-weight: 600;
@@ -442,6 +499,42 @@
         .lesson-item .name {
             font-size: 0.85rem; font-weight: 500;
             color: var(--text); flex: 1;
+        }
+        .lesson-item.done .name {
+            text-decoration: line-through;
+            opacity: 0.4;
+        }
+        .lesson-item .del {
+            background: none; border: none;
+            color: var(--text2); opacity: 0.15;
+            cursor: pointer; font-size: 0.7rem;
+            width: 20px; height: 20px; border-radius: 50%;
+            transition: 0.2s; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .lesson-item .del:hover {
+            opacity: 1; color: var(--red);
+            background: rgba(255, 68, 85, 0.1);
+        }
+
+        /* ===== ADD LESSON BTN ===== */
+        .add-lesson-btn {
+            margin-top: 8px;
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+            border-radius: 10px; padding: 6px 12px;
+            font-size: 0.55rem; font-weight: 600;
+            color: var(--text2); opacity: 0.5;
+            cursor: pointer; transition: 0.2s;
+            font-family: var(--font);
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            width: 100%;
+        }
+        .add-lesson-btn:hover {
+            opacity: 1; color: var(--accent);
+            border-color: var(--accent);
+            background: rgba(108, 140, 255, 0.05);
+            box-shadow: 0 0 20px var(--glow);
         }
 
         /* ============================================================
@@ -462,13 +555,37 @@
             color: var(--text2); font-size: 0.75rem; font-weight: 400;
         }
         .stats-bar .stat .num {
-            color: #fff; font-weight: 700; font-size: 0.9rem;
+            color: var(--text); font-weight: 700; font-size: 0.9rem;
             font-family: var(--mono-font);
         }
         .stats-bar .stat .label { opacity: 0.4; }
         .stats-bar .divider {
             width: 1px; height: 24px; background: var(--border);
         }
+
+        /* ===== ACTION BUTTONS ===== */
+        .action-bar {
+            max-width: 1100px; margin: 16px auto 0;
+            display: flex; gap: 10px; justify-content: center;
+            flex-wrap: wrap; position: relative; z-index: 1;
+        }
+        .action-bar button {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            color: var(--text2); padding: 8px 16px;
+            border-radius: 30px; font-size: 0.6rem;
+            font-weight: 600; cursor: pointer;
+            font-family: var(--font); transition: 0.2s;
+            display: flex; align-items: center; gap: 6px;
+            box-shadow: 0 0 20px var(--glow);
+        }
+        .action-bar button:hover {
+            background: rgba(108, 140, 255, 0.08);
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 0 40px var(--glow);
+        }
+        .action-bar button i { font-size: 0.7rem; }
 
         /* ============================================================
                    WATERMARK
@@ -557,6 +674,58 @@
             50% { opacity: 0.5; width: 100px; }
         }
 
+        /* ===== ADD MODAL ===== */
+        .add-modal {
+            position: fixed; top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(20px);
+            z-index: 99999; display: none;
+            align-items: center; justify-content: center;
+            padding: 20px;
+        }
+        .add-modal.open { display: flex; }
+        .add-modal-content {
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px; width: 100%; max-width: 340px;
+            box-shadow: 0 0 80px var(--glow);
+        }
+        .add-modal-content h3 {
+            font-size: 0.9rem; font-weight: 700;
+            color: var(--text); margin-bottom: 14px;
+            letter-spacing: 0.5px;
+        }
+        .add-modal-content input {
+            width: 100%; padding: 10px 14px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--text); font-size: 0.8rem;
+            font-family: var(--font); outline: none;
+            margin-bottom: 10px;
+        }
+        .add-modal-content input:focus { border-color: var(--accent); }
+        .add-modal-content .btns {
+            display: flex; gap: 8px; margin-top: 6px;
+        }
+        .add-modal-content .btns button {
+            flex: 1; padding: 9px;
+            border-radius: 10px; border: none;
+            font-weight: 700; cursor: pointer;
+            font-family: var(--font); font-size: 0.7rem;
+            transition: 0.2s;
+        }
+        .add-modal-content .btns .ok {
+            background: var(--accent); color: #fff;
+        }
+        .add-modal-content .btns .ok:hover { transform: scale(1.02); }
+        .add-modal-content .btns .no {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text2);
+        }
+
         /* ============================================================
                    RESPONSIVE
                    ============================================================ */
@@ -577,10 +746,6 @@
             .header .telegram-btn { padding: 4px 12px 4px 10px; font-size: 0.7rem; }
             .header .telegram-btn i { font-size: 1rem; }
             .header .telegram-btn .sparkle { display: none; }
-            #loadingOverlay .loader-info { padding: 12px 16px; }
-            #loadingOverlay .loader-info .line { font-size: 0.65rem; }
-            #loadingOverlay .loader-timer { font-size: 2.2rem; }
-            #loadingOverlay .loader-timer .icon { font-size: 1.6rem; }
             .watermark .icons-row { gap: 14px; }
             .atom-icon, .layers-icon { width: 30px; height: 30px; }
             .connect-card { padding: 6px 14px; gap: 8px; }
@@ -589,6 +754,7 @@
             .watermark .sub .uz { font-size: 0.65rem; }
             .day-header .day-count { margin-right: 70px; }
             .day-badge { font-size: 0.5rem; padding: 3px 8px; top: 10px; right: 10px; }
+            .countdown { font-size: 0.6rem; padding: 6px 14px; }
         }
 
         @media (max-width: 400px) {
@@ -614,19 +780,14 @@
 </head>
 <body>
 
-    <!-- ============================================================
-    LOADING OVERLAY
-    ============================================================ -->
+    <!-- LOADING OVERLAY -->
     <div id="loadingOverlay">
         <div class="loader-ring"></div>
-
         <div class="loader-timer">
             <span class="icon">⏳</span>
             <span class="glow" id="timerDisplay">5</span><span class="glow">s</span>
         </div>
-
         <div class="loader-sub">Loading schedule</div>
-
         <div class="loader-info">
             <div class="line">
                 <span class="highlight">✦</span> This content is made by <strong>Johan Frost</strong>
@@ -639,9 +800,7 @@
         </div>
     </div>
 
-    <!-- ============================================================
-    MAIN CONTENT
-    ============================================================ -->
+    <!-- MAIN CONTENT -->
     <div id="mainContent" style="opacity:0;transition:opacity 0.6s ease;">
 
         <!-- HEADER -->
@@ -660,6 +819,19 @@
                 <div class="today-badge" id="todayBadge">
                     📅 <span id="todayDate"></span> — <span class="day-highlight" id="todayDay">Today</span>
                 </div>
+            </div>
+
+            <!-- LAST UPDATED -->
+            <div class="last-updated" id="lastUpdated">
+                <i class="fas fa-clock"></i> Last updated: <span id="updateDate">--</span>
+            </div>
+
+            <!-- COUNTDOWN -->
+            <div class="countdown" id="countdown">
+                <i class="fas fa-hourglass-half"></i>
+                <span class="cd-label">Next</span>
+                <span class="cd-lesson" id="cdLesson">—</span>
+                <span class="cd-value" id="cdValue">--:--</span>
             </div>
         </div>
 
@@ -682,87 +854,100 @@
                 <div class="day-badge chill">Chill</div>
                 <div class="day-header">
                     <span class="day-name">Dushanba <span class="uz">Monday</span></span>
-                    <span class="day-count">5 dars</span>
+                    <span class="day-count">4 dars</span>
                 </div>
                 <div class="day-roast">Easy start. Enjoy it while it lasts.</div>
-                <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kelajak soati</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Adabiyot</span></div>
-                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ona tili</span></div>
-                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Rus tili</span></div>
-                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Algebra</span></div>
+                <div class="lesson-list" data-day="monday">
+                    <div class="lesson-item">
+                        <span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name" contenteditable="false">Kelajak soati</span><button class="del"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="lesson-item">
+                        <span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name" contenteditable="false">Adabiyot</span><button class="del"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="lesson-item">
+                        <span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name" contenteditable="false">Ona tili</span><button class="del"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="lesson-item">
+                        <span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name" contenteditable="false">Fizika</span><button class="del"><i class="fas fa-times"></i></button>
+                    </div>
                 </div>
+                <button class="add-lesson-btn" data-day="monday"><i class="fas fa-plus"></i> Add lesson</button>
             </div>
 
             <!-- TUESDAY -->
             <div class="day-card" data-day="tuesday">
-                <div class="day-badge easy">Easy</div>
+                <div class="day-badge brutal">Brutal</div>
                 <div class="day-header">
                     <span class="day-name">Seshanba <span class="uz">Tuesday</span></span>
-                    <span class="day-count">5 dars</span>
+                    <span class="day-count">6 dars</span>
                 </div>
                 <div class="day-roast">Still alive? Good. Wednesday is coming.</div>
-                <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Algebra</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Geometriya</span></div>
-                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ingliz tili</span></div>
-                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">O'zbekiston tarixi</span></div>
-                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Biologiya</span></div>
+                <div class="lesson-list" data-day="tuesday">
+                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ingliz tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Jahon tarixi</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Biologiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
                 </div>
+                <button class="add-lesson-btn" data-day="tuesday"><i class="fas fa-plus"></i> Add lesson</button>
             </div>
 
             <!-- WEDNESDAY -->
             <div class="day-card" data-day="wednesday">
-                <div class="day-badge brutal">Brutal</div>
+                <div class="day-badge hell">Hell</div>
                 <div class="day-header">
                     <span class="day-name">Chorshanba <span class="uz">Wednesday</span></span>
                     <span class="day-count">6 dars</span>
                 </div>
                 <div class="day-roast">Halfway through the week. Fully through your energy.</div>
-                <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Jahon tarixi</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span></div>
-                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Informatika</span></div>
-                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Jismoniy tarbiya</span></div>
-                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span></div>
-                    <div class="lesson-item"><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Ingliz tili</span></div>
+                <div class="lesson-list" data-day="wednesday">
+                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">O'zbekiston tarixi</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Informatika</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Jismoniy tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Ingliz tili</span><button class="del"><i class="fas fa-times"></i></button></div>
                 </div>
+                <button class="add-lesson-btn" data-day="wednesday"><i class="fas fa-plus"></i> Add lesson</button>
             </div>
 
             <!-- THURSDAY -->
             <div class="day-card" data-day="thursday">
-                <div class="day-badge hell">Hell</div>
+                <div class="day-badge boss">Boss</div>
                 <div class="day-header">
                     <span class="day-name">Payshanba <span class="uz">Thursday</span></span>
                     <span class="day-count">6 dars</span>
                 </div>
                 <div class="day-roast">Thursday: where hope goes to die.</div>
-                <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarbiya</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Ona tili</span></div>
-                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Geografiya</span></div>
-                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Adabiyot</span></div>
-                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span></div>
-                    <div class="lesson-item"><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Biologiya</span></div>
+                <div class="lesson-list" data-day="thursday">
+                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Ona tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Adabiyot</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Biologiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
                 </div>
+                <button class="add-lesson-btn" data-day="thursday"><i class="fas fa-plus"></i> Add lesson</button>
             </div>
 
             <!-- FRIDAY -->
             <div class="day-card" data-day="friday">
-                <div class="day-badge boss">Boss</div>
+                <div class="day-badge hell">Hell</div>
                 <div class="day-header">
                     <span class="day-name">Juma <span class="uz">Friday</span></span>
                     <span class="day-count">6 dars</span>
                 </div>
                 <div class="day-roast">Friday: 6 dars of pure suffering.</div>
-                <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kimyo</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Fizika</span></div>
-                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Informatika</span></div>
-                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Huquq</span></div>
-                    <div class="lesson-item"><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Jismoniy tarbiya</span></div>
-                    <div class="lesson-item"><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Geografiya</span></div>
+                <div class="lesson-list" data-day="friday">
+                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Jismoniy Tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Huquq</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Informatika</span><button class="del"><i class="fas fa-times"></i></button></div>
                 </div>
+                <button class="add-lesson-btn" data-day="friday"><i class="fas fa-plus"></i> Add lesson</button>
             </div>
 
             <!-- SATURDAY -->
@@ -773,44 +958,37 @@
                     <span class="day-count">4 dars</span>
                 </div>
                 <div class="day-roast">Only 4. You made it.</div>
-                <div class="lesson-list">
-                    <div class="lesson-item"><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Algebra</span></div>
-                    <div class="lesson-item"><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Geometriya</span></div>
-                    <div class="lesson-item"><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Kimyo</span></div>
-                    <div class="lesson-item"><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Fizika</span></div>
+                <div class="lesson-list" data-day="saturday">
+                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
+                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Fizika</span><button class="del"><i class="fas fa-times"></i></button></div>
                 </div>
+                <button class="add-lesson-btn" data-day="saturday"><i class="fas fa-plus"></i> Add lesson</button>
             </div>
 
         </div>
 
         <!-- STATS BAR -->
         <div class="stats-bar">
-            <div class="stat">
-                <span class="num">32</span>
-                <span class="label">total lessons</span>
-            </div>
+            <div class="stat"><span class="num" id="totalLessons">32</span><span class="label">total lessons</span></div>
             <div class="divider"></div>
-            <div class="stat">
-                <span class="num">6</span>
-                <span class="label">subjects</span>
-            </div>
+            <div class="stat"><span class="num">6</span><span class="label">subjects</span></div>
             <div class="divider"></div>
-            <div class="stat">
-                <span class="num">6</span>
-                <span class="label">days</span>
-            </div>
+            <div class="stat"><span class="num">6</span><span class="label">days</span></div>
             <div class="divider"></div>
-            <div class="stat">
-                <span class="num">08:00</span>
-                <span class="label">start</span>
-            </div>
+            <div class="stat"><span class="num">08:00</span><span class="label">start</span></div>
         </div>
 
-        <!-- ============================================================
-        WATERMARK
-        ============================================================ -->
-        <div class="watermark">
+        <!-- ACTION BAR -->
+        <div class="action-bar">
+            <button id="exportBtn"><i class="fas fa-download"></i> Export</button>
+            <button id="importBtn"><i class="fas fa-upload"></i> Import</button>
+            <button id="resetBtn"><i class="fas fa-undo"></i> Reset</button>
+        </div>
 
+        <!-- WATERMARK -->
+        <div class="watermark">
             <div class="icons-row">
                 <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="50" cy="50" r="10" fill="#00bfff" />
@@ -847,10 +1025,23 @@
 
     </div>
 
-    <!-- ============================================================
-    JAVASCRIPT
-    ============================================================ -->
+    <!-- ADD LESSON MODAL -->
+    <div class="add-modal" id="addModal">
+        <div class="add-modal-content">
+            <h3>Add Lesson</h3>
+            <input type="text" id="addName" placeholder="Lesson name" />
+            <input type="text" id="addTime" placeholder="Time (e.g. 13:00–13:45)" />
+            <div class="btns">
+                <button class="no" id="addCancel">Cancel</button>
+                <button class="ok" id="addConfirm">Add</button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        /* ============================================================
+                   LOADING TIMER
+                   ============================================================ */
         const loadingOverlay = document.getElementById('loadingOverlay');
         const mainContent = document.getElementById('mainContent');
         const timerDisplay = document.getElementById('timerDisplay');
@@ -870,6 +1061,9 @@
             }
         }, 1000);
 
+        /* ============================================================
+                   TODAY'S DATE
+                   ============================================================ */
         const today = new Date();
         const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
         const uzDays = ['Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
@@ -897,6 +1091,22 @@
             });
         }
 
+        /* ============================================================
+                   LAST UPDATED
+                   ============================================================ */
+        const updateDateEl = document.getElementById('updateDate');
+        let lastUpdated = localStorage.getItem('scheduleLastUpdated');
+        if (!lastUpdated) {
+            lastUpdated = new Date().toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric'
+            });
+            localStorage.setItem('scheduleLastUpdated', lastUpdated);
+        }
+        updateDateEl.textContent = lastUpdated;
+
+        /* ============================================================
+                   THEME SWITCHER
+                   ============================================================ */
         const themeBtns = document.querySelectorAll('.theme-btn');
         const body = document.body;
 
@@ -914,6 +1124,321 @@
 
         const savedTheme = localStorage.getItem('theme') || 'emilia';
         setTheme(savedTheme);
+
+        /* ============================================================
+                   AUTO LIGHT/DARK BY SYSTEM
+                   ============================================================ */
+        const lightModeQuery = window.matchMedia('(prefers-color-scheme: light)');
+
+        function applySystemTheme(e) {
+            if (e.matches) {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+        }
+
+        applySystemTheme(lightModeQuery);
+        lightModeQuery.addEventListener('change', applySystemTheme);
+
+        /* ============================================================
+                   LESSON CHECKS
+                   ============================================================ */
+        function todayStr() {
+            const d = new Date();
+            return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        }
+
+        function initChecks() {
+            const savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
+            const savedDate = localStorage.getItem('lessonCheckDate');
+            const currentDate = todayStr();
+
+            if (savedDate !== currentDate) {
+                localStorage.setItem('lessonCheckDate', currentDate);
+                localStorage.setItem('lessonChecks', '{}');
+                return;
+            }
+
+            document.querySelectorAll('.lesson-item').forEach((item, idx) => {
+                const key = item.closest('.lesson-list').dataset.day + '-' + idx;
+                if (savedChecks[key]) {
+                    item.querySelector('.check').classList.add('done');
+                    item.classList.add('done');
+                }
+            });
+        }
+
+        function attachCheckHandlers() {
+            document.querySelectorAll('.lesson-item .check').forEach(check => {
+                check.onclick = function() {
+                    const item = this.closest('.lesson-item');
+                    const day = item.closest('.lesson-list').dataset.day;
+                    const idx = Array.from(item.parentNode.children).indexOf(item);
+                    const key = day + '-' + idx;
+
+                    this.classList.toggle('done');
+                    item.classList.toggle('done');
+
+                    const savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
+                    if (this.classList.contains('done')) {
+                        savedChecks[key] = true;
+                    } else {
+                        delete savedChecks[key];
+                    }
+                    localStorage.setItem('lessonChecks', JSON.stringify(savedChecks));
+                };
+            });
+        }
+
+        /* ============================================================
+                   DELETE LESSON
+                   ============================================================ */
+        function attachDeleteHandlers() {
+            document.querySelectorAll('.lesson-item .del').forEach(btn => {
+                btn.onclick = function(e) {
+                    e.stopPropagation();
+                    const item = this.closest('.lesson-item');
+                    item.style.transition = 'opacity 0.3s, transform 0.3s';
+                    item.style.opacity = '0';
+                    item.style.transform = 'translateX(-20px)';
+                    setTimeout(() => {
+                        item.remove();
+                        renumberLessons();
+                        saveSchedule();
+                        updateTotalLessons();
+                    }, 300);
+                };
+            });
+        }
+
+        function renumberLessons() {
+            document.querySelectorAll('.lesson-list').forEach(list => {
+                Array.from(list.children).forEach((item, idx) => {
+                    const numEl = item.querySelector('.num');
+                    if (numEl) numEl.textContent = idx + 1;
+                });
+            });
+        }
+
+        /* ============================================================
+                   ADD LESSON
+                   ============================================================ */
+        const addModal = document.getElementById('addModal');
+        const addName = document.getElementById('addName');
+        const addTime = document.getElementById('addTime');
+        let pendingDay = null;
+
+        document.querySelectorAll('.add-lesson-btn').forEach(btn => {
+            btn.onclick = function() {
+                pendingDay = this.dataset.day;
+                addName.value = '';
+                addTime.value = '';
+                addModal.classList.add('open');
+                addName.focus();
+            };
+        });
+
+        document.getElementById('addCancel').onclick = function() {
+            addModal.classList.remove('open');
+        };
+
+        document.getElementById('addConfirm').onclick = function() {
+            const name = addName.value.trim();
+            const time = addTime.value.trim() || '00:00–00:00';
+            if (!name) return;
+
+            const list = document.querySelector('.lesson-list[data-day="' + pendingDay + '"]');
+            const newItem = document.createElement('div');
+            newItem.className = 'lesson-item';
+            newItem.innerHTML = `
+                <span class="check"></span>
+                <span class="num">${list.children.length + 1}</span>
+                <span class="time">${time}</span>
+                <span class="name">${name}</span>
+                <button class="del"><i class="fas fa-times"></i></button>
+            `;
+            list.appendChild(newItem);
+
+            attachCheckHandlers();
+            attachDeleteHandlers();
+            renumberLessons();
+            saveSchedule();
+            updateTotalLessons();
+
+            addModal.classList.remove('open');
+        };
+
+        /* ============================================================
+                   SAVE / LOAD SCHEDULE
+                   ============================================================ */
+        function saveSchedule() {
+            const schedule = {};
+            document.querySelectorAll('.day-card').forEach(card => {
+                const day = card.dataset.day;
+                const lessons = [];
+                card.querySelectorAll('.lesson-item').forEach(item => {
+                    lessons.push({
+                        time: item.querySelector('.time').textContent.trim(),
+                        name: item.querySelector('.name').textContent.trim()
+                    });
+                });
+                schedule[day] = lessons;
+            });
+            localStorage.setItem('customSchedule', JSON.stringify(schedule));
+            localStorage.setItem('scheduleLastUpdated',
+                new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }));
+            updateDateEl.textContent = localStorage.getItem('scheduleLastUpdated');
+        }
+
+        function loadSchedule() {
+            const saved = localStorage.getItem('customSchedule');
+            if (!saved) return false;
+            try {
+                const schedule = JSON.parse(saved);
+                Object.keys(schedule).forEach(day => {
+                    const list = document.querySelector('.lesson-list[data-day="' + day + '"]');
+                    if (!list) return;
+                    list.innerHTML = '';
+                    schedule[day].forEach((lesson, idx) => {
+                        const item = document.createElement('div');
+                        item.className = 'lesson-item';
+                        item.innerHTML = `
+                            <span class="check"></span>
+                            <span class="num">${idx + 1}</span>
+                            <span class="time">${lesson.time}</span>
+                            <span class="name">${lesson.name}</span>
+                            <button class="del"><i class="fas fa-times"></i></button>
+                        `;
+                        list.appendChild(item);
+                    });
+                });
+                return true;
+            } catch (e) { return false; }
+        }
+
+        /* ============================================================
+                   UPDATE TOTAL LESSONS
+                   ============================================================ */
+        function updateTotalLessons() {
+            const total = document.querySelectorAll('.lesson-item').length;
+            document.getElementById('totalLessons').textContent = total;
+        }
+
+        /* ============================================================
+                   EXPORT / IMPORT / RESET
+                   ============================================================ */
+        document.getElementById('exportBtn').onclick = function() {
+            const data = localStorage.getItem('customSchedule') || '{}';
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'schedule-' + todayStr() + '.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        document.getElementById('importBtn').onclick = function() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = function(ev) {
+                    try {
+                        const data = JSON.parse(ev.target.result);
+                        localStorage.setItem('customSchedule', JSON.stringify(data));
+                        location.reload();
+                    } catch (err) {
+                        alert('Invalid file');
+                    }
+                };
+                reader.readAsText(file);
+            };
+            input.click();
+        };
+
+        document.getElementById('resetBtn').onclick = function() {
+            if (confirm('Reset schedule to default?')) {
+                localStorage.removeItem('customSchedule');
+                localStorage.removeItem('lessonChecks');
+                localStorage.removeItem('scheduleLastUpdated');
+                location.reload();
+            }
+        };
+
+        /* ============================================================
+                   COUNTDOWN TO NEXT LESSON
+                   ============================================================ */
+        function updateCountdown() {
+            const cd = document.getElementById('countdown');
+            const cdLesson = document.getElementById('cdLesson');
+            const cdValue = document.getElementById('cdValue');
+
+            if (!todayKey) {
+                cd.classList.add('idle');
+                cdLesson.textContent = '—';
+                cdValue.textContent = 'Weekend';
+                return;
+            }
+
+            const card = document.querySelector('.day-card[data-day="' + todayKey + '"]');
+            if (!card) return;
+
+            const now = new Date();
+            const nowMin = now.getHours() * 60 + now.getMinutes();
+            let next = null;
+
+            card.querySelectorAll('.lesson-item').forEach(item => {
+                const timeText = item.querySelector('.time').textContent.trim();
+                const match = timeText.match(/(\d{1,2}):(\d{2})/);
+                if (!match) return;
+                const startMin = parseInt(match[1]) * 60 + parseInt(match[2]);
+                if (startMin > nowMin && !next) {
+                    next = {
+                        min: startMin,
+                        name: item.querySelector('.name').textContent.trim()
+                    };
+                }
+            });
+
+            if (next) {
+                cd.classList.remove('idle');
+                const diff = next.min - nowMin;
+                const h = Math.floor(diff / 60);
+                const m = diff % 60;
+                cdLesson.textContent = next.name;
+                cdValue.textContent = (h > 0 ? h + 'h ' : '') + m + 'm';
+            } else {
+                cd.classList.add('idle');
+                cdLesson.textContent = '—';
+                cdValue.textContent = 'Done for today';
+            }
+        }
+
+        /* ============================================================
+                   INIT
+                   ============================================================ */
+        loadSchedule();
+        initChecks();
+        attachCheckHandlers();
+        attachDeleteHandlers();
+        renumberLessons();
+        updateTotalLessons();
+        updateCountdown();
+        setInterval(updateCountdown, 60000);
+
+        /* ============================================================
+                   PWA SERVICE WORKER
+                   ============================================================ */
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",e=>{});').catch(() => {});
+            });
+        }
     </script>
 
 </body>
