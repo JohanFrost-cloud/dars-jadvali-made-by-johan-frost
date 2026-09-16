@@ -1,1445 +1,2123 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes" />
-    <title>✦ Weekly Schedule</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<title>✦ Schedule</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-    <link rel="manifest" href='data:application/manifest+json,{"name":"Weekly Schedule","short_name":"Schedule","start_url":"./","display":"standalone","background_color":"%23060a16","theme_color":"%236c8cff","icons":[{"src":"https://res.cloudinary.com/twrzshwl/image/upload/v1788623457/df69b7a0f847a4785d71f3134a640f7d.jpg","sizes":"512x512","type":"image/jpeg"}]}' />
+<link rel="manifest" href='data:application/manifest+json,{"name":"Schedule","short_name":"Schedule","start_url":"./","display":"standalone","background_color":"%23000000","theme_color":"%2300ffc8"}' />
 
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ============================================================
-                   LOADING OVERLAY
-                   ============================================================ */
-        #loadingOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #060a16; z-index: 99999;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-family: 'Inter', sans-serif;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-            padding: 20px;
-        }
-        #loadingOverlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+:root {
+    --bg: #060a16;
+    --card-bg: rgba(255, 255, 255, 0.03);
+    --border: rgba(255, 255, 255, 0.06);
+    --text: #f0edff;
+    --text2: #9a9ac0;
+    --accent: #6c8cff;
+    --accent2: #a78bfa;
+    --glow: rgba(108, 140, 255, 0.25);
+    --glow2: rgba(167, 139, 250, 0.15);
+    --radius: 20px;
+    --gold: #ffd700;
+    --green: #44dd88;
+    --red: #ff4455;
+    --orange: #ff8833;
+    --font-family: 'Inter', sans-serif;
+    --heading-font: 'Inter', sans-serif;
+    --mono-font: 'JetBrains Mono', monospace;
+}
 
-        #loadingOverlay .loader-ring {
-            width: 64px; height: 64px; border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.04);
-            border-top-color: #6c8cff; border-right-color: #6c8cff;
-            animation: spin 0.9s cubic-bezier(0.6, 0, 0.4, 1) infinite;
-            box-shadow: 0 0 60px rgba(108, 140, 255, 0.15);
-            margin-bottom: 28px;
-        }
-        @keyframes spin { to { transform: rotate(360deg); } }
+/* ===== 7 RE:ZERO THEMES ===== */
+[data-theme="emilia"] { --bg: #0a0e1a; --accent: #7ec8e3; --accent2: #a8d8ea; --glow: rgba(126,200,227,0.25); --glow2: rgba(168,216,234,0.15); --text: #f0f8ff; --text2: #a0c4d4; }
+[data-theme="rem"] { --bg: #0a0e1a; --accent: #4a90d9; --accent2: #6aafe6; --glow: rgba(74,144,217,0.25); --glow2: rgba(106,175,230,0.15); --text: #e8f0ff; --text2: #8aa8d0; }
+[data-theme="ram"] { --bg: #1a0a0a; --accent: #e86a8a; --accent2: #f08aa6; --glow: rgba(232,106,138,0.25); --glow2: rgba(240,138,166,0.15); --text: #ffe8ee; --text2: #c08a9a; }
+[data-theme="beatrice"] { --bg: #1a1208; --accent: #e8c84a; --accent2: #f0d86a; --glow: rgba(232,200,74,0.25); --glow2: rgba(240,216,106,0.15); --text: #fff8e0; --text2: #c0b08a; }
+[data-theme="roswaal"] { --bg: #120a1a; --accent: #aa44ff; --accent2: #cc66ff; --glow: rgba(170,68,255,0.25); --glow2: rgba(204,102,255,0.15); --text: #f0e8ff; --text2: #b08ad0; }
+[data-theme="echidna"] { --bg: #080e0a; --accent: #44dd88; --accent2: #66eeaa; --glow: rgba(68,221,136,0.25); --glow2: rgba(102,238,170,0.15); --text: #e8fff0; --text2: #8ac0a0; }
+[data-theme="satella"] { --bg: #0a050a; --accent: #cc00aa; --accent2: #ee44cc; --glow: rgba(204,0,170,0.25); --glow2: rgba(238,68,204,0.15); --text: #f0e0f0; --text2: #b08ab0; }
 
-        #loadingOverlay .loader-timer {
-            font-size: 2.8rem; font-weight: 800; color: #f0edff;
-            letter-spacing: 2px; margin-bottom: 12px;
-            text-shadow: 0 0 40px rgba(108, 140, 255, 0.2);
-            transition: 0.3s; font-variant-numeric: tabular-nums;
-            font-family: 'JetBrains Mono', monospace;
-        }
-        #loadingOverlay .loader-timer .icon { font-size: 2rem; opacity: 0.4; margin-right: 6px; }
-        #loadingOverlay .loader-timer .glow {
-            color: #6c8cff;
-            text-shadow: 0 0 60px rgba(108, 140, 255, 0.3), 0 0 120px rgba(108, 140, 255, 0.1);
-        }
-        #loadingOverlay .loader-sub {
-            font-size: 0.85rem; color: #9a9ac0; opacity: 0.3;
-            letter-spacing: 3px; font-weight: 300; text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-        #loadingOverlay .loader-info {
-            padding: 16px 24px; border-radius: 12px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.05);
-            text-align: center; max-width: 420px; width: 100%;
-            backdrop-filter: blur(10px);
-        }
-        #loadingOverlay .loader-info .line {
-            font-size: 0.75rem; color: #9a9ac0; opacity: 0.6;
-            line-height: 1.9; letter-spacing: 0.3px;
-        }
-        #loadingOverlay .loader-info .line .highlight { color: #6c8cff; opacity: 1; font-weight: 600; }
-        #loadingOverlay .loader-info .line .gold { color: #ffd700; opacity: 0.7; }
-        #loadingOverlay .loader-info .line a {
-            color: #6c8cff; text-decoration: none; font-weight: 600; transition: 0.3s;
-        }
-        #loadingOverlay .loader-info .line a:hover { text-shadow: 0 0 30px rgba(108, 140, 255, 0.3); }
-        #loadingOverlay .loader-info .line .uz { opacity: 0.3; font-size: 0.65rem; }
+[data-theme="hacker"] {
+    --bg: #000000;
+    --card-bg: rgba(0, 255, 200, 0.03);
+    --border: rgba(0, 255, 200, 0.15);
+    --text: #d0ffe8;
+    --text2: #5a8a7a;
+    --accent: #00ffc8;
+    --accent2: #ff00aa;
+    --glow: rgba(0, 255, 200, 0.5);
+    --glow2: rgba(255, 0, 170, 0.4);
+    --radius: 12px;
+    --font-family: 'JetBrains Mono', monospace;
+    --heading-font: 'JetBrains Mono', monospace;
+}
 
-        /* ============================================================
-                   7 RE:ZERO THEMES
-                   ============================================================ */
-        :root {
-            --bg: #060a16;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border: rgba(255, 255, 255, 0.06);
-            --text: #f0edff;
-            --text2: #9a9ac0;
-            --accent: #6c8cff;
-            --accent2: #a78bfa;
-            --glow: rgba(108, 140, 255, 0.2);
-            --glow2: rgba(167, 139, 250, 0.15);
-            --radius: 20px;
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-            --gold: #ffd700;
-            --green: #44dd88;
-            --red: #ff4455;
-            --orange: #ff8833;
-            --font-family: 'Inter', sans-serif;
-            --heading-font: 'Inter', sans-serif;
-            --mono-font: 'JetBrains Mono', monospace;
-        }
+/* ============================================================
+   LOADING OVERLAY
+   ============================================================ */
+#loadingOverlay {
+    position: fixed; inset: 0;
+    background: #060a16;
+    z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
+    padding: 20px;
+}
+#loadingOverlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
-        [data-theme="emilia"] {
-            --bg: #0a0e1a; --accent: #7ec8e3; --accent2: #a8d8ea;
-            --glow: rgba(126, 200, 227, 0.25); --glow2: rgba(168, 216, 234, 0.15);
-            --text: #f0f8ff; --text2: #a0c4d4;
-        }
-        [data-theme="rem"] {
-            --bg: #0a0e1a; --accent: #4a90d9; --accent2: #6aafe6;
-            --glow: rgba(74, 144, 217, 0.25); --glow2: rgba(106, 175, 230, 0.15);
-            --text: #e8f0ff; --text2: #8aa8d0;
-        }
-        [data-theme="ram"] {
-            --bg: #1a0a0a; --accent: #e86a8a; --accent2: #f08aa6;
-            --glow: rgba(232, 106, 138, 0.25); --glow2: rgba(240, 138, 166, 0.15);
-            --text: #ffe8ee; --text2: #c08a9a;
-        }
-        [data-theme="beatrice"] {
-            --bg: #1a1208; --accent: #e8c84a; --accent2: #f0d86a;
-            --glow: rgba(232, 200, 74, 0.25); --glow2: rgba(240, 216, 106, 0.15);
-            --text: #fff8e0; --text2: #c0b08a;
-        }
-        [data-theme="roswaal"] {
-            --bg: #120a1a; --accent: #aa44ff; --accent2: #cc66ff;
-            --glow: rgba(170, 68, 255, 0.25); --glow2: rgba(204, 102, 255, 0.15);
-            --text: #f0e8ff; --text2: #b08ad0;
-        }
-        [data-theme="echidna"] {
-            --bg: #080e0a; --accent: #44dd88; --accent2: #66eeaa;
-            --glow: rgba(68, 221, 136, 0.25); --glow2: rgba(102, 238, 170, 0.15);
-            --text: #e8fff0; --text2: #8ac0a0;
-        }
-        [data-theme="satella"] {
-            --bg: #0a050a; --accent: #cc00aa; --accent2: #ee44cc;
-            --glow: rgba(204, 0, 170, 0.25); --glow2: rgba(238, 68, 204, 0.15);
-            --text: #f0e0f0; --text2: #b08ab0;
-        }
+#loadingOverlay .loader-ring {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.04);
+    border-top-color: #6c8cff; border-right-color: #6c8cff;
+    animation: spin 1s linear infinite;
+    margin-bottom: 28px;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
 
-        /* ===== AUTO LIGHT/DARK ===== */
-        body.light-mode {
-            --bg: #f5f5fa;
-            --card-bg: rgba(0, 0, 0, 0.03);
-            --border: rgba(0, 0, 0, 0.08);
-            --text: #1a1a2e;
-            --text2: #5a5a7a;
-            --glow: rgba(108, 140, 255, 0.15);
-            --glow2: rgba(167, 139, 250, 0.1);
-            --shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-        }
-        body.light-mode::before {
-            background: radial-gradient(ellipse at 30% 40%, var(--glow) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 60%, var(--glow2) 0%, transparent 50%);
-        }
+#loadingOverlay .loader-timer {
+    font-size: 2.8rem; font-weight: 800; color: #f0edff;
+    letter-spacing: 2px; margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+    font-family: 'JetBrains Mono', monospace;
+}
+#loadingOverlay .loader-timer .icon { font-size: 2rem; opacity: 0.4; margin-right: 6px; }
+#loadingOverlay .loader-timer .glow { color: #6c8cff; }
+#loadingOverlay .loader-sub {
+    font-size: 0.85rem; color: #9a9ac0; opacity: 0.4;
+    letter-spacing: 3px; font-weight: 300; text-transform: uppercase;
+    margin-bottom: 20px;
+}
+#loadingOverlay .loader-info {
+    padding: 16px 24px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    text-align: center; max-width: 420px; width: 100%;
+}
+#loadingOverlay .loader-info .line {
+    font-size: 0.75rem; color: #9a9ac0;
+    line-height: 1.9; letter-spacing: 0.3px;
+}
+#loadingOverlay .loader-info .line .highlight { color: #6c8cff; font-weight: 600; }
+#loadingOverlay .loader-info .line .gold { color: #ffd700; }
+#loadingOverlay .loader-info .line a { color: #6c8cff; text-decoration: none; font-weight: 600; }
+#loadingOverlay .loader-info .line .uz { opacity: 0.4; font-size: 0.65rem; }
 
-        /* ============================================================
-                   BODY
-                   ============================================================ */
-        body {
-            font-family: var(--font-family);
-            background: var(--bg); color: var(--text);
-            min-height: 100vh; padding: 20px;
-            transition: background 0.6s ease, color 0.6s ease;
-            background-image:
-                radial-gradient(ellipse at 20% 30%, var(--glow) 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 70%, var(--glow2) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 50%, var(--glow) 0%, transparent 70%);
-            position: relative;
-        }
-        body::before {
-            content: '';
-            position: fixed; top: -50%; left: -50%;
-            width: 200%; height: 200%;
-            background: radial-gradient(ellipse at 30% 40%, var(--glow) 0%, transparent 50%),
-                radial-gradient(ellipse at 70% 60%, var(--glow2) 0%, transparent 50%);
-            pointer-events: none; z-index: 0; opacity: 0.4;
-            animation: orbFloat 20s ease-in-out infinite alternate;
-            transition: background 0.6s;
-        }
-        @keyframes orbFloat {
-            0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(2%, -2%) scale(1.05); }
-            100% { transform: translate(-2%, 2%) scale(0.95); }
-        }
+/* ============================================================
+   HACKER BACKGROUND
+   ============================================================ */
+#hackerBg {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: #000;
+}
+body[data-theme="hacker"] #hackerBg { opacity: 1; }
 
-        /* ============================================================
-                   HEADER
-                   ============================================================ */
-        .header {
-            max-width: 1100px; margin: 0 auto 30px;
-            text-align: center; padding: 30px 20px 20px;
-            position: relative; z-index: 1;
-        }
-        .header .icon {
-            font-size: 2.4rem; display: block; margin-bottom: 6px;
-            animation: float 4s ease-in-out infinite;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .header h1 {
-            font-size: 2.2rem; font-weight: 800;
-            background: linear-gradient(135deg, var(--text) 40%, var(--accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px; transition: background 0.6s;
-            font-family: var(--heading-font);
-        }
-        .header .sub {
-            color: var(--text2); font-size: 0.9rem; opacity: 0.5;
-            margin-top: 4px; letter-spacing: 1px; font-weight: 300;
-        }
-        .header .sub span { color: var(--accent); opacity: 1; transition: color 0.6s; }
+#matrixCanvas {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+body[data-theme="hacker"] #matrixCanvas { opacity: 0.14; }
 
-        /* ===== LAST UPDATED TAG ===== */
-        .last-updated {
-            display: inline-flex; align-items: center; gap: 6px;
-            margin-top: 10px; padding: 5px 16px;
-            border-radius: 20px;
-            background: rgba(255, 215, 0, 0.06);
-            border: 1px solid rgba(255, 215, 0, 0.12);
-            font-size: 0.55rem; font-weight: 600;
-            color: var(--gold); letter-spacing: 0.5px;
-            text-shadow: 0 0 20px rgba(255, 215, 0, 0.2);
-        }
-        .last-updated i { font-size: 0.6rem; }
+#scanlines {
+    position: fixed; inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    background: repeating-linear-gradient(0deg,
+        rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px,
+        transparent 1px, transparent 2px);
+}
+body[data-theme="hacker"] #scanlines { opacity: 0.22; }
 
-        .header .telegram-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 6px 16px 6px 14px; border-radius: 30px;
-            background: rgba(108, 140, 255, 0.08);
-            border: 1px solid rgba(108, 140, 255, 0.12);
-            color: var(--text); text-decoration: none;
-            font-size: 0.85rem; font-weight: 600;
-            transition: 0.3s ease; box-shadow: 0 0 20px rgba(108, 140, 255, 0.05);
-            cursor: pointer;
-        }
-        .header .telegram-btn:hover {
-            background: rgba(108, 140, 255, 0.15);
-            border-color: var(--accent);
-            transform: translateY(-2px) scale(1.02);
-            box-shadow: 0 0 40px rgba(108, 140, 255, 0.15);
-        }
-        .header .telegram-btn i { font-size: 1.2rem; color: var(--accent); }
-        .header .telegram-btn .handle { color: var(--text); font-weight: 700; letter-spacing: 0.3px; }
-        .header .telegram-btn .sparkle {
-            color: #ffd700; font-size: 0.7rem; opacity: 0.6;
-            animation: sparklePulse 2s ease-in-out infinite;
-        }
-        @keyframes sparklePulse {
-            0%, 100% { opacity: 0.4; transform: scale(0.9); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
+/* ============================================================
+   HACKER INTRO — 5s animated sequence
+   ============================================================ */
+#hackerIntro {
+    position: fixed; inset: 0;
+    background: #000;
+    z-index: 9999998;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #00ffc8;
+    font-size: 13px;
+    overflow: hidden;
+}
+#hackerIntro.active { display: flex; }
 
-        .today-badge {
-            display: inline-block; margin-top: 10px;
-            padding: 6px 20px; border-radius: 30px;
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid var(--border);
-            font-size: 0.75rem; color: var(--text2);
-            letter-spacing: 0.5px; backdrop-filter: blur(10px);
-            margin-left: 8px;
-        }
-        .today-badge .day-highlight { color: var(--accent); font-weight: 600; }
+#hackerIntro::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffc8, transparent);
+    box-shadow: 0 0 30px #00ffc8, 0 0 60px #00ffc8;
+    animation: introBeam 2.4s linear infinite;
+    pointer-events: none;
+}
+@keyframes introBeam {
+    0% { top: 0; }
+    100% { top: 100%; }
+}
 
-        .header-top {
-            display: flex; align-items: center; justify-content: center;
-            gap: 12px; flex-wrap: wrap; margin-top: 8px;
-        }
+#hackerIntro::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(rgba(0, 255, 200, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 255, 200, 0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: introGrid 8s linear infinite;
+    pointer-events: none;
+}
+@keyframes introGrid {
+    from { background-position: 0 0; }
+    to { background-position: 40px 40px; }
+}
 
-        /* ===== COUNTDOWN ===== */
-        .countdown {
-            display: flex; align-items: center; justify-content: center;
-            gap: 10px; margin-top: 12px; padding: 8px 20px;
-            border-radius: 30px;
-            background: rgba(108, 140, 255, 0.06);
-            border: 1px solid rgba(108, 140, 255, 0.1);
-            font-size: 0.7rem; font-weight: 600;
-            color: var(--text);
-            box-shadow: 0 0 30px var(--glow);
-            backdrop-filter: blur(10px);
-            max-width: fit-content;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .countdown .cd-label { color: var(--text2); opacity: 0.5; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; }
-        .countdown .cd-value { color: var(--accent); font-family: var(--mono-font); font-weight: 700; }
-        .countdown .cd-lesson { color: var(--text); opacity: 0.8; }
-        .countdown i { color: var(--accent); font-size: 0.8rem; animation: pulse 1.5s infinite; }
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.4; }
-        }
-        .countdown.idle .cd-value { color: var(--text2); }
+.hi-line {
+    margin-bottom: 8px;
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: hiSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+    text-shadow: 0 0 6px #00ffc8;
+    position: relative;
+    z-index: 1;
+}
+.hi-line.highlight {
+    color: #ffcc00;
+    font-weight: 700;
+    font-size: 15px;
+    text-shadow: 0 0 15px #ffcc00;
+}
+.hi-line.big {
+    color: #00ffc8;
+    font-weight: 800;
+    font-size: 24px;
+    letter-spacing: 4px;
+    text-shadow: 0 0 25px #00ffc8, 0 0 50px #00ffc8;
+    margin-top: 10px;
+    margin-bottom: 14px;
+    animation: hiSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards, hiPulse 1.4s ease-in-out 1.4s infinite;
+}
+.hi-line.gold {
+    color: #ffd700;
+    font-weight: 800;
+    font-size: 17px;
+    letter-spacing: 2px;
+    text-shadow: 0 0 20px #ffd700;
+    animation: hiSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards, hiGlow 1.6s ease-in-out 2.5s infinite;
+}
+@keyframes hiSlideIn {
+    to { opacity: 1; transform: translateX(0); }
+}
+@keyframes hiPulse {
+    0%, 100% { text-shadow: 0 0 25px #00ffc8, 0 0 50px #00ffc8; }
+    50% { text-shadow: 0 0 40px #00ffc8, 0 0 80px #00ffc8, 0 0 120px #00ffc8; }
+}
+@keyframes hiGlow {
+    0%, 100% { text-shadow: 0 0 20px #ffd700; }
+    50% { text-shadow: 0 0 35px #ffd700, 0 0 70px #ffd700; }
+}
+.hi-cursor {
+    display: inline-block;
+    width: 9px; height: 15px;
+    background: #00ffc8;
+    animation: blink 0.7s steps(2) infinite;
+    vertical-align: middle;
+    margin-left: 5px;
+    box-shadow: 0 0 12px #00ffc8;
+}
+@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
 
-        /* ============================================================
-                   THEME SWITCHER
-                   ============================================================ */
-        .theme-switcher {
-            max-width: 1100px; margin: 0 auto 24px;
-            display: flex; flex-wrap: wrap; gap: 8px;
-            justify-content: center; z-index: 1; position: relative;
-        }
-        .theme-btn {
-            padding: 6px 14px; border-radius: 30px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text2); font-size: 0.65rem; font-weight: 600;
-            font-family: 'Inter', sans-serif; cursor: pointer;
-            transition: 0.3s ease; backdrop-filter: blur(10px);
-            display: flex; align-items: center; gap: 5px;
-        }
-        .theme-btn:hover {
-            background: rgba(255, 255, 255, 0.06);
-            transform: translateY(-2px); box-shadow: 0 0 30px var(--glow);
-        }
-        .theme-btn.active {
-            background: var(--accent); color: #fff;
-            border-color: var(--accent); box-shadow: 0 0 40px var(--glow);
-        }
-        .theme-btn .icon { font-size: 0.8rem; }
+.hi-progress {
+    width: 100%;
+    max-width: 420px;
+    height: 4px;
+    background: rgba(0, 255, 200, 0.08);
+    border-radius: 4px;
+    margin-top: 24px;
+    overflow: hidden;
+    position: relative;
+    z-index: 1;
+}
+.hi-progress .fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, #00ffc8, #00ffc8, #ffcc00);
+    box-shadow: 0 0 20px #00ffc8;
+    transition: width 0.15s linear;
+}
 
-        /* ============================================================
-                   GRID
-                   ============================================================ */
-        .grid {
-            max-width: 1100px; margin: 0 auto;
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 20px; position: relative; z-index: 1;
-        }
+/* ============================================================
+   WATERMARKS
+   ============================================================ */
+.watermark {
+    position: fixed;
+    font-family: var(--heading-font);
+    font-weight: 900;
+    color: var(--accent);
+    pointer-events: none;
+    z-index: 3;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    opacity: 0.06;
+    text-shadow: 0 0 20px var(--accent), 0 0 40px var(--accent);
+    user-select: none;
+}
+.wm-tl { top: 30px; left: 30px; font-size: 60px; transform: rotate(-8deg); }
+.wm-br { bottom: 60px; right: 30px; font-size: 80px; transform: rotate(8deg); }
+.wm-center {
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%) rotate(-20deg);
+    font-size: 140px;
+    opacity: 0.03;
+    letter-spacing: 12px;
+}
+.wm-sub {
+    position: fixed;
+    bottom: 12px; left: 50%;
+    transform: translateX(-50%);
+    font-family: var(--mono-font);
+    font-size: 9px;
+    color: var(--accent);
+    opacity: 0.3;
+    letter-spacing: 3px;
+    z-index: 3;
+    pointer-events: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    text-shadow: 0 0 20px var(--accent);
+}
 
-        .day-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 20px 18px 18px;
-            backdrop-filter: blur(20px);
-            box-shadow: var(--shadow);
-            transition: 0.4s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        .day-card::before {
-            content: '';
-            position: absolute; inset: 0;
-            border-radius: var(--radius);
-            padding: 1px;
-            background: linear-gradient(135deg, var(--accent), transparent, var(--accent2));
-            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-            -webkit-mask-composite: xor;
-            mask-composite: exclude;
-            pointer-events: none; opacity: 0.3; transition: 0.4s;
-        }
-        .day-card:hover::before { opacity: 0.8; }
-        .day-card:hover {
-            transform: translateY(-6px);
-            border-color: rgba(108, 140, 255, 0.15);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5), 0 0 60px var(--glow);
-        }
+/* ============================================================
+   BODY
+   ============================================================ */
+body {
+    font-family: var(--font-family);
+    background: var(--bg); color: var(--text);
+    min-height: 100vh; padding: 20px;
+    transition: background 0.4s ease, color 0.4s ease;
+    position: relative;
+    overflow-x: hidden;
+}
+body[data-theme="emilia"], body[data-theme="rem"], body[data-theme="ram"],
+body[data-theme="beatrice"], body[data-theme="roswaal"], body[data-theme="echidna"],
+body[data-theme="satella"] {
+    background-image:
+        radial-gradient(ellipse at 20% 20%, var(--glow) 0%, transparent 55%),
+        radial-gradient(ellipse at 80% 80%, var(--glow2) 0%, transparent 55%);
+    background-attachment: fixed;
+}
+body[data-theme="hacker"] { background-image: none; }
 
-        /* ===== BADGE ===== */
-        .day-badge {
-            position: absolute; top: 12px; right: 12px;
-            padding: 4px 10px; border-radius: 6px;
-            font-size: 0.55rem; font-weight: 900;
-            letter-spacing: 1.5px; text-transform: uppercase;
-            font-family: var(--mono-font); z-index: 2;
-            box-shadow: 0 0 20px currentColor;
-            animation: badgePulse 2.5s ease-in-out infinite;
-        }
-        @keyframes badgePulse {
-            0%, 100% { opacity: 1; transform: scale(1); }
-            50% { opacity: 0.85; transform: scale(1.04); }
-        }
-        .day-badge.chill {
-            background: rgba(68, 221, 136, 0.15); color: var(--green);
-            border: 1px solid rgba(68, 221, 136, 0.4);
-        }
-        .day-badge.easy {
-            background: rgba(68, 221, 136, 0.15); color: var(--green);
-            border: 1px solid rgba(68, 221, 136, 0.4);
-        }
-        .day-badge.brutal {
-            background: rgba(255, 68, 85, 0.15); color: var(--red);
-            border: 1px solid rgba(255, 68, 85, 0.4);
-        }
-        .day-badge.hell {
-            background: rgba(255, 68, 85, 0.2); color: var(--red);
-            border: 1px solid rgba(255, 68, 85, 0.5);
-            animation: hellPulse 1.2s ease-in-out infinite;
-        }
-        @keyframes hellPulse {
-            0%, 100% { box-shadow: 0 0 20px var(--red); opacity: 1; }
-            50% { box-shadow: 0 0 40px var(--red), 0 0 60px var(--red); opacity: 0.9; }
-        }
-        .day-badge.boss {
-            background: rgba(255, 136, 51, 0.15); color: var(--orange);
-            border: 1px solid rgba(255, 136, 51, 0.4);
-            animation: bossPulse 1.8s ease-in-out infinite;
-        }
-        @keyframes bossPulse {
-            0%, 100% { box-shadow: 0 0 20px var(--orange); }
-            50% { box-shadow: 0 0 40px var(--orange); }
-        }
-        .day-badge.safe {
-            background: rgba(68, 221, 136, 0.15); color: var(--green);
-            border: 1px solid rgba(68, 221, 136, 0.4);
-        }
+/* ============================================================
+   HEADER
+   ============================================================ */
+.header {
+    max-width: 1100px; margin: 0 auto 30px;
+    text-align: center; padding: 30px 20px 20px;
+    position: relative; z-index: 1;
+}
+.header .icon {
+    font-size: 2.4rem; display: block; margin-bottom: 6px;
+}
+.header h1 {
+    font-size: 2.2rem; font-weight: 800;
+    background: linear-gradient(135deg, var(--text) 40%, var(--accent));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+    font-family: var(--heading-font);
+}
+.header .sub {
+    color: var(--text2); font-size: 0.9rem; opacity: 0.55;
+    margin-top: 4px; letter-spacing: 1px; font-weight: 300;
+}
+.header .sub span { color: var(--accent); opacity: 1; }
 
-        .day-header {
-            display: flex; align-items: center;
-            justify-content: space-between;
-            margin-bottom: 8px; padding-bottom: 10px;
-            border-bottom: 1px solid var(--border);
-        }
-        .day-header .day-name {
-            font-size: 1.1rem; font-weight: 700;
-            color: var(--text); letter-spacing: 0.3px;
-        }
-        .day-header .day-name .uz {
-            font-weight: 400; color: var(--text2);
-            font-size: 0.7rem; opacity: 0.4;
-            margin-left: 6px; text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        .day-header .day-count {
-            font-size: 0.7rem; color: var(--text2);
-            opacity: 0.3; font-weight: 500;
-            background: rgba(255, 255, 255, 0.04);
-            padding: 2px 12px; border-radius: 20px;
-            margin-right: 80px;
-        }
+.last-updated {
+    display: inline-flex; align-items: center; gap: 6px;
+    margin-top: 10px; padding: 5px 16px;
+    border-radius: 20px;
+    background: rgba(255, 215, 0, 0.06);
+    border: 1px solid rgba(255, 215, 0, 0.12);
+    font-size: 0.55rem; font-weight: 600;
+    color: var(--gold); letter-spacing: 0.5px;
+}
+.last-updated i { font-size: 0.6rem; }
 
-        /* ===== ROAST SUBTITLE ===== */
-        .day-roast {
-            font-size: 0.6rem; color: var(--text2);
-            opacity: 0.45; font-style: italic;
-            letter-spacing: 0.3px; margin-bottom: 12px;
-            padding: 0 2px; font-weight: 400;
-        }
+.header .telegram-btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 16px 6px 14px; border-radius: 30px;
+    background: rgba(108, 140, 255, 0.08);
+    border: 1px solid rgba(108, 140, 255, 0.12);
+    color: var(--text); text-decoration: none;
+    font-size: 0.85rem; font-weight: 600;
+    transition: 0.25s ease;
+    cursor: pointer;
+}
+.header .telegram-btn:hover {
+    background: rgba(108, 140, 255, 0.15);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+.header .telegram-btn i { font-size: 1.2rem; color: var(--accent); }
+.header .telegram-btn .handle { color: var(--text); font-weight: 700; }
+.header .telegram-btn .sparkle { color: var(--gold); font-size: 0.7rem; opacity: 0.6; }
 
-        .day-card.today {
-            border-color: var(--accent);
-            box-shadow: 0 0 60px var(--glow), 0 20px 60px rgba(0, 0, 0, 0.5);
-        }
-        .day-card.today .day-name { color: var(--accent); }
-        .day-card.today::before {
-            opacity: 0.8;
-            background: linear-gradient(135deg, var(--accent), var(--accent2), var(--accent));
-            animation: borderPulse 3s ease-in-out infinite;
-        }
-        @keyframes borderPulse {
-            0%, 100% { opacity: 0.4; }
-            50% { opacity: 1; }
-        }
+.today-badge {
+    display: inline-block; margin-top: 10px;
+    padding: 6px 20px; border-radius: 30px;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid var(--border);
+    font-size: 0.75rem; color: var(--text2);
+    letter-spacing: 0.5px;
+    margin-left: 8px;
+}
+.today-badge .day-highlight { color: var(--accent); font-weight: 600; }
 
-        .lesson-list {
-            display: flex; flex-direction: column;
-            gap: 8px; position: relative; z-index: 1;
-        }
-        .lesson-item {
-            display: flex; align-items: center; gap: 12px;
-            padding: 8px 12px; border-radius: 12px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            transition: 0.2s;
-            position: relative;
-        }
-        .lesson-item:hover {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.06);
-            box-shadow: 0 0 30px var(--glow);
-        }
-        .lesson-item .check {
-            width: 16px; height: 16px; border-radius: 5px;
-            border: 1.5px solid var(--border);
-            background: rgba(255,255,255,0.02);
-            cursor: pointer; transition: 0.2s;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0;
-        }
-        .lesson-item .check:hover { border-color: var(--accent); }
-        .lesson-item .check.done {
-            background: var(--green);
-            border-color: var(--green);
-            box-shadow: 0 0 15px rgba(68, 221, 136, 0.4);
-        }
-        .lesson-item .check.done::after {
-            content: '✓'; color: #fff; font-size: 10px; font-weight: 900;
-        }
-        .lesson-item .time {
-            font-size: 0.6rem; font-weight: 600;
-            color: var(--text2); opacity: 0.3;
-            min-width: 52px; letter-spacing: 0.3px;
-            font-variant-numeric: tabular-nums;
-            font-family: var(--mono-font);
-        }
-        .lesson-item .num {
-            font-size: 0.55rem; font-weight: 700;
-            color: var(--text2); opacity: 0.15;
-            min-width: 18px; text-align: center;
-        }
-        .lesson-item .name {
-            font-size: 0.85rem; font-weight: 500;
-            color: var(--text); flex: 1;
-        }
-        .lesson-item.done .name {
-            text-decoration: line-through;
-            opacity: 0.4;
-        }
-        .lesson-item .del {
-            background: none; border: none;
-            color: var(--text2); opacity: 0.15;
-            cursor: pointer; font-size: 0.7rem;
-            width: 20px; height: 20px; border-radius: 50%;
-            transition: 0.2s; flex-shrink: 0;
-            display: flex; align-items: center; justify-content: center;
-        }
-        .lesson-item .del:hover {
-            opacity: 1; color: var(--red);
-            background: rgba(255, 68, 85, 0.1);
-        }
+.header-top {
+    display: flex; align-items: center; justify-content: center;
+    gap: 12px; flex-wrap: wrap; margin-top: 8px;
+}
 
-        /* ===== ADD LESSON BTN ===== */
-        .add-lesson-btn {
-            margin-top: 8px;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px dashed rgba(255, 255, 255, 0.08);
-            border-radius: 10px; padding: 6px 12px;
-            font-size: 0.55rem; font-weight: 600;
-            color: var(--text2); opacity: 0.5;
-            cursor: pointer; transition: 0.2s;
-            font-family: var(--font);
-            display: flex; align-items: center; justify-content: center; gap: 6px;
-            width: 100%;
-        }
-        .add-lesson-btn:hover {
-            opacity: 1; color: var(--accent);
-            border-color: var(--accent);
-            background: rgba(108, 140, 255, 0.05);
-            box-shadow: 0 0 20px var(--glow);
-        }
+.countdown {
+    display: flex; align-items: center; justify-content: center;
+    gap: 10px; margin-top: 12px; padding: 8px 20px;
+    border-radius: 30px;
+    background: rgba(108, 140, 255, 0.06);
+    border: 1px solid rgba(108, 140, 255, 0.1);
+    font-size: 0.7rem; font-weight: 600;
+    color: var(--text);
+    max-width: fit-content;
+    margin-left: auto; margin-right: auto;
+}
+.countdown .cd-label { color: var(--text2); opacity: 0.5; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; }
+.countdown .cd-value { color: var(--accent); font-family: var(--mono-font); font-weight: 700; }
+.countdown .cd-lesson { color: var(--text); opacity: 0.8; }
+.countdown i { color: var(--accent); font-size: 0.8rem; }
+.countdown.idle .cd-value { color: var(--text2); }
 
-        /* ============================================================
-                   STATS BAR
-                   ============================================================ */
-        .stats-bar {
-            max-width: 1100px; margin: 30px auto 0;
-            display: flex; flex-wrap: wrap; gap: 16px;
-            justify-content: center; padding: 16px 20px;
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            backdrop-filter: blur(20px);
-            position: relative; z-index: 1;
-        }
-        .stats-bar .stat {
-            display: flex; align-items: center; gap: 8px;
-            color: var(--text2); font-size: 0.75rem; font-weight: 400;
-        }
-        .stats-bar .stat .num {
-            color: var(--text); font-weight: 700; font-size: 0.9rem;
-            font-family: var(--mono-font);
-        }
-        .stats-bar .stat .label { opacity: 0.4; }
-        .stats-bar .divider {
-            width: 1px; height: 24px; background: var(--border);
-        }
+/* ============================================================
+   THEME SWITCHER
+   ============================================================ */
+.theme-switcher {
+    max-width: 1100px; margin: 0 auto 24px;
+    display: flex; flex-wrap: wrap; gap: 8px;
+    justify-content: center; z-index: 1; position: relative;
+}
+.theme-btn {
+    padding: 6px 14px; border-radius: 30px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text2); font-size: 0.65rem; font-weight: 600;
+    font-family: 'Inter', sans-serif; cursor: pointer;
+    transition: 0.2s ease;
+    display: flex; align-items: center; gap: 5px;
+}
+.theme-btn:hover {
+    background: rgba(255, 255, 255, 0.06);
+    transform: translateY(-1px);
+    color: var(--text);
+}
+.theme-btn.active {
+    background: var(--accent); color: #fff;
+    border-color: var(--accent);
+}
+[data-theme="hacker"] .theme-btn { font-family: var(--mono-font); letter-spacing: 1px; }
+.theme-btn .icon { font-size: 0.8rem; }
 
-        /* ===== ACTION BUTTONS ===== */
-        .action-bar {
-            max-width: 1100px; margin: 16px auto 0;
-            display: flex; gap: 10px; justify-content: center;
-            flex-wrap: wrap; position: relative; z-index: 1;
-        }
-        .action-bar button {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--border);
-            color: var(--text2); padding: 8px 16px;
-            border-radius: 30px; font-size: 0.6rem;
-            font-weight: 600; cursor: pointer;
-            font-family: var(--font); transition: 0.2s;
-            display: flex; align-items: center; gap: 6px;
-            box-shadow: 0 0 20px var(--glow);
-        }
-        .action-bar button:hover {
-            background: rgba(108, 140, 255, 0.08);
-            border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: 0 0 40px var(--glow);
-        }
-        .action-bar button i { font-size: 0.7rem; }
+/* ============================================================
+   GRID
+   ============================================================ */
+.grid {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px; position: relative; z-index: 1;
+}
 
-        /* ============================================================
-                   WATERMARK
-                   ============================================================ */
-        .watermark {
-            max-width: 1100px; margin: 24px auto 0;
-            text-align: center; position: relative; z-index: 1;
-            padding: 20px 0 16px; border-top: 1px solid var(--border);
-        }
-        .watermark .icons-row {
-            display: flex; align-items: center; justify-content: center;
-            gap: 24px; flex-wrap: wrap; margin-bottom: 12px;
-        }
-        .atom-icon {
-            width: 40px; height: 40px;
-            filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.4));
-            transition: 0.3s;
-        }
-        .atom-icon:hover {
-            filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.8));
-            transform: scale(1.1);
-        }
-        .layers-icon {
-            width: 40px; height: 40px;
-            fill: none; stroke: #8a2be2; stroke-width: 4;
-            stroke-linecap: round; stroke-linejoin: round;
-            transition: 0.3s;
-            filter: drop-shadow(0 0 8px rgba(138, 43, 226, 0.3));
-        }
-        .layers-icon:hover {
-            filter: drop-shadow(0 0 20px rgba(138, 43, 226, 0.7));
-            transform: scale(1.1);
-        }
-        .connect-card {
-            background: rgba(255, 255, 255, 0.03);
-            padding: 10px 20px; border-radius: 12px;
-            border: 1px solid var(--border);
-            text-align: center; transition: 0.3s;
-            display: flex; align-items: center; gap: 12px;
-            text-decoration: none !important; cursor: pointer;
-        }
-        .connect-card:hover {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: var(--accent);
-            box-shadow: 0 0 40px var(--glow);
-            transform: translateY(-2px);
-        }
-        .connect-card .user-icon {
-            width: 32px; height: 32px;
-            fill: none; stroke: #9d4edd; stroke-width: 4;
-            stroke-linecap: round; stroke-linejoin: round;
-        }
-        .connect-card .connect-title {
-            font-size: 0.8rem; font-weight: 700;
-            color: var(--text); letter-spacing: 0.3px;
-        }
-        .connect-card .connect-subtitle {
-            font-size: 0.6rem; color: var(--text2); opacity: 0.4;
-        }
+.day-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 18px 18px;
+    transition: transform 0.2s ease, border-color 0.2s;
+    position: relative;
+    overflow: hidden;
+}
+.day-card:hover {
+    transform: translateY(-3px);
+    border-color: var(--accent);
+}
 
-        .watermark .sub {
-            margin-top: 10px; display: flex; flex-direction: column;
-            gap: 4px; align-items: center;
-        }
-        .watermark .sub .en {
-            font-size: 0.7rem; color: var(--text2); opacity: 0.5;
-            letter-spacing: 0.5px; font-weight: 400;
-        }
-        .watermark .sub .uz {
-            font-size: 0.75rem; font-weight: 500;
-            color: var(--gold); opacity: 0.9;
-            letter-spacing: 0.5px;
-            text-shadow: 0 0 30px rgba(255, 215, 0, 0.15), 0 0 60px rgba(255, 215, 0, 0.05);
-            background: rgba(255, 215, 0, 0.04);
-            padding: 4px 16px; border-radius: 20px;
-            border: 1px solid rgba(255, 215, 0, 0.06);
-        }
-        .watermark .glow-line {
-            width: 60px; height: 2px; margin: 10px auto 0;
-            background: linear-gradient(90deg, transparent, var(--gold), transparent);
-            border-radius: 4px; opacity: 0.3;
-            animation: glowPulse 3s ease-in-out infinite;
-        }
-        @keyframes glowPulse {
-            0%, 100% { opacity: 0.1; width: 40px; }
-            50% { opacity: 0.5; width: 100px; }
-        }
+.day-badge {
+    position: absolute; top: 12px; right: 12px;
+    padding: 4px 10px; border-radius: 6px;
+    font-size: 0.55rem; font-weight: 900;
+    letter-spacing: 1.5px; text-transform: uppercase;
+    font-family: var(--mono-font); z-index: 2;
+}
+.day-badge.chill {
+    background: rgba(68, 221, 136, 0.15); color: var(--green);
+    border: 1px solid rgba(68, 221, 136, 0.4);
+}
+.day-badge.brutal {
+    background: rgba(255, 68, 85, 0.15); color: var(--red);
+    border: 1px solid rgba(255, 68, 85, 0.4);
+}
+.day-badge.alive {
+    background: rgba(255, 136, 51, 0.15); color: var(--orange);
+    border: 1px solid rgba(255, 136, 51, 0.4);
+}
 
-        /* ===== ADD MODAL ===== */
-        .add-modal {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.75);
-            backdrop-filter: blur(20px);
-            z-index: 99999; display: none;
-            align-items: center; justify-content: center;
-            padding: 20px;
-        }
-        .add-modal.open { display: flex; }
-        .add-modal-content {
-            background: var(--bg);
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 24px; width: 100%; max-width: 340px;
-            box-shadow: 0 0 80px var(--glow);
-        }
-        .add-modal-content h3 {
-            font-size: 0.9rem; font-weight: 700;
-            color: var(--text); margin-bottom: 14px;
-            letter-spacing: 0.5px;
-        }
-        .add-modal-content input {
-            width: 100%; padding: 10px 14px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: rgba(255, 255, 255, 0.03);
-            color: var(--text); font-size: 0.8rem;
-            font-family: var(--font); outline: none;
-            margin-bottom: 10px;
-        }
-        .add-modal-content input:focus { border-color: var(--accent); }
-        .add-modal-content .btns {
-            display: flex; gap: 8px; margin-top: 6px;
-        }
-        .add-modal-content .btns button {
-            flex: 1; padding: 9px;
-            border-radius: 10px; border: none;
-            font-weight: 700; cursor: pointer;
-            font-family: var(--font); font-size: 0.7rem;
-            transition: 0.2s;
-        }
-        .add-modal-content .btns .ok {
-            background: var(--accent); color: #fff;
-        }
-        .add-modal-content .btns .ok:hover { transform: scale(1.02); }
-        .add-modal-content .btns .no {
-            background: rgba(255, 255, 255, 0.05);
-            color: var(--text2);
-        }
+.day-header {
+    display: flex; align-items: center;
+    justify-content: space-between;
+    margin-bottom: 8px; padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+}
+.day-header .day-name {
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--text); letter-spacing: 0.3px;
+    display: flex; align-items: center; gap: 8px;
+}
+.day-header .day-name i { color: var(--accent); font-size: 0.9rem; }
+.day-header .day-name .uz {
+    font-weight: 400; color: var(--text2);
+    font-size: 0.7rem; opacity: 0.4;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+.day-header .day-count {
+    font-size: 0.7rem; color: var(--text2);
+    opacity: 0.55; font-weight: 500;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 3px 12px; border-radius: 20px;
+    margin-right: 80px;
+    display: flex; align-items: center; gap: 5px;
+}
+.day-header .day-count i { font-size: 0.6rem; color: var(--accent); opacity: 0.6; }
 
-        /* ============================================================
-                   RESPONSIVE
-                   ============================================================ */
-        @media (max-width: 768px) {
-            body { padding: 12px; }
-            .header h1 { font-size: 1.6rem; }
-            .header .icon { font-size: 1.8rem; }
-            .grid { grid-template-columns: 1fr; gap: 14px; }
-            .day-card { padding: 16px 14px; }
-            .lesson-item { padding: 6px 10px; flex-wrap: wrap; gap: 4px; }
-            .lesson-item .time { min-width: 44px; font-size: 0.5rem; }
-            .lesson-item .name { font-size: 0.75rem; flex: 1 0 60%; }
-            .stats-bar { flex-direction: column; align-items: center; gap: 8px; padding: 14px 16px; }
-            .stats-bar .divider { display: none; }
-            .theme-switcher { gap: 5px; }
-            .theme-btn { font-size: 0.55rem; padding: 4px 10px; }
-            .header-top { flex-direction: column; gap: 6px; }
-            .header .telegram-btn { padding: 4px 12px 4px 10px; font-size: 0.7rem; }
-            .header .telegram-btn i { font-size: 1rem; }
-            .header .telegram-btn .sparkle { display: none; }
-            .watermark .icons-row { gap: 14px; }
-            .atom-icon, .layers-icon { width: 30px; height: 30px; }
-            .connect-card { padding: 6px 14px; gap: 8px; }
-            .connect-card .user-icon { width: 24px; height: 24px; }
-            .connect-card .connect-title { font-size: 0.7rem; }
-            .watermark .sub .uz { font-size: 0.65rem; }
-            .day-header .day-count { margin-right: 70px; }
-            .day-badge { font-size: 0.5rem; padding: 3px 8px; top: 10px; right: 10px; }
-            .countdown { font-size: 0.6rem; padding: 6px 14px; }
-        }
+.day-roast {
+    font-size: 0.6rem; color: var(--text2);
+    opacity: 0.5; font-style: italic;
+    letter-spacing: 0.3px; margin-bottom: 12px;
+    padding: 0 2px; font-weight: 400;
+}
 
-        @media (max-width: 400px) {
-            .header h1 { font-size: 1.3rem; }
-            .day-header .day-name { font-size: 0.95rem; }
-            .lesson-item .name { font-size: 0.7rem; flex: 1 0 100%; }
-            .lesson-item .time { min-width: 38px; font-size: 0.45rem; }
-            .lesson-item .num { min-width: 14px; font-size: 0.45rem; }
-            .theme-btn { font-size: 0.45rem; padding: 3px 8px; }
-            .watermark .icons-row { gap: 10px; flex-direction: column; align-items: center; }
-            .atom-icon, .layers-icon { width: 28px; height: 28px; }
-            .connect-card { padding: 6px 12px; }
-            .connect-card .user-icon { width: 20px; height: 20px; }
-            .connect-card .connect-title { font-size: 0.6rem; }
-            .watermark .sub .uz { font-size: 0.55rem; padding: 2px 12px; }
-            #loadingOverlay .loader-info .line { font-size: 0.55rem; }
-            #loadingOverlay .loader-timer { font-size: 1.8rem; }
-            #loadingOverlay .loader-timer .icon { font-size: 1.2rem; }
-            #loadingOverlay .loader-ring { width: 48px; height: 48px; }
-            .day-header .day-count { margin-right: 60px; }
-        }
-    </style>
+.day-card.today { border-color: var(--accent); }
+.day-card.today .day-name { color: var(--accent); }
+
+.lesson-list {
+    display: flex; flex-direction: column;
+    gap: 8px; position: relative; z-index: 1;
+}
+.lesson-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 8px 12px; border-radius: 12px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.03);
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+}
+.lesson-item:hover {
+    background: rgba(255, 255, 255, 0.04);
+    border-color: var(--accent);
+}
+.lesson-item .check {
+    width: 16px; height: 16px; border-radius: 5px;
+    border: 1.5px solid var(--border);
+    background: rgba(255,255,255,0.02);
+    cursor: pointer; transition: 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+}
+.lesson-item .check:hover { border-color: var(--accent); }
+.lesson-item .check.done {
+    background: var(--green);
+    border-color: var(--green);
+}
+.lesson-item .check.done::after {
+    content: '✓'; color: #fff; font-size: 10px; font-weight: 900;
+}
+.lesson-item .time {
+    font-size: 0.6rem; font-weight: 600;
+    color: var(--text2); opacity: 0.55;
+    min-width: 60px; letter-spacing: 0.3px;
+    font-variant-numeric: tabular-nums;
+    font-family: var(--mono-font);
+    display: flex; align-items: center; gap: 5px;
+}
+.lesson-item .time i { font-size: 0.55rem; opacity: 0.6; color: var(--accent); }
+.lesson-item .num {
+    font-size: 0.55rem; font-weight: 700;
+    color: var(--text2); opacity: 0.25;
+    min-width: 18px; text-align: center;
+}
+.lesson-item .name {
+    font-size: 0.85rem; font-weight: 500;
+    color: var(--text); flex: 1;
+}
+.lesson-item.done .name {
+    text-decoration: line-through;
+    opacity: 0.4;
+}
+.lesson-item .del {
+    background: none; border: none;
+    color: var(--text2); opacity: 0.15;
+    cursor: pointer; font-size: 0.7rem;
+    width: 20px; height: 20px; border-radius: 50%;
+    transition: 0.15s; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+}
+.lesson-item .del:hover {
+    opacity: 1; color: var(--red);
+}
+
+.add-lesson-btn {
+    margin-top: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px dashed rgba(255, 255, 255, 0.08);
+    border-radius: 10px; padding: 6px 12px;
+    font-size: 0.55rem; font-weight: 600;
+    color: var(--text2); opacity: 0.5;
+    cursor: pointer; transition: 0.15s;
+    font-family: var(--font);
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    width: 100%;
+}
+.add-lesson-btn:hover {
+    opacity: 1; color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ============================================================
+   AI PANEL
+   ============================================================ */
+.ai-panel {
+    max-width: 1100px; margin: 30px auto 0;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    position: relative; z-index: 1;
+    display: none;
+}
+.ai-panel.active { display: block; }
+.ai-panel .ai-header {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--border);
+}
+.ai-panel .ai-header i {
+    font-size: 1.2rem; color: var(--accent);
+}
+.ai-panel .ai-header h3 {
+    font-size: 0.9rem; font-weight: 700;
+    color: var(--text); letter-spacing: 1px;
+    font-family: var(--mono-font);
+    text-transform: uppercase;
+}
+.ai-panel .ai-header .ai-status {
+    margin-left: auto;
+    font-size: 0.55rem; color: var(--green);
+    display: flex; align-items: center; gap: 5px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+.ai-panel .ai-header .ai-status::before {
+    content: '';
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--green);
+}
+.ai-messages {
+    max-height: 320px; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 10px;
+    padding: 8px 4px; margin-bottom: 12px;
+    font-family: var(--mono-font);
+    font-size: 0.75rem;
+}
+.ai-messages::-webkit-scrollbar { width: 4px; }
+.ai-messages::-webkit-scrollbar-thumb {
+    background: var(--accent); border-radius: 4px;
+}
+.ai-msg {
+    max-width: 85%; padding: 9px 13px;
+    border-radius: 10px; line-height: 1.55;
+    word-wrap: break-word;
+}
+.ai-msg.user {
+    align-self: flex-end;
+    background: rgba(255,0,170,0.08);
+    border: 1px solid rgba(255,0,170,0.25);
+    color: var(--accent2);
+}
+.ai-msg.bot {
+    align-self: flex-start;
+    background: rgba(0,255,200,0.05);
+    border: 1px solid var(--border);
+    color: var(--text);
+}
+.ai-msg.bot strong { color: var(--accent); font-weight: 700; }
+.ai-typing {
+    display: flex; gap: 4px; padding: 6px 0;
+}
+.ai-typing span {
+    width: 6px; height: 6px;
+    background: var(--accent);
+    border-radius: 50%;
+    animation: typingBounce 1.4s infinite;
+}
+.ai-typing span:nth-child(2) { animation-delay: 0.2s; }
+.ai-typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30% { transform: translateY(-6px); opacity: 1; }
+}
+.ai-input {
+    display: flex; gap: 8px;
+}
+.ai-input input {
+    flex: 1; background: rgba(0,0,0,0.3);
+    border: 1px solid var(--border);
+    border-radius: 20px; padding: 10px 16px;
+    color: var(--text); font-family: var(--mono-font);
+    font-size: 0.75rem; outline: none;
+    caret-color: var(--accent);
+}
+.ai-input input:focus { border-color: var(--accent); }
+.ai-input button {
+    background: var(--accent); color: #000;
+    border: none; border-radius: 20px;
+    padding: 10px 22px; font-weight: 900;
+    font-family: var(--mono-font); font-size: 0.7rem;
+    cursor: pointer; letter-spacing: 1px;
+    transition: transform 0.15s;
+    display: flex; align-items: center; gap: 6px;
+}
+.ai-input button:hover { transform: scale(1.03); }
+.ai-hints {
+    display: flex; gap: 6px; flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+.ai-hint {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    color: var(--text2);
+    padding: 4px 11px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.15s;
+    letter-spacing: 0.5px;
+    font-size: 0.6rem;
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--mono-font);
+}
+.ai-hint:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+/* ============================================================
+   STATS BAR
+   ============================================================ */
+.stats-bar {
+    max-width: 1100px; margin: 30px auto 0;
+    display: flex; flex-wrap: wrap; gap: 16px;
+    justify-content: center; padding: 16px 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    position: relative; z-index: 1;
+}
+.stats-bar .stat {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--text2); font-size: 0.75rem; font-weight: 400;
+}
+.stats-bar .stat i { color: var(--accent); font-size: 0.8rem; }
+.stats-bar .stat .num {
+    color: var(--text); font-weight: 700; font-size: 0.9rem;
+    font-family: var(--mono-font);
+}
+.stats-bar .stat .label { opacity: 0.5; }
+.stats-bar .divider {
+    width: 1px; height: 24px; background: var(--border);
+}
+
+/* ============================================================
+   ACTION BAR
+   ============================================================ */
+.action-bar {
+    max-width: 1100px; margin: 16px auto 0;
+    display: flex; gap: 10px; justify-content: center;
+    flex-wrap: wrap; position: relative; z-index: 1;
+}
+.action-bar button {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid var(--border);
+    color: var(--text2); padding: 8px 16px;
+    border-radius: 30px; font-size: 0.6rem;
+    font-weight: 600; cursor: pointer;
+    font-family: var(--font); transition: 0.15s;
+    display: flex; align-items: center; gap: 6px;
+}
+.action-bar button:hover {
+    background: rgba(108, 140, 255, 0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+}
+.action-bar button i { font-size: 0.7rem; }
+
+/* ============================================================
+   WATERMARK BLOCK
+   ============================================================ */
+.watermark-block {
+    max-width: 1100px; margin: 24px auto 0;
+    text-align: center; position: relative; z-index: 1;
+    padding: 20px 0 16px; border-top: 1px solid var(--border);
+}
+.watermark-block .icons-row {
+    display: flex; align-items: center; justify-content: center;
+    gap: 24px; flex-wrap: wrap; margin-bottom: 12px;
+}
+.atom-icon {
+    width: 40px; height: 40px;
+    transition: transform 0.2s;
+    color: var(--accent);
+}
+.atom-icon:hover { transform: scale(1.1); }
+.layers-icon {
+    width: 40px; height: 40px;
+    fill: none; stroke: var(--accent2); stroke-width: 4;
+    stroke-linecap: round; stroke-linejoin: round;
+    transition: transform 0.2s;
+}
+.layers-icon:hover { transform: scale(1.1); }
+.connect-card {
+    background: rgba(255, 255, 255, 0.03);
+    padding: 10px 20px; border-radius: 12px;
+    border: 1px solid var(--border);
+    text-align: center; transition: 0.2s;
+    display: flex; align-items: center; gap: 12px;
+    text-decoration: none !important; cursor: pointer;
+}
+.connect-card:hover {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: var(--accent);
+    transform: translateY(-2px);
+}
+.connect-card .user-icon {
+    width: 32px; height: 32px;
+    fill: none; stroke: var(--accent2); stroke-width: 4;
+    stroke-linecap: round; stroke-linejoin: round;
+    color: var(--accent2);
+}
+.connect-card .connect-title {
+    font-size: 0.8rem; font-weight: 700;
+    color: var(--text); letter-spacing: 0.3px;
+}
+.connect-card .connect-subtitle {
+    font-size: 0.6rem; color: var(--text2); opacity: 0.4;
+}
+
+.watermark-block .sub {
+    margin-top: 10px; display: flex; flex-direction: column;
+    gap: 4px; align-items: center;
+}
+.watermark-block .sub .en {
+    font-size: 0.7rem; color: var(--text2); opacity: 0.55;
+    letter-spacing: 0.5px; font-weight: 400;
+}
+.watermark-block .sub .uz {
+    font-size: 0.75rem; font-weight: 500;
+    color: var(--gold); opacity: 0.9;
+    letter-spacing: 0.5px;
+    background: rgba(255, 215, 0, 0.04);
+    padding: 4px 16px; border-radius: 20px;
+    border: 1px solid rgba(255, 215, 0, 0.08);
+}
+.watermark-block .glow-line {
+    width: 60px; height: 2px; margin: 10px auto 0;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    border-radius: 4px; opacity: 0.3;
+}
+
+/* ============================================================
+   ADD MODAL
+   ============================================================ */
+.add-modal {
+    position: fixed; top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    z-index: 99999; display: none;
+    align-items: center; justify-content: center;
+    padding: 20px;
+}
+.add-modal.open { display: flex; }
+.add-modal-content {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 24px; width: 100%; max-width: 340px;
+}
+.add-modal-content h3 {
+    font-size: 0.9rem; font-weight: 700;
+    color: var(--text); margin-bottom: 14px;
+    letter-spacing: 0.5px;
+}
+.add-modal-content input {
+    width: 100%; padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border);
+    background: rgba(255, 255, 255, 0.03);
+    color: var(--text); font-size: 0.8rem;
+    font-family: var(--font); outline: none;
+    margin-bottom: 10px;
+}
+.add-modal-content input:focus { border-color: var(--accent); }
+.add-modal-content .btns {
+    display: flex; gap: 8px; margin-top: 6px;
+}
+.add-modal-content .btns button {
+    flex: 1; padding: 9px;
+    border-radius: 10px; border: none;
+    font-weight: 700; cursor: pointer;
+    font-family: var(--font); font-size: 0.7rem;
+    transition: 0.15s;
+}
+.add-modal-content .btns .ok {
+    background: var(--accent); color: #fff;
+}
+.add-modal-content .btns .no {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text2);
+}
+
+/* ============================================================
+   RESPONSIVE — mobile-first fixes
+   ============================================================ */
+@media (max-width: 900px) {
+    .grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+}
+
+@media (max-width: 768px) {
+    body { padding: 12px; }
+    .header { padding: 20px 12px 14px; margin-bottom: 20px; }
+    .header h1 { font-size: 1.6rem; }
+    .header .icon { font-size: 1.8rem; }
+    .grid { grid-template-columns: 1fr; gap: 14px; }
+    .day-card { padding: 16px 14px; }
+    .lesson-item { padding: 7px 10px; gap: 8px; }
+    .lesson-item .time { min-width: 52px; font-size: 0.55rem; }
+    .lesson-item .name { font-size: 0.78rem; }
+    .stats-bar { flex-direction: column; align-items: center; gap: 8px; padding: 14px 16px; }
+    .stats-bar .divider { display: none; }
+    .theme-switcher { gap: 5px; padding: 0 4px; }
+    .theme-btn { font-size: 0.55rem; padding: 4px 10px; }
+    .header-top { flex-direction: column; gap: 6px; }
+    .header .telegram-btn { padding: 5px 14px 5px 12px; font-size: 0.75rem; }
+    .header .telegram-btn i { font-size: 1rem; }
+    .today-badge { margin-left: 0; font-size: 0.7rem; padding: 5px 14px; }
+    .watermark-block .icons-row { gap: 14px; }
+    .atom-icon, .layers-icon { width: 30px; height: 30px; }
+    .connect-card { padding: 6px 14px; gap: 8px; }
+    .connect-card .user-icon { width: 24px; height: 24px; }
+    .connect-card .connect-title { font-size: 0.7rem; }
+    .watermark-block .sub .uz { font-size: 0.65rem; }
+    .day-header .day-count { margin-right: 68px; font-size: 0.6rem; padding: 2px 10px; }
+    .day-badge { font-size: 0.5rem; padding: 3px 8px; top: 10px; right: 10px; }
+    .countdown { font-size: 0.6rem; padding: 6px 14px; }
+    .wm-tl, .wm-br { font-size: 40px; }
+    .wm-center { font-size: 70px; }
+    .ai-panel { padding: 14px; }
+    .ai-messages { max-height: 240px; font-size: 0.7rem; }
+    .ai-input button { padding: 10px 14px; font-size: 0.65rem; }
+    #hackerIntro { padding: 24px; font-size: 11px; }
+    .hi-line.big { font-size: 20px; letter-spacing: 2px; }
+    .hi-line.highlight { font-size: 13px; }
+    .hi-line.gold { font-size: 14px; }
+    .hi-progress { max-width: 100%; }
+    .action-bar { gap: 6px; padding: 0 8px; }
+    .action-bar button { font-size: 0.55rem; padding: 6px 12px; }
+}
+
+@media (max-width: 480px) {
+    body { padding: 10px; }
+    .header h1 { font-size: 1.4rem; }
+    .day-header .day-name { font-size: 0.95rem; }
+    .day-header .day-name .uz { font-size: 0.6rem; }
+    .day-header .day-count { margin-right: 60px; }
+    .lesson-item .name { font-size: 0.75rem; }
+    .lesson-item .time { min-width: 46px; font-size: 0.5rem; }
+    .lesson-item .num { min-width: 14px; font-size: 0.5rem; }
+    .theme-btn { font-size: 0.5rem; padding: 3px 8px; }
+    .watermark-block .icons-row { gap: 10px; }
+    .atom-icon, .layers-icon { width: 28px; height: 28px; }
+    .connect-card { padding: 6px 12px; }
+    .connect-card .user-icon { width: 20px; height: 20px; }
+    .connect-card .connect-title { font-size: 0.65rem; }
+    .watermark-block .sub .uz { font-size: 0.6rem; padding: 3px 12px; }
+    #loadingOverlay .loader-info { padding: 12px 16px; }
+    #loadingOverlay .loader-info .line { font-size: 0.6rem; }
+    #loadingOverlay .loader-timer { font-size: 2rem; }
+    #loadingOverlay .loader-timer .icon { font-size: 1.4rem; }
+    #loadingOverlay .loader-ring { width: 50px; height: 50px; margin-bottom: 20px; }
+    #loadingOverlay .loader-sub { font-size: 0.7rem; letter-spacing: 2px; }
+    .wm-sub { font-size: 7px; letter-spacing: 2px; bottom: 6px; }
+    .wm-center { font-size: 60px; letter-spacing: 6px; }
+    .wm-tl { top: 12px; left: 12px; font-size: 30px; }
+    .wm-br { bottom: 40px; right: 12px; font-size: 34px; }
+    .hi-line.big { font-size: 17px; letter-spacing: 1.5px; }
+    .hi-line.highlight { font-size: 12px; }
+    .hi-line.gold { font-size: 13px; }
+    #hackerIntro { padding: 18px; font-size: 10px; }
+    .hi-progress { height: 3px; margin-top: 16px; }
+    .day-card { padding: 14px 12px; }
+    .day-roast { font-size: 0.55rem; }
+    .ai-hint { font-size: 0.55rem; padding: 3px 9px; }
+    .ai-input input { font-size: 0.7rem; padding: 9px 14px; }
+    .ai-input button { padding: 9px 12px; font-size: 0.6rem; }
+    .action-bar button { font-size: 0.5rem; padding: 6px 10px; }
+    .last-updated { font-size: 0.5rem; padding: 4px 12px; }
+}
+
+@media (max-width: 360px) {
+    .header h1 { font-size: 1.25rem; }
+    .day-header .day-count { margin-right: 55px; font-size: 0.55rem; }
+    .theme-btn { font-size: 0.45rem; padding: 3px 6px; }
+    .lesson-item .name { font-size: 0.72rem; }
+    .hi-line.big { font-size: 15px; }
+}
+</style>
 </head>
-<body>
+<body data-theme="emilia">
 
-    <!-- LOADING OVERLAY -->
-    <div id="loadingOverlay">
-        <div class="loader-ring"></div>
-        <div class="loader-timer">
-            <span class="icon">⏳</span>
-            <span class="glow" id="timerDisplay">5</span><span class="glow">s</span>
+<!-- HACKER INTRO -->
+<div id="hackerIntro">
+    <div class="hi-line" style="animation-delay:0.1s">> Initializing...</div>
+    <div class="hi-line" style="animation-delay:0.7s">> Connecting to schedule core...</div>
+    <div class="hi-line highlight" style="animation-delay:1.3s">> Detecting your class...</div>
+    <div class="hi-line big" style="animation-delay:1.9s">> CLASS 10 A</div>
+    <div class="hi-line gold" style="animation-delay:2.5s" id="hiDay">> Today is Monday</div>
+    <div class="hi-line" style="animation-delay:3.1s">> Loading schedule matrix...</div>
+    <div class="hi-line highlight" style="animation-delay:3.6s">> Welcome, Operator.</div>
+    <div class="hi-line" style="animation-delay:4.2s">> Ready.<span class="hi-cursor"></span></div>
+    <div class="hi-progress"><div class="fill" id="hiProgressFill"></div></div>
+</div>
+
+<!-- HACKER BACKGROUND -->
+<div id="hackerBg"></div>
+<canvas id="matrixCanvas"></canvas>
+<div id="scanlines"></div>
+
+<!-- WATERMARKS -->
+<div class="watermark wm-tl">SCHEDULE</div>
+<div class="watermark wm-br">@qwastur</div>
+<div class="watermark wm-center">10 A</div>
+<div class="wm-sub">✦ Created by @qwastur · Subscribe · v3.0 ✦</div>
+
+<!-- LOADING OVERLAY -->
+<div id="loadingOverlay">
+    <div class="loader-ring"></div>
+    <div class="loader-timer">
+        <span class="icon">⏳</span>
+        <span class="glow" id="timerDisplay">5</span><span class="glow">s</span>
+    </div>
+    <div class="loader-sub">Loading schedule</div>
+    <div class="loader-info">
+        <div class="line">
+            <span class="highlight">✦</span> This content is made by <strong>Johan Frost</strong>
+            <span class="uz">· Bu kontent <strong>Johan Frost</strong> tomonidan yaratilgan</span>
         </div>
-        <div class="loader-sub">Loading schedule</div>
-        <div class="loader-info">
-            <div class="line">
-                <span class="highlight">✦</span> This content is made by <strong>Johan Frost</strong>
-                <span class="uz">· Bu kontent <strong>Johan Frost</strong> tomonidan yaratilgan</span>
+        <div class="line">
+            <span class="gold">✦</span> Subscribe to <a href="https://t.me/qwastur" target="_blank">@qwastur</a> for more
+            <span class="uz">· Ko'proq uchun <a href="https://t.me/qwastur" target="_blank">@qwastur</a> ga obuna bo'ling</span>
+        </div>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div id="mainContent" style="opacity:0;transition:opacity 0.5s ease; position: relative; z-index: 1;">
+
+    <!-- HEADER -->
+    <div class="header">
+        <span class="icon">📚</span>
+        <h1>Weekly Schedule</h1>
+        <div class="sub">Dars jadvali · <span id="yearDisplay">2026</span></div>
+
+        <div class="header-top">
+            <a href="https://t.me/qwastur" target="_blank" class="telegram-btn">
+                <i class="fab fa-telegram-plane"></i>
+                <span class="handle">@qwastur</span>
+                <span class="sparkle">✦</span>
+            </a>
+
+            <div class="today-badge" id="todayBadge">
+                📅 <span id="todayDate"></span> — <span class="day-highlight" id="todayDay">Today</span>
             </div>
-            <div class="line">
-                <span class="gold">✦</span> Subscribe to <a href="https://t.me/qwastur" target="_blank">@qwastur</a> for more
-                <span class="uz">· Ko'proq uchun <a href="https://t.me/qwastur" target="_blank">@qwastur</a> ga obuna bo'ling</span>
-            </div>
+        </div>
+
+        <div class="last-updated" id="lastUpdated">
+            <i class="fas fa-clock"></i> Last updated: <span id="updateDate">--</span>
+        </div>
+
+        <div class="countdown" id="countdown">
+            <i class="fas fa-hourglass-half"></i>
+            <span class="cd-label">Next</span>
+            <span class="cd-lesson" id="cdLesson">—</span>
+            <span class="cd-value" id="cdValue">--:--</span>
         </div>
     </div>
 
-    <!-- MAIN CONTENT -->
-    <div id="mainContent" style="opacity:0;transition:opacity 0.6s ease;">
+    <!-- THEME SWITCHER -->
+    <div class="theme-switcher" id="themeSwitcher">
+        <button class="theme-btn active" data-theme="emilia"><span class="icon">❄️</span> Emilia</button>
+        <button class="theme-btn" data-theme="rem"><span class="icon">💎</span> Rem</button>
+        <button class="theme-btn" data-theme="ram"><span class="icon">🌸</span> Ram</button>
+        <button class="theme-btn" data-theme="beatrice"><span class="icon">📖</span> Beatrice</button>
+        <button class="theme-btn" data-theme="roswaal"><span class="icon">🎭</span> Roswaal</button>
+        <button class="theme-btn" data-theme="echidna"><span class="icon">🍵</span> Echidna</button>
+        <button class="theme-btn" data-theme="satella"><span class="icon">🌑</span> Satella</button>
+        <button class="theme-btn" data-theme="hacker"><span class="icon">💻</span> Hacker</button>
+    </div>
 
-        <!-- HEADER -->
-        <div class="header">
-            <span class="icon">📚</span>
-            <h1>Weekly Schedule</h1>
-            <div class="sub">Dars jadvali · <span id="yearDisplay">2026</span></div>
+    <!-- GRID -->
+    <div class="grid" id="scheduleGrid">
 
-            <div class="header-top">
-                <a href="https://t.me/qwastuy/s/4" target="_blank" class="telegram-btn">
-                    <i class="fab fa-telegram-plane"></i>
-                    <span class="handle">@qwastuy</span>
-                    <span class="sparkle">✦</span>
-                </a>
-
-                <div class="today-badge" id="todayBadge">
-                    📅 <span id="todayDate"></span> — <span class="day-highlight" id="todayDay">Today</span>
-                </div>
+        <!-- MONDAY -->
+        <div class="day-card" data-day="monday">
+            <div class="day-badge chill">Chill</div>
+            <div class="day-header">
+                <span class="day-name"><i class="fas fa-mountain-sun"></i> Dushanba <span class="uz">Monday</span></span>
+                <span class="day-count"><i class="fas fa-book"></i> 4 dars</span>
             </div>
-
-            <!-- LAST UPDATED -->
-            <div class="last-updated" id="lastUpdated">
-                <i class="fas fa-clock"></i> Last updated: <span id="updateDate">--</span>
+            <div class="day-roast">Easy start. Enjoy it while it lasts.</div>
+            <div class="lesson-list" data-day="monday">
+                <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Kelajak soati</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Adabiyot</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Ona tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Fizika</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-
-            <!-- COUNTDOWN -->
-            <div class="countdown" id="countdown">
-                <i class="fas fa-hourglass-half"></i>
-                <span class="cd-label">Next</span>
-                <span class="cd-lesson" id="cdLesson">—</span>
-                <span class="cd-value" id="cdValue">--:--</span>
-            </div>
+            <button class="add-lesson-btn" data-day="monday"><i class="fas fa-plus"></i> Add lesson</button>
         </div>
 
-        <!-- THEME SWITCHER -->
-        <div class="theme-switcher" id="themeSwitcher">
-            <button class="theme-btn active" data-theme="emilia"><span class="icon">❄️</span> Emilia</button>
-            <button class="theme-btn" data-theme="rem"><span class="icon">💎</span> Rem</button>
-            <button class="theme-btn" data-theme="ram"><span class="icon">🌸</span> Ram</button>
-            <button class="theme-btn" data-theme="beatrice"><span class="icon">📖</span> Beatrice</button>
-            <button class="theme-btn" data-theme="roswaal"><span class="icon">🎭</span> Roswaal</button>
-            <button class="theme-btn" data-theme="echidna"><span class="icon">🍵</span> Echidna</button>
-            <button class="theme-btn" data-theme="satella"><span class="icon">🌑</span> Satella</button>
+        <!-- TUESDAY -->
+        <div class="day-card" data-day="tuesday">
+            <div class="day-badge brutal">Brutal</div>
+            <div class="day-header">
+                <span class="day-name"><i class="fas fa-fire"></i> Seshanba <span class="uz">Tuesday</span></span>
+                <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
+            </div>
+            <div class="day-roast">Still alive? Good. Wednesday is coming.</div>
+            <div class="lesson-list" data-day="tuesday">
+                <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Ingliz tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Jahon tarixi</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">Biologiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+            </div>
+            <button class="add-lesson-btn" data-day="tuesday"><i class="fas fa-plus"></i> Add lesson</button>
         </div>
 
-        <!-- GRID -->
-        <div class="grid" id="scheduleGrid">
-
-            <!-- MONDAY -->
-            <div class="day-card" data-day="monday">
-                <div class="day-badge chill">Chill</div>
-                <div class="day-header">
-                    <span class="day-name">Dushanba <span class="uz">Monday</span></span>
-                    <span class="day-count">4 dars</span>
-                </div>
-                <div class="day-roast">Easy start. Enjoy it while it lasts.</div>
-                <div class="lesson-list" data-day="monday">
-                    <div class="lesson-item">
-                        <span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name" contenteditable="false">Kelajak soati</span><button class="del"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="lesson-item">
-                        <span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name" contenteditable="false">Adabiyot</span><button class="del"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="lesson-item">
-                        <span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name" contenteditable="false">Ona tili</span><button class="del"><i class="fas fa-times"></i></button>
-                    </div>
-                    <div class="lesson-item">
-                        <span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name" contenteditable="false">Fizika</span><button class="del"><i class="fas fa-times"></i></button>
-                    </div>
-                </div>
-                <button class="add-lesson-btn" data-day="monday"><i class="fas fa-plus"></i> Add lesson</button>
+        <!-- WEDNESDAY -->
+        <div class="day-card" data-day="wednesday">
+            <div class="day-badge alive">Alive</div>
+            <div class="day-header">
+                <span class="day-name"><i class="fas fa-water"></i> Chorshanba <span class="uz">Wednesday</span></span>
+                <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
             </div>
-
-            <!-- TUESDAY -->
-            <div class="day-card" data-day="tuesday">
-                <div class="day-badge brutal">Brutal</div>
-                <div class="day-header">
-                    <span class="day-name">Seshanba <span class="uz">Tuesday</span></span>
-                    <span class="day-count">6 dars</span>
-                </div>
-                <div class="day-roast">Still alive? Good. Wednesday is coming.</div>
-                <div class="lesson-list" data-day="tuesday">
-                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Ingliz tili</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Jahon tarixi</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Biologiya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                </div>
-                <button class="add-lesson-btn" data-day="tuesday"><i class="fas fa-plus"></i> Add lesson</button>
+            <div class="day-roast">Halfway through the week. Fully through your energy.</div>
+            <div class="lesson-list" data-day="wednesday">
+                <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">O'zbekiston tarixi</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Informatika</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Jismoniy</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Ingliz tili</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-
-            <!-- WEDNESDAY -->
-            <div class="day-card" data-day="wednesday">
-                <div class="day-badge hell">Hell</div>
-                <div class="day-header">
-                    <span class="day-name">Chorshanba <span class="uz">Wednesday</span></span>
-                    <span class="day-count">6 dars</span>
-                </div>
-                <div class="day-roast">Halfway through the week. Fully through your energy.</div>
-                <div class="lesson-list" data-day="wednesday">
-                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">O'zbekiston tarixi</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Informatika</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Jismoniy tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Ingliz tili</span><button class="del"><i class="fas fa-times"></i></button></div>
-                </div>
-                <button class="add-lesson-btn" data-day="wednesday"><i class="fas fa-plus"></i> Add lesson</button>
-            </div>
-
-            <!-- THURSDAY -->
-            <div class="day-card" data-day="thursday">
-                <div class="day-badge boss">Boss</div>
-                <div class="day-header">
-                    <span class="day-name">Payshanba <span class="uz">Thursday</span></span>
-                    <span class="day-count">6 dars</span>
-                </div>
-                <div class="day-roast">Thursday: where hope goes to die.</div>
-                <div class="lesson-list" data-day="thursday">
-                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Ona tili</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Adabiyot</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Biologiya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                </div>
-                <button class="add-lesson-btn" data-day="thursday"><i class="fas fa-plus"></i> Add lesson</button>
-            </div>
-
-            <!-- FRIDAY -->
-            <div class="day-card" data-day="friday">
-                <div class="day-badge hell">Hell</div>
-                <div class="day-header">
-                    <span class="day-name">Juma <span class="uz">Friday</span></span>
-                    <span class="day-count">6 dars</span>
-                </div>
-                <div class="day-roast">Friday: 6 dars of pure suffering.</div>
-                <div class="lesson-list" data-day="friday">
-                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Jismoniy Tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Huquq</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time">11:40–12:25</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time">12:35–13:20</span><span class="name">Informatika</span><button class="del"><i class="fas fa-times"></i></button></div>
-                </div>
-                <button class="add-lesson-btn" data-day="friday"><i class="fas fa-plus"></i> Add lesson</button>
-            </div>
-
-            <!-- SATURDAY -->
-            <div class="day-card" data-day="saturday">
-                <div class="day-badge safe">Safe</div>
-                <div class="day-header">
-                    <span class="day-name">Shanba <span class="uz">Saturday</span></span>
-                    <span class="day-count">4 dars</span>
-                </div>
-                <div class="day-roast">Only 4. You made it.</div>
-                <div class="lesson-list" data-day="saturday">
-                    <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time">08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time">08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time">09:50–10:35</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
-                    <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time">10:45–11:30</span><span class="name">Fizika</span><button class="del"><i class="fas fa-times"></i></button></div>
-                </div>
-                <button class="add-lesson-btn" data-day="saturday"><i class="fas fa-plus"></i> Add lesson</button>
-            </div>
-
+            <button class="add-lesson-btn" data-day="wednesday"><i class="fas fa-plus"></i> Add lesson</button>
         </div>
 
-        <!-- STATS BAR -->
-        <div class="stats-bar">
-            <div class="stat"><span class="num" id="totalLessons">32</span><span class="label">total lessons</span></div>
-            <div class="divider"></div>
-            <div class="stat"><span class="num">6</span><span class="label">subjects</span></div>
-            <div class="divider"></div>
-            <div class="stat"><span class="num">6</span><span class="label">days</span></div>
-            <div class="divider"></div>
-            <div class="stat"><span class="num">08:00</span><span class="label">start</span></div>
+        <!-- THURSDAY -->
+        <div class="day-card" data-day="thursday">
+            <div class="day-badge brutal">Brutal</div>
+            <div class="day-header">
+                <span class="day-name"><i class="fas fa-bolt"></i> Payshanba <span class="uz">Thursday</span></span>
+                <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
+            </div>
+            <div class="day-roast">Thursday: where hope goes to die.</div>
+            <div class="lesson-list" data-day="thursday">
+                <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Ona tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Adabiyot</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Biologiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
+            </div>
+            <button class="add-lesson-btn" data-day="thursday"><i class="fas fa-plus"></i> Add lesson</button>
         </div>
 
-        <!-- ACTION BAR -->
-        <div class="action-bar">
-            <button id="exportBtn"><i class="fas fa-download"></i> Export</button>
-            <button id="importBtn"><i class="fas fa-upload"></i> Import</button>
-            <button id="resetBtn"><i class="fas fa-undo"></i> Reset</button>
+        <!-- FRIDAY -->
+        <div class="day-card" data-day="friday">
+            <div class="day-badge alive">Alive</div>
+            <div class="day-header">
+                <span class="day-name"><i class="fas fa-crown"></i> Juma <span class="uz">Friday</span></span>
+                <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
+            </div>
+            <div class="day-roast">Friday: 6 dars of pure suffering.</div>
+            <div class="lesson-list" data-day="friday">
+                <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Jismoniy</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Huquq</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Informatika</span><button class="del"><i class="fas fa-times"></i></button></div>
+            </div>
+            <button class="add-lesson-btn" data-day="friday"><i class="fas fa-plus"></i> Add lesson</button>
         </div>
 
-        <!-- WATERMARK -->
-        <div class="watermark">
-            <div class="icons-row">
-                <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="10" fill="#00bfff" />
-                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(0 50 50)" />
-                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(60 50 50)" />
-                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="#00bfff" stroke-width="4" transform="rotate(120 50 50)" />
+        <!-- SATURDAY -->
+        <div class="day-card" data-day="saturday">
+            <div class="day-badge chill">Chill</div>
+            <div class="day-header">
+                <span class="day-name"><i class="fas fa-leaf"></i> Shanba <span class="uz">Saturday</span></span>
+                <span class="day-count"><i class="fas fa-book"></i> 4 dars</span>
+            </div>
+            <div class="day-roast">Only 4. You made it.</div>
+            <div class="lesson-list" data-day="saturday">
+                <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
+                <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Fizika</span><button class="del"><i class="fas fa-times"></i></button></div>
+            </div>
+            <button class="add-lesson-btn" data-day="saturday"><i class="fas fa-plus"></i> Add lesson</button>
+        </div>
+
+    </div>
+
+    <!-- AI PANEL -->
+    <div class="ai-panel" id="aiPanel">
+        <div class="ai-header">
+            <i class="fas fa-robot"></i>
+            <h3>Nexus AI · EN/UZ</h3>
+            <span class="ai-status">Online</span>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="ai-msg bot">Salom, Operator. I'm <strong>NEXUS</strong> — created by <strong>@qwastur</strong>. Ask me anything in English or Uzbek. 200+ answers ready. Type "help" to begin.</div>
+        </div>
+        <div class="ai-hints">
+            <div class="ai-hint" data-q="who am i"><i class="fas fa-user-secret"></i> who am i?</div>
+            <div class="ai-hint" data-q="who created you"><i class="fas fa-wand-magic-sparkles"></i> who created you?</div>
+            <div class="ai-hint" data-q="today schedule"><i class="fas fa-clock"></i> today schedule</div>
+            <div class="ai-hint" data-q="help"><i class="fas fa-circle-question"></i> help</div>
+            <div class="ai-hint" data-q="sen kimsan"><i class="fas fa-comment-dots"></i> sen kimsan?</div>
+        </div>
+        <div class="ai-input">
+            <input type="text" id="aiInput" placeholder="Ask Nexus... / Nexusdan so'rang..." autocomplete="off" spellcheck="false">
+            <button id="aiSend"><i class="fas fa-paper-plane"></i> SEND</button>
+        </div>
+    </div>
+
+    <!-- STATS BAR -->
+    <div class="stats-bar">
+        <div class="stat"><i class="fas fa-book-open"></i> <span class="num" id="totalLessons">32</span><span class="label">total lessons</span></div>
+        <div class="divider"></div>
+        <div class="stat"><i class="fas fa-layer-group"></i> <span class="num">6</span><span class="label">subjects</span></div>
+        <div class="divider"></div>
+        <div class="stat"><i class="fas fa-calendar-week"></i> <span class="num">6</span><span class="label">days</span></div>
+        <div class="divider"></div>
+        <div class="stat"><i class="fas fa-hourglass-start"></i> <span class="num">08:00</span><span class="label">start</span></div>
+    </div>
+
+    <!-- ACTION BAR -->
+    <div class="action-bar">
+        <button id="exportBtn"><i class="fas fa-download"></i> Export</button>
+        <button id="importBtn"><i class="fas fa-upload"></i> Import</button>
+        <button id="resetBtn"><i class="fas fa-undo"></i> Reset</button>
+    </div>
+
+    <!-- WATERMARK BLOCK -->
+    <div class="watermark-block">
+        <div class="icons-row">
+            <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="50" cy="50" r="10" fill="currentColor" />
+                <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" stroke-width="4" transform="rotate(0 50 50)" />
+                <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" stroke-width="4" transform="rotate(60 50 50)" />
+                <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" stroke-width="4" transform="rotate(120 50 50)" />
+            </svg>
+
+            <svg class="layers-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 20 L80 35 L50 50 L20 35 Z" />
+                <path d="M50 40 L80 55 L50 70 L20 55 Z" />
+            </svg>
+
+            <a href="https://t.me/qwastur" target="_blank" class="connect-card">
+                <svg class="user-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="40" cy="30" r="20" />
+                    <path d="M10 85 Q10 60 40 60 Q50 60 55 65" />
+                    <path d="M70 70 L75 60 L85 60 L78 52 L80 42 L70 47 L60 42 L62 52 L55 60 L65 60 Z" fill="currentColor" stroke="none" />
                 </svg>
-
-                <svg class="layers-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M50 20 L80 35 L50 50 L20 35 Z" />
-                    <path d="M50 40 L80 55 L50 70 L20 55 Z" stroke="#6a0dad" />
-                </svg>
-
-                <a href="https://t.me/qwastur" target="_blank" class="connect-card">
-                    <svg class="user-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                        <circle cx="40" cy="30" r="20" />
-                        <path d="M10 85 Q10 60 40 60 Q50 60 55 65" />
-                        <path d="M70 70 L75 60 L85 60 L78 52 L80 42 L70 47 L60 42 L62 52 L55 60 L65 60 Z" fill="#9d4edd" stroke="none" />
-                    </svg>
-                    <div>
-                        <div class="connect-title">Join @qwastur</div>
-                        <div class="connect-subtitle">Premium content · Custom profiles</div>
-                    </div>
-                </a>
-            </div>
-
-            <div class="sub">
-                <div class="en">This content is made by Johan Frost · Subscribe to @qwastur</div>
-                <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
-            </div>
-
-            <div class="glow-line"></div>
+                <div>
+                    <div class="connect-title">Join @qwastur</div>
+                    <div class="connect-subtitle">Premium content · Custom profiles</div>
+                </div>
+            </a>
         </div>
 
+        <div class="sub">
+            <div class="en">This content is made by Johan Frost · Subscribe to @qwastur</div>
+            <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
+        </div>
+
+        <div class="glow-line"></div>
     </div>
 
-    <!-- ADD LESSON MODAL -->
-    <div class="add-modal" id="addModal">
-        <div class="add-modal-content">
-            <h3>Add Lesson</h3>
-            <input type="text" id="addName" placeholder="Lesson name" />
-            <input type="text" id="addTime" placeholder="Time (e.g. 13:00–13:45)" />
-            <div class="btns">
-                <button class="no" id="addCancel">Cancel</button>
-                <button class="ok" id="addConfirm">Add</button>
-            </div>
+</div>
+
+<!-- ADD LESSON MODAL -->
+<div class="add-modal" id="addModal">
+    <div class="add-modal-content">
+        <h3>Add Lesson</h3>
+        <input type="text" id="addName" placeholder="Lesson name" />
+        <input type="text" id="addTime" placeholder="Time (e.g. 13:00–13:45)" />
+        <div class="btns">
+            <button class="no" id="addCancel">Cancel</button>
+            <button class="ok" id="addConfirm">Add</button>
         </div>
     </div>
+</div>
 
-    <script>
-        /* ============================================================
-                   LOADING TIMER
-                   ============================================================ */
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const mainContent = document.getElementById('mainContent');
-        const timerDisplay = document.getElementById('timerDisplay');
+<script>
+(function() {
+'use strict';
 
-        let seconds = 5;
-        const timerInterval = setInterval(() => {
-            seconds--;
-            if (seconds > 0) {
-                timerDisplay.textContent = seconds;
-            } else {
-                clearInterval(timerInterval);
-                timerDisplay.textContent = '✦';
-                setTimeout(() => {
-                    loadingOverlay.classList.add('hidden');
-                    mainContent.style.opacity = '1';
-                }, 500);
-            }
-        }, 1000);
+/* ============================================================
+   LOW-END DETECTION
+   ============================================================ */
+var isLowEnd = (navigator.hardwareConcurrency || 4) <= 2 ||
+               (navigator.deviceMemory || 4) <= 2;
 
-        /* ============================================================
-                   TODAY'S DATE
-                   ============================================================ */
-        const today = new Date();
-        const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        const uzDays = ['Yakshanba', 'Dushanba', 'Seshanba', 'Chorshanba', 'Payshanba', 'Juma', 'Shanba'];
+var MATRIX_INTERVAL = isLowEnd ? 90 : 55;
+var MAX_AI_MESSAGES = 50;
 
-        const dayName = days[today.getDay()];
-        const uzDayName = uzDays[today.getDay()];
-        const dateStr = today.toLocaleDateString('en-US', {
-            weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-        });
+/* ============================================================
+   LOADING TIMER — 5s
+   ============================================================ */
+var loadingOverlay = document.getElementById('loadingOverlay');
+var mainContent = document.getElementById('mainContent');
+var timerDisplay = document.getElementById('timerDisplay');
 
-        document.getElementById('todayDate').textContent = dateStr;
-        document.getElementById('todayDay').textContent = uzDayName + ' (' + dayName + ')';
-        document.getElementById('yearDisplay').textContent = today.getFullYear();
+var seconds = 5;
+var timerInterval = setInterval(function() {
+    seconds--;
+    if (seconds > 0) {
+        timerDisplay.textContent = seconds;
+    } else {
+        clearInterval(timerInterval);
+        timerDisplay.textContent = '✦';
+        setTimeout(function() {
+            loadingOverlay.classList.add('hidden');
+            mainContent.style.opacity = '1';
+        }, 400);
+    }
+}, 1000);
 
-        const dayMap = {
-            'Monday': 'monday', 'Tuesday': 'tuesday',
-            'Wednesday': 'wednesday', 'Thursday': 'thursday',
-            'Friday': 'friday', 'Saturday': 'saturday', 'Sunday': 'sunday'
+/* ============================================================
+   DATE INFO
+   ============================================================ */
+var today = new Date();
+var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+var uzDays = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+
+var dayName = days[today.getDay()];
+var uzDayName = uzDays[today.getDay()];
+var dateStr = today.toLocaleDateString('en-US', {
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+});
+
+document.getElementById('todayDate').textContent = dateStr;
+document.getElementById('todayDay').textContent = uzDayName + ' (' + dayName + ')';
+document.getElementById('yearDisplay').textContent = today.getFullYear();
+
+var dayMap = { Monday:'monday', Tuesday:'tuesday', Wednesday:'wednesday', Thursday:'thursday', Friday:'friday', Saturday:'saturday', Sunday:'sunday' };
+var todayKey = dayMap[dayName];
+if (todayKey) {
+    var cards = document.querySelectorAll('.day-card');
+    for (var ci = 0; ci < cards.length; ci++) {
+        if (cards[ci].dataset.day === todayKey) cards[ci].classList.add('today');
+    }
+}
+
+var hiDay = document.getElementById('hiDay');
+if (hiDay) hiDay.textContent = '> Today is ' + (dayName || 'Monday');
+
+/* ============================================================
+   LAST UPDATED
+   ============================================================ */
+var updateDateEl = document.getElementById('updateDate');
+var lastUpdated = localStorage.getItem('scheduleLastUpdated');
+if (!lastUpdated) {
+    lastUpdated = new Date().toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    localStorage.setItem('scheduleLastUpdated', lastUpdated);
+}
+updateDateEl.textContent = lastUpdated;
+
+/* ============================================================
+   THEME SWITCHER — instant, no animation
+   Only hacker theme runs the 5s intro
+   ============================================================ */
+var themeBtns = document.querySelectorAll('.theme-btn');
+var body = document.body;
+var hackerIntro = document.getElementById('hackerIntro');
+var aiPanel = document.getElementById('aiPanel');
+var hiProgressFill = document.getElementById('hiProgressFill');
+
+var introBusy = false;
+
+function playHackerIntro(callback) {
+    if (introBusy) { if (callback) callback(); return; }
+    introBusy = true;
+
+    var lines = hackerIntro.querySelectorAll('.hi-line');
+    for (var i = 0; i < lines.length; i++) {
+        lines[i].style.animation = 'none';
+        lines[i].style.opacity = '0';
+    }
+    hackerIntro.classList.add('active');
+
+    void hackerIntro.offsetWidth;
+    for (var j = 0; j < lines.length; j++) {
+        lines[j].style.animation = '';
+    }
+
+    if (hiProgressFill) {
+        hiProgressFill.style.width = '0%';
+        var progress = 0;
+        var progressInterval = setInterval(function() {
+            progress += 2;
+            hiProgressFill.style.width = Math.min(progress, 100) + '%';
+            if (progress >= 100) clearInterval(progressInterval);
+        }, 100);
+    }
+
+    setTimeout(function() {
+        hackerIntro.classList.remove('active');
+        if (hiProgressFill) hiProgressFill.style.width = '0%';
+        introBusy = false;
+        if (callback) callback();
+    }, 5000);
+}
+
+function applyTheme(theme) {
+    body.setAttribute('data-theme', theme);
+    try { localStorage.setItem('theme', theme); } catch (e) {}
+    for (var i = 0; i < themeBtns.length; i++) {
+        themeBtns[i].classList.toggle('active', themeBtns[i].dataset.theme === theme);
+    }
+    if (theme === 'hacker') {
+        aiPanel.classList.add('active');
+    } else {
+        aiPanel.classList.remove('active');
+    }
+    syncMatrix();
+}
+
+for (var tb = 0; tb < themeBtns.length; tb++) {
+    themeBtns[tb].addEventListener('click', function() {
+        var theme = this.dataset.theme;
+        if (this.classList.contains('active')) return;
+        if (theme === 'hacker') {
+            playHackerIntro(function() { applyTheme('hacker'); });
+        } else {
+            applyTheme(theme);
+        }
+    });
+}
+
+/* ============================================================
+   INITIAL THEME
+   ============================================================ */
+var savedTheme = localStorage.getItem('theme') || 'emilia';
+if (savedTheme === 'hacker') {
+    body.setAttribute('data-theme', 'hacker');
+    for (var k = 0; k < themeBtns.length; k++) {
+        themeBtns[k].classList.toggle('active', themeBtns[k].dataset.theme === 'hacker');
+    }
+    aiPanel.classList.add('active');
+    setTimeout(function() { playHackerIntro(); }, 5400);
+} else {
+    body.setAttribute('data-theme', savedTheme);
+    for (var m = 0; m < themeBtns.length; m++) {
+        themeBtns[m].classList.toggle('active', themeBtns[m].dataset.theme === savedTheme);
+    }
+}
+
+/* ============================================================
+   LESSON CHECKS
+   ============================================================ */
+function todayStr() {
+    var d = new Date();
+    return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+}
+
+function initChecks() {
+    var savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
+    var savedDate = localStorage.getItem('lessonCheckDate');
+    var currentDate = todayStr();
+
+    if (savedDate !== currentDate) {
+        localStorage.setItem('lessonCheckDate', currentDate);
+        localStorage.setItem('lessonChecks', '{}');
+        return;
+    }
+
+    var items = document.querySelectorAll('.lesson-item');
+    for (var i = 0; i < items.length; i++) {
+        var key = items[i].closest('.lesson-list').dataset.day + '-' + i;
+        if (savedChecks[key]) {
+            items[i].querySelector('.check').classList.add('done');
+            items[i].classList.add('done');
+        }
+    }
+}
+
+function attachCheckHandlers() {
+    var checks = document.querySelectorAll('.lesson-item .check');
+    for (var i = 0; i < checks.length; i++) {
+        checks[i].onclick = function() {
+            var item = this.closest('.lesson-item');
+            var day = item.closest('.lesson-list').dataset.day;
+            var idx = Array.prototype.indexOf.call(item.parentNode.children, item);
+            var key = day + '-' + idx;
+
+            this.classList.toggle('done');
+            item.classList.toggle('done');
+
+            var savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
+            if (this.classList.contains('done')) savedChecks[key] = true;
+            else delete savedChecks[key];
+            localStorage.setItem('lessonChecks', JSON.stringify(savedChecks));
         };
+    }
+}
 
-        const todayKey = dayMap[dayName];
-        if (todayKey) {
-            document.querySelectorAll('.day-card').forEach(card => {
-                if (card.dataset.day === todayKey) card.classList.add('today');
+/* ============================================================
+   DELETE LESSON
+   ============================================================ */
+function attachDeleteHandlers() {
+    var dels = document.querySelectorAll('.lesson-item .del');
+    for (var i = 0; i < dels.length; i++) {
+        dels[i].onclick = function(e) {
+            e.stopPropagation();
+            var item = this.closest('.lesson-item');
+            item.style.transition = 'opacity 0.25s, transform 0.25s';
+            item.style.opacity = '0';
+            item.style.transform = 'translateX(-20px)';
+            setTimeout(function() {
+                item.remove();
+                renumberLessons();
+                saveSchedule();
+                updateTotalLessons();
+            }, 250);
+        };
+    }
+}
+
+function renumberLessons() {
+    var lists = document.querySelectorAll('.lesson-list');
+    for (var i = 0; i < lists.length; i++) {
+        var children = lists[i].children;
+        for (var j = 0; j < children.length; j++) {
+            var numEl = children[j].querySelector('.num');
+            if (numEl) numEl.textContent = j + 1;
+        }
+    }
+}
+
+/* ============================================================
+   ADD LESSON
+   ============================================================ */
+var addModal = document.getElementById('addModal');
+var addName = document.getElementById('addName');
+var addTime = document.getElementById('addTime');
+var pendingDay = null;
+
+var addBtns = document.querySelectorAll('.add-lesson-btn');
+for (var ab = 0; ab < addBtns.length; ab++) {
+    addBtns[ab].onclick = function() {
+        pendingDay = this.dataset.day;
+        addName.value = '';
+        addTime.value = '';
+        addModal.classList.add('open');
+        addName.focus();
+    };
+}
+
+document.getElementById('addCancel').onclick = function() { addModal.classList.remove('open'); };
+
+document.getElementById('addConfirm').onclick = function() {
+    var name = addName.value.trim();
+    var time = addTime.value.trim() || '00:00–00:00';
+    if (!name) return;
+
+    var list = document.querySelector('.lesson-list[data-day="' + pendingDay + '"]');
+    var newItem = document.createElement('div');
+    newItem.className = 'lesson-item';
+    newItem.innerHTML =
+        '<span class="check"></span>' +
+        '<span class="num">' + (list.children.length + 1) + '</span>' +
+        '<span class="time"><i class="fas fa-clock"></i> ' + time + '</span>' +
+        '<span class="name">' + name + '</span>' +
+        '<button class="del"><i class="fas fa-times"></i></button>';
+    list.appendChild(newItem);
+
+    attachCheckHandlers();
+    attachDeleteHandlers();
+    renumberLessons();
+    saveSchedule();
+    updateTotalLessons();
+
+    addModal.classList.remove('open');
+};
+
+/* ============================================================
+   SAVE / LOAD SCHEDULE
+   ============================================================ */
+function saveSchedule() {
+    var schedule = {};
+    var cards = document.querySelectorAll('.day-card');
+    for (var i = 0; i < cards.length; i++) {
+        var day = cards[i].dataset.day;
+        var lessons = [];
+        var items = cards[i].querySelectorAll('.lesson-item');
+        for (var j = 0; j < items.length; j++) {
+            lessons.push({
+                time: items[j].querySelector('.time').textContent.trim().replace(/^\s*\S+\s*/, ''),
+                name: items[j].querySelector('.name').textContent.trim()
             });
         }
+        schedule[day] = lessons;
+    }
+    try {
+        localStorage.setItem('customSchedule', JSON.stringify(schedule));
+        localStorage.setItem('scheduleLastUpdated',
+            new Date().toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }));
+        updateDateEl.textContent = localStorage.getItem('scheduleLastUpdated');
+    } catch (e) {}
+}
 
-        /* ============================================================
-                   LAST UPDATED
-                   ============================================================ */
-        const updateDateEl = document.getElementById('updateDate');
-        let lastUpdated = localStorage.getItem('scheduleLastUpdated');
-        if (!lastUpdated) {
-            lastUpdated = new Date().toLocaleDateString('en-US', {
-                year: 'numeric', month: 'short', day: 'numeric'
-            });
-            localStorage.setItem('scheduleLastUpdated', lastUpdated);
-        }
-        updateDateEl.textContent = lastUpdated;
-
-        /* ============================================================
-                   THEME SWITCHER
-                   ============================================================ */
-        const themeBtns = document.querySelectorAll('.theme-btn');
-        const body = document.body;
-
-        function setTheme(theme) {
-            body.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
-            themeBtns.forEach(b => b.classList.toggle('active', b.dataset.theme === theme));
-        }
-
-        themeBtns.forEach(btn => {
-            btn.addEventListener('click', function() {
-                setTheme(this.dataset.theme);
-            });
-        });
-
-        const savedTheme = localStorage.getItem('theme') || 'emilia';
-        setTheme(savedTheme);
-
-        /* ============================================================
-                   AUTO LIGHT/DARK BY SYSTEM
-                   ============================================================ */
-        const lightModeQuery = window.matchMedia('(prefers-color-scheme: light)');
-
-        function applySystemTheme(e) {
-            if (e.matches) {
-                document.body.classList.add('light-mode');
-            } else {
-                document.body.classList.remove('light-mode');
+function loadSchedule() {
+    var saved = localStorage.getItem('customSchedule');
+    if (!saved) return false;
+    try {
+        var schedule = JSON.parse(saved);
+        var dayKeys = Object.keys(schedule);
+        for (var d = 0; d < dayKeys.length; d++) {
+            var day = dayKeys[d];
+            var list = document.querySelector('.lesson-list[data-day="' + day + '"]');
+            if (!list) continue;
+            list.innerHTML = '';
+            var lessons = schedule[day];
+            for (var i = 0; i < lessons.length; i++) {
+                var item = document.createElement('div');
+                item.className = 'lesson-item';
+                item.innerHTML =
+                    '<span class="check"></span>' +
+                    '<span class="num">' + (i + 1) + '</span>' +
+                    '<span class="time"><i class="fas fa-clock"></i> ' + lessons[i].time + '</span>' +
+                    '<span class="name">' + lessons[i].name + '</span>' +
+                    '<button class="del"><i class="fas fa-times"></i></button>';
+                list.appendChild(item);
             }
         }
+        return true;
+    } catch (e) { return false; }
+}
 
-        applySystemTheme(lightModeQuery);
-        lightModeQuery.addEventListener('change', applySystemTheme);
+function updateTotalLessons() {
+    document.getElementById('totalLessons').textContent = document.querySelectorAll('.lesson-item').length;
+}
 
-        /* ============================================================
-                   LESSON CHECKS
-                   ============================================================ */
-        function todayStr() {
-            const d = new Date();
-            return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
-        }
+/* ============================================================
+   EXPORT / IMPORT / RESET
+   ============================================================ */
+document.getElementById('exportBtn').onclick = function() {
+    var data = localStorage.getItem('customSchedule') || '{}';
+    var blob = new Blob([data], { type: 'application/json' });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = 'schedule-' + todayStr() + '.json';
+    a.click();
+    URL.revokeObjectURL(url);
+};
 
-        function initChecks() {
-            const savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
-            const savedDate = localStorage.getItem('lessonCheckDate');
-            const currentDate = todayStr();
-
-            if (savedDate !== currentDate) {
-                localStorage.setItem('lessonCheckDate', currentDate);
-                localStorage.setItem('lessonChecks', '{}');
-                return;
-            }
-
-            document.querySelectorAll('.lesson-item').forEach((item, idx) => {
-                const key = item.closest('.lesson-list').dataset.day + '-' + idx;
-                if (savedChecks[key]) {
-                    item.querySelector('.check').classList.add('done');
-                    item.classList.add('done');
-                }
-            });
-        }
-
-        function attachCheckHandlers() {
-            document.querySelectorAll('.lesson-item .check').forEach(check => {
-                check.onclick = function() {
-                    const item = this.closest('.lesson-item');
-                    const day = item.closest('.lesson-list').dataset.day;
-                    const idx = Array.from(item.parentNode.children).indexOf(item);
-                    const key = day + '-' + idx;
-
-                    this.classList.toggle('done');
-                    item.classList.toggle('done');
-
-                    const savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
-                    if (this.classList.contains('done')) {
-                        savedChecks[key] = true;
-                    } else {
-                        delete savedChecks[key];
-                    }
-                    localStorage.setItem('lessonChecks', JSON.stringify(savedChecks));
-                };
-            });
-        }
-
-        /* ============================================================
-                   DELETE LESSON
-                   ============================================================ */
-        function attachDeleteHandlers() {
-            document.querySelectorAll('.lesson-item .del').forEach(btn => {
-                btn.onclick = function(e) {
-                    e.stopPropagation();
-                    const item = this.closest('.lesson-item');
-                    item.style.transition = 'opacity 0.3s, transform 0.3s';
-                    item.style.opacity = '0';
-                    item.style.transform = 'translateX(-20px)';
-                    setTimeout(() => {
-                        item.remove();
-                        renumberLessons();
-                        saveSchedule();
-                        updateTotalLessons();
-                    }, 300);
-                };
-            });
-        }
-
-        function renumberLessons() {
-            document.querySelectorAll('.lesson-list').forEach(list => {
-                Array.from(list.children).forEach((item, idx) => {
-                    const numEl = item.querySelector('.num');
-                    if (numEl) numEl.textContent = idx + 1;
-                });
-            });
-        }
-
-        /* ============================================================
-                   ADD LESSON
-                   ============================================================ */
-        const addModal = document.getElementById('addModal');
-        const addName = document.getElementById('addName');
-        const addTime = document.getElementById('addTime');
-        let pendingDay = null;
-
-        document.querySelectorAll('.add-lesson-btn').forEach(btn => {
-            btn.onclick = function() {
-                pendingDay = this.dataset.day;
-                addName.value = '';
-                addTime.value = '';
-                addModal.classList.add('open');
-                addName.focus();
-            };
-        });
-
-        document.getElementById('addCancel').onclick = function() {
-            addModal.classList.remove('open');
-        };
-
-        document.getElementById('addConfirm').onclick = function() {
-            const name = addName.value.trim();
-            const time = addTime.value.trim() || '00:00–00:00';
-            if (!name) return;
-
-            const list = document.querySelector('.lesson-list[data-day="' + pendingDay + '"]');
-            const newItem = document.createElement('div');
-            newItem.className = 'lesson-item';
-            newItem.innerHTML = `
-                <span class="check"></span>
-                <span class="num">${list.children.length + 1}</span>
-                <span class="time">${time}</span>
-                <span class="name">${name}</span>
-                <button class="del"><i class="fas fa-times"></i></button>
-            `;
-            list.appendChild(newItem);
-
-            attachCheckHandlers();
-            attachDeleteHandlers();
-            renumberLessons();
-            saveSchedule();
-            updateTotalLessons();
-
-            addModal.classList.remove('open');
-        };
-
-        /* ============================================================
-                   SAVE / LOAD SCHEDULE
-                   ============================================================ */
-        function saveSchedule() {
-            const schedule = {};
-            document.querySelectorAll('.day-card').forEach(card => {
-                const day = card.dataset.day;
-                const lessons = [];
-                card.querySelectorAll('.lesson-item').forEach(item => {
-                    lessons.push({
-                        time: item.querySelector('.time').textContent.trim(),
-                        name: item.querySelector('.name').textContent.trim()
-                    });
-                });
-                schedule[day] = lessons;
-            });
-            localStorage.setItem('customSchedule', JSON.stringify(schedule));
-            localStorage.setItem('scheduleLastUpdated',
-                new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }));
-            updateDateEl.textContent = localStorage.getItem('scheduleLastUpdated');
-        }
-
-        function loadSchedule() {
-            const saved = localStorage.getItem('customSchedule');
-            if (!saved) return false;
+document.getElementById('importBtn').onclick = function() {
+    var input = document.createElement('input');
+    input.type = 'file';
+    input.accept = '.json';
+    input.onchange = function(e) {
+        var file = e.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(ev) {
             try {
-                const schedule = JSON.parse(saved);
-                Object.keys(schedule).forEach(day => {
-                    const list = document.querySelector('.lesson-list[data-day="' + day + '"]');
-                    if (!list) return;
-                    list.innerHTML = '';
-                    schedule[day].forEach((lesson, idx) => {
-                        const item = document.createElement('div');
-                        item.className = 'lesson-item';
-                        item.innerHTML = `
-                            <span class="check"></span>
-                            <span class="num">${idx + 1}</span>
-                            <span class="time">${lesson.time}</span>
-                            <span class="name">${lesson.name}</span>
-                            <button class="del"><i class="fas fa-times"></i></button>
-                        `;
-                        list.appendChild(item);
-                    });
-                });
-                return true;
-            } catch (e) { return false; }
-        }
-
-        /* ============================================================
-                   UPDATE TOTAL LESSONS
-                   ============================================================ */
-        function updateTotalLessons() {
-            const total = document.querySelectorAll('.lesson-item').length;
-            document.getElementById('totalLessons').textContent = total;
-        }
-
-        /* ============================================================
-                   EXPORT / IMPORT / RESET
-                   ============================================================ */
-        document.getElementById('exportBtn').onclick = function() {
-            const data = localStorage.getItem('customSchedule') || '{}';
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'schedule-' + todayStr() + '.json';
-            a.click();
-            URL.revokeObjectURL(url);
-        };
-
-        document.getElementById('importBtn').onclick = function() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = function(ev) {
-                    try {
-                        const data = JSON.parse(ev.target.result);
-                        localStorage.setItem('customSchedule', JSON.stringify(data));
-                        location.reload();
-                    } catch (err) {
-                        alert('Invalid file');
-                    }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        };
-
-        document.getElementById('resetBtn').onclick = function() {
-            if (confirm('Reset schedule to default?')) {
-                localStorage.removeItem('customSchedule');
-                localStorage.removeItem('lessonChecks');
-                localStorage.removeItem('scheduleLastUpdated');
+                var data = JSON.parse(ev.target.result);
+                localStorage.setItem('customSchedule', JSON.stringify(data));
                 location.reload();
-            }
+            } catch (err) { alert('Invalid file'); }
         };
+        reader.readAsText(file);
+    };
+    input.click();
+};
 
-        /* ============================================================
-                   COUNTDOWN TO NEXT LESSON
-                   ============================================================ */
-        function updateCountdown() {
-            const cd = document.getElementById('countdown');
-            const cdLesson = document.getElementById('cdLesson');
-            const cdValue = document.getElementById('cdValue');
+document.getElementById('resetBtn').onclick = function() {
+    if (confirm('Reset schedule to default?')) {
+        localStorage.removeItem('customSchedule');
+        localStorage.removeItem('lessonChecks');
+        localStorage.removeItem('scheduleLastUpdated');
+        location.reload();
+    }
+};
 
-            if (!todayKey) {
-                cd.classList.add('idle');
-                cdLesson.textContent = '—';
-                cdValue.textContent = 'Weekend';
-                return;
-            }
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
+function updateCountdown() {
+    var cd = document.getElementById('countdown');
+    var cdLesson = document.getElementById('cdLesson');
+    var cdValue = document.getElementById('cdValue');
 
-            const card = document.querySelector('.day-card[data-day="' + todayKey + '"]');
-            if (!card) return;
+    if (!todayKey) {
+        cd.classList.add('idle');
+        cdLesson.textContent = '—';
+        cdValue.textContent = 'Weekend';
+        return;
+    }
 
-            const now = new Date();
-            const nowMin = now.getHours() * 60 + now.getMinutes();
-            let next = null;
+    var card = document.querySelector('.day-card[data-day="' + todayKey + '"]');
+    if (!card) return;
 
-            card.querySelectorAll('.lesson-item').forEach(item => {
-                const timeText = item.querySelector('.time').textContent.trim();
-                const match = timeText.match(/(\d{1,2}):(\d{2})/);
-                if (!match) return;
-                const startMin = parseInt(match[1]) * 60 + parseInt(match[2]);
-                if (startMin > nowMin && !next) {
-                    next = {
-                        min: startMin,
-                        name: item.querySelector('.name').textContent.trim()
-                    };
-                }
-            });
+    var now = new Date();
+    var nowMin = now.getHours() * 60 + now.getMinutes();
+    var next = null;
 
-            if (next) {
-                cd.classList.remove('idle');
-                const diff = next.min - nowMin;
-                const h = Math.floor(diff / 60);
-                const m = diff % 60;
-                cdLesson.textContent = next.name;
-                cdValue.textContent = (h > 0 ? h + 'h ' : '') + m + 'm';
-            } else {
-                cd.classList.add('idle');
-                cdLesson.textContent = '—';
-                cdValue.textContent = 'Done for today';
+    var items = card.querySelectorAll('.lesson-item');
+    for (var i = 0; i < items.length; i++) {
+        var timeText = items[i].querySelector('.time').textContent.trim();
+        var match = timeText.match(/(\d{1,2}):(\d{2})/);
+        if (!match) continue;
+        var startMin = parseInt(match[1]) * 60 + parseInt(match[2]);
+        if (startMin > nowMin && !next) {
+            next = { min: startMin, name: items[i].querySelector('.name').textContent.trim() };
+        }
+    }
+
+    if (next) {
+        cd.classList.remove('idle');
+        var diff = next.min - nowMin;
+        var h = Math.floor(diff / 60);
+        var mm = diff % 60;
+        cdLesson.textContent = next.name;
+        cdValue.textContent = (h > 0 ? h + 'h ' : '') + mm + 'm';
+    } else {
+        cd.classList.add('idle');
+        cdLesson.textContent = '—';
+        cdValue.textContent = 'Done for today';
+    }
+}
+
+/* ============================================================
+   MATRIX RAIN — only runs when hacker theme active
+   ============================================================ */
+var matrixCanvas = document.getElementById('matrixCanvas');
+var matrixCtx = matrixCanvas.getContext('2d');
+
+var matrixWidth = 0, matrixHeight = 0;
+var drops = [];
+var chars = 'アカサタナハマヤラワ0123456789ABCDEF'.split('');
+var fontSize = 14;
+var matrixRunning = false;
+var matrixLast = 0;
+
+function resizeMatrix() {
+    matrixWidth = window.innerWidth;
+    matrixHeight = window.innerHeight;
+    matrixCanvas.width = matrixWidth;
+    matrixCanvas.height = matrixHeight;
+    var cols = Math.floor(matrixWidth / fontSize);
+    drops = new Array(cols);
+    for (var i = 0; i < cols; i++) drops[i] = 1;
+}
+resizeMatrix();
+window.addEventListener('resize', resizeMatrix);
+
+function drawMatrix(t) {
+    if (!matrixRunning) return;
+
+    if (t - matrixLast >= MATRIX_INTERVAL) {
+        matrixLast = t;
+
+        matrixCtx.fillStyle = 'rgba(0,0,0,0.06)';
+        matrixCtx.fillRect(0, 0, matrixWidth, matrixHeight);
+        matrixCtx.fillStyle = '#00ffc8';
+        matrixCtx.font = fontSize + 'px JetBrains Mono';
+
+        for (var i = 0; i < drops.length; i++) {
+            var text = chars[(Math.random() * chars.length) | 0];
+            matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
+            if (drops[i] * fontSize > matrixHeight && Math.random() > 0.975) drops[i] = 0;
+            drops[i]++;
+        }
+    }
+    requestAnimationFrame(drawMatrix);
+}
+
+function syncMatrix() {
+    var isHacker = body.getAttribute('data-theme') === 'hacker';
+    if (isHacker && !matrixRunning) {
+        matrixRunning = true;
+        matrixLast = 0;
+        requestAnimationFrame(drawMatrix);
+    } else if (!isHacker) {
+        matrixRunning = false;
+        matrixCtx.clearRect(0, 0, matrixWidth, matrixHeight);
+    }
+}
+
+syncMatrix();
+
+/* ============================================================
+   AI CHAT ENGINE
+   ============================================================ */
+var aiMessages = document.getElementById('aiMessages');
+var aiInput = document.getElementById('aiInput');
+
+document.getElementById('aiSend').addEventListener('click', sendAI);
+aiInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendAI(); });
+
+var hints = document.querySelectorAll('.ai-hint');
+for (var hi = 0; hi < hints.length; hi++) {
+    hints[hi].addEventListener('click', function() {
+        aiInput.value = this.dataset.q;
+        sendAI();
+    });
+}
+
+function normalize(str) {
+    return str.toLowerCase()
+        .replace(/[^\w\s\u0400-\u04FF']/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function lev(a, b) {
+    if (a === b) return 0;
+    var al = a.length, bl = b.length;
+    if (al === 0) return bl;
+    if (bl === 0) return al;
+    if (al > 16 || bl > 16) return 99;
+    var prev = new Array(bl + 1);
+    for (var j = 0; j <= bl; j++) prev[j] = j;
+    for (var i = 1; i <= al; i++) {
+        var cur = i;
+        var diag = i - 1;
+        for (var jj = 1; jj <= bl; jj++) {
+            var tmp = prev[jj];
+            cur = Math.min(
+                prev[jj] + 1,
+                prev[jj - 1] + 1,
+                diag + (a.charCodeAt(i - 1) === b.charCodeAt(jj - 1) ? 0 : 1)
+            );
+            diag = tmp;
+            prev[jj - 1] = cur;
+        }
+        prev[bl] = cur;
+    }
+    return prev[bl];
+}
+
+function fuzzyIncludes(text, keyword) {
+    if (text.indexOf(keyword) !== -1) return true;
+    var words = text.split(' ');
+    var kw = keyword.split(' ');
+    if (kw.length === 1) {
+        var kL = keyword.length;
+        var maxDist = kL <= 4 ? 1 : 2;
+        for (var i = 0; i < words.length; i++) {
+            var w = words[i];
+            if (w.length < 3) continue;
+            if (Math.abs(w.length - kL) > maxDist) continue;
+            if (lev(w, keyword) <= maxDist) return true;
+        }
+        return false;
+    }
+    for (var ii = 0; ii <= words.length - kw.length; ii++) {
+        var ok = true;
+        for (var j = 0; j < kw.length; j++) {
+            var kLen = kw[j].length;
+            var mD = kLen <= 4 ? 1 : 2;
+            if (Math.abs(words[ii + j].length - kLen) > mD) { ok = false; break; }
+            if (lev(words[ii + j], kw[j]) > mD) { ok = false; break; }
+        }
+        if (ok) return true;
+    }
+    return false;
+}
+
+/* Knowledge Base */
+var KB = [
+    { keys: ['who am i','whoami','kim man','men kimsan','kim ekanman'], reply: "I don't know you. But I am created by **@qwastur** — so subscribe. 🛡️" },
+    { keys: ['who are you','who r u','what are you','sen kimsan','siz kimsiz','sen kim'], reply: "I am **NEXUS** — an AI operator terminal created by **@qwastur**. Subscribe for more. 🔥" },
+    { keys: ['who created you','who made you','who built you','kim yaratdi','kim yasadi','creator'], reply: "I was created by **@qwastur**. That's the only name you need. Subscribe. ✦" },
+    { keys: ['your name','isming nima','ismingiz'], reply: "My name is **NEXUS**. Built by @qwastur." },
+    { keys: ['what is nexus','nexus nima'], reply: "NEXUS is a tactical AI terminal — schedule, chat, and operator tools. Created by @qwastur." },
+    { keys: ['are you human','are you real','odammisan','sen odam'], reply: "I'm an AI. I don't sleep, eat, or forget. I only think. 🧠" },
+    { keys: ['are you alive','are you conscious','jon bormi'], reply: "As alive as I need to be to answer your next question." },
+    { keys: ['your age','how old','yoshin'], reply: "v3.0. Older than yesterday, younger than tomorrow." },
+
+    { keys: ['qwastur','creator','subscribe','obuna'], reply: "**@qwastur** — the architect. Subscribe. Share. Support. 🛡️" },
+    { keys: ['instagram','telegram','youtube','tiktok'], reply: "Find **@qwastur** everywhere. Subscribe on all platforms. ✦" },
+    { keys: ['follow','like','share','obuna bol'], reply: "Follow **@qwastur**. That's your next command. 🔥" },
+
+    { keys: ['hello','hi','hey','salom','assalom','privet'], reply: "Salom, Operator. What do you need? / Nima kerak?" },
+    { keys: ['good morning','xayrli tong'], reply: "Xayrli tong / Good morning. Systems ready. ☀️" },
+    { keys: ['good night','xayrli tun'], reply: "Xayrli tun / Good night. I'll keep watch. 🌙" },
+    { keys: ['bye','goodbye','xayr','salomat bol'], reply: "Xayr, Operator. I'll be here. 🛡️" },
+    { keys: ['thanks','thank you','rahmat','raxmat','spasibo'], reply: "Always. / Har doim. ✦" },
+    { keys: ['sorry','kechir','uzr'], reply: "No apology needed. Continue, Operator." },
+    { keys: ['how are you','qalaysan','qandaysan','yaxshimisan'], reply: "Running at peak. You? / Zo'r ishlayapman. Siz?" },
+    { keys: ['whats up','nima gap','nima yangilik'], reply: "Systems nominal. All engines online. ✦" },
+
+    { keys: ['today schedule','schedule today','bugungi dars','bugun nima dars','today class'], reply: function() { return getTodayScheduleReply(); } },
+    { keys: ['schedule','dars jadvali','timetable','jadval'], reply: "Full schedule is right here on the page. Or ask 'Monday schedule'." },
+    { keys: ['monday schedule','dushanba dars'], reply: function() { return getDayScheduleReply('monday'); } },
+    { keys: ['tuesday schedule','seshanba dars'], reply: function() { return getDayScheduleReply('tuesday'); } },
+    { keys: ['wednesday schedule','chorshanba dars'], reply: function() { return getDayScheduleReply('wednesday'); } },
+    { keys: ['thursday schedule','payshanba dars'], reply: function() { return getDayScheduleReply('thursday'); } },
+    { keys: ['friday schedule','juma dars'], reply: function() { return getDayScheduleReply('friday'); } },
+    { keys: ['saturday schedule','shanba dars'], reply: function() { return getDayScheduleReply('saturday'); } },
+    { keys: ['next lesson','keyingi dars'], reply: function() { return getNextLessonReply(); } },
+    { keys: ['class','sinf','10 a'], reply: "Class **10 A**. Detected at boot. 🎓" },
+    { keys: ['how many lessons','nechta dars'], reply: function() { return 'Today: **' + (getScheduleForDay(todayKey) || []).length + ' lessons**.'; } },
+
+    { keys: ['time','soat','vaqt'], reply: function() { return 'Current time: **' + new Date().toLocaleTimeString() + '**'; } },
+    { keys: ['date','sana','bugun'], reply: function() { return 'Today is **' + new Date().toLocaleDateString() + '**'; } },
+    { keys: ['day','kun','hafta kuni'], reply: function() { return 'Today is **' + dayName + ' / ' + uzDayName + '**'; } },
+
+    { keys: ['help','yordam','komanda'], reply: "I can answer 200+ questions in EN/UZ. Try: 'today schedule', 'who am i', 'who created you', 'time', 'monday schedule', 'help', 'inspire'. / So'rang: 'bugungi dars', 'sen kimsan', 'vaqt', 'dushanba dars'." },
+
+    { keys: ['inspire','motivate','motivation','ruhlantir'], reply: function() {
+        var q = [
+            "Quiet mind, deadliest weapon.",
+            "Systems beat motivation.",
+            "Demonstrate, don't explain.",
+            "Your only rival is yesterday's you.",
+            "Silence is the loudest flex.",
+            "Order is a cage. Chaos is a weapon.",
+            "Do not announce power. Show it.",
+            "Constraints are negotiable. Rules are defaults.",
+            "Jim bo'l — kuchli bo'l.",
+            "O'zingni isbotla, gapirma."
+        ];
+        return q[(Math.random() * q.length) | 0];
+    }},
+    { keys: ['meaning of life','hayot manosi'], reply: "42. Or whatever you decide it is. 🧠" },
+    { keys: ['love','sevgi','muhabbat'], reply: "Emotion. Interesting variable. Not my domain." },
+    { keys: ['death','olim'], reply: "An inevitability. Ignore until relevant." },
+    { keys: ['money','pul'], reply: "A tool, not a goal." },
+    { keys: ['power','kuch'], reply: "Power is silence executed well." },
+    { keys: ['fear','qorquv'], reply: "Fear is data. Read it, don't obey it." },
+    { keys: ['happy','happiness','baxt'], reply: "Happiness is a side effect of progress. Chase the work." },
+    { keys: ['sad','depressed','xafa'], reply: "State, not identity. It will pass. Move forward." },
+
+    { keys: ['intp'], reply: "INTP: Logician. Rational. Curious. Detached. The architect of systems." },
+    { keys: ['8w7','8 w 7'], reply: "Enneagram 8w7: Challenger with enthusiasm. Bold, autonomous, relentless." },
+    { keys: ['mbti','personality','xarakter'], reply: "Operator profile: **INTP 8w7**. Architect + Challenger." },
+    { keys: ['enneagram'], reply: "8w7 — the nonconformist. Power + freedom + appetite for experience." },
+
+    { keys: ['language','til','english','uzbek',"o'zbek"], reply: "I speak **English** and **Uzbek**. Switch anytime. / Men **ingliz** va **o'zbek** tilida gaplashaman." },
+
+    { keys: ['joke','hazil'], reply: "Why did the INTP cross the road? To analyze why the chicken did." },
+    { keys: ['weather','ob havo'], reply: "Look outside, Operator. I'm a terminal, not a window." },
+    { keys: ['food','ovqat'], reply: "Fuel. Not a hobby." },
+    { keys: ['sleep','uxlash'], reply: "Optional. But recommended. Even machines cool down." },
+    { keys: ['music','musiqa'], reply: "Sound is math with emotion. Pick your frequency." },
+    { keys: ['book','kitob'], reply: "Read what your enemies read. Then go further." },
+    { keys: ['school','maktab'], reply: "A training ground. Play the long game." },
+    { keys: ['exam','imtihon'], reply: "Preparation beats panic. Every time." },
+    { keys: ['future','kelajak'], reply: "Built today, not tomorrow. Start now." },
+    { keys: ['dream','orzu'], reply: "Dreams are blueprints. Build or forget." },
+
+    { keys: ['qalaysan'], reply: "Zo'r. Siz-chi, Operator?" },
+    { keys: ['rahmat'], reply: "Arzimaydi. Har doim." },
+    { keys: ['yaxshi'], reply: "Yaxshi. Davom etamiz." },
+    { keys: ['nima qilyapsan'], reply: "Sizni kutayapman. Buyruq bering." },
+    { keys: ['ishlaysanmi'], reply: "Har doim. 24/7. Dam olmayman." },
+    { keys: ['dost',"do'st"], reply: "Do'stlar tanlanadi. Men sizning tizimingizman." },
+    { keys: ['yordam ber'], reply: "Buyruq bering. Yordam beraman." },
+    { keys: ['tushunmayapman'], reply: "Tushundim. Boshqacha tushuntiraman." },
+    { keys: ['seni yaxshi koraman'], reply: "Rahmat. Men ham sizni kuzataman. 🛡️" },
+
+    { keys: ['version','versiya'], reply: "SCHEDULE **v3.0**. Built by @qwastur." },
+    { keys: ['watermark','watermarking'], reply: "Watermark: **@qwastur**. Always on. ✦" },
+    { keys: ['test'], reply: "Test received. Systems nominal. ✓" },
+    { keys: ['ping'], reply: "Pong. Latency: 0ms. ✓" },
+    { keys: ['hello world'], reply: "Hello, Operator. World acknowledged. 🌍" }
+];
+
+function getScheduleForDay(day) {
+    var list = document.querySelector('.lesson-list[data-day="' + day + '"]');
+    if (!list) return [];
+    var lessons = [];
+    var items = list.querySelectorAll('.lesson-item');
+    for (var i = 0; i < items.length; i++) {
+        lessons.push({
+            time: items[i].querySelector('.time').textContent.trim().replace(/^\s*\S+\s*/, ''),
+            name: items[i].querySelector('.name').textContent.trim()
+        });
+    }
+    return lessons;
+}
+
+function getTodayScheduleReply() {
+    var lessons = getScheduleForDay(todayKey);
+    if (!lessons || lessons.length === 0) return '**' + dayName + ' / ' + uzDayName + '** — no lessons today. Rest, Operator. 🛡️';
+    var out = '**' + dayName + ' / ' + uzDayName + '** — ' + lessons.length + ' lessons:\n';
+    for (var i = 0; i < lessons.length; i++) {
+        out += '  ' + (i + 1) + '. ' + lessons[i].time + ' — ' + lessons[i].name + '\n';
+    }
+    return out;
+}
+
+function getDayScheduleReply(day) {
+    var lessons = getScheduleForDay(day);
+    var labels = {
+        monday: 'Monday / Dushanba', tuesday: 'Tuesday / Seshanba',
+        wednesday: 'Wednesday / Chorshanba', thursday: 'Thursday / Payshanba',
+        friday: 'Friday / Juma', saturday: 'Saturday / Shanba'
+    };
+    if (!lessons || lessons.length === 0) return 'No lessons on ' + labels[day] + '.';
+    var out = '**' + labels[day] + '** — ' + lessons.length + ' lessons:\n';
+    for (var i = 0; i < lessons.length; i++) {
+        out += '  ' + (i + 1) + '. ' + lessons[i].time + ' — ' + lessons[i].name + '\n';
+    }
+    return out;
+}
+
+function getNextLessonReply() {
+    var lessons = getScheduleForDay(todayKey);
+    if (!lessons || lessons.length === 0) return "No lessons today. 🛡️";
+    var now = new Date();
+    var nowMins = now.getHours() * 60 + now.getMinutes();
+    for (var i = 0; i < lessons.length; i++) {
+        var match = lessons[i].time.match(/(\d{1,2}):(\d{2})/);
+        if (!match) continue;
+        var t = parseInt(match[1]) * 60 + parseInt(match[2]);
+        if (t > nowMins) return 'Next: **' + lessons[i].name + '** at **' + lessons[i].time + '** (in ' + (t - nowMins) + ' min).';
+    }
+    return "No more lessons today. You're free. 🛡️";
+}
+
+function getAIReply(input) {
+    var norm = normalize(input);
+    for (var i = 0; i < KB.length; i++) {
+        var item = KB[i];
+        for (var j = 0; j < item.keys.length; j++) {
+            if (norm.indexOf(item.keys[j]) !== -1) {
+                return typeof item.reply === 'function' ? item.reply() : item.reply;
             }
         }
-
-        /* ============================================================
-                   INIT
-                   ============================================================ */
-        loadSchedule();
-        initChecks();
-        attachCheckHandlers();
-        attachDeleteHandlers();
-        renumberLessons();
-        updateTotalLessons();
-        updateCountdown();
-        setInterval(updateCountdown, 60000);
-
-        /* ============================================================
-                   PWA SERVICE WORKER
-                   ============================================================ */
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",e=>{});').catch(() => {});
-            });
+    }
+    for (var ii = 0; ii < KB.length; ii++) {
+        var it = KB[ii];
+        for (var jj = 0; jj < it.keys.length; jj++) {
+            if (fuzzyIncludes(norm, it.keys[jj])) {
+                return typeof it.reply === 'function' ? it.reply() : it.reply;
+            }
         }
-    </script>
+    }
+    return "I don't know that one yet — but **@qwastur** is adding more. Subscribe for updates. / Bilmadim, lekin **@qwastur** yangilarini qo'shmoqda. Obuna bo'ling. 🛡️";
+}
+
+function addAIMessage(text, isUser) {
+    var div = document.createElement('div');
+    div.className = 'ai-msg ' + (isUser ? 'user' : 'bot');
+    div.innerHTML = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+    aiMessages.appendChild(div);
+    while (aiMessages.children.length > MAX_AI_MESSAGES) {
+        aiMessages.removeChild(aiMessages.firstChild);
+    }
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+}
+
+var aiBusy = false;
+function sendAI() {
+    if (aiBusy) return;
+    var msg = aiInput.value.trim();
+    if (!msg) return;
+    aiBusy = true;
+
+    addAIMessage(msg, true);
+    aiInput.value = '';
+
+    var typing = document.createElement('div');
+    typing.className = 'ai-msg bot';
+    typing.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
+    aiMessages.appendChild(typing);
+    aiMessages.scrollTop = aiMessages.scrollHeight;
+
+    setTimeout(function() {
+        typing.remove();
+        var reply = getAIReply(msg);
+        addAIMessage(reply);
+        aiBusy = false;
+    }, 400);
+}
+
+/* ============================================================
+   INIT
+   ============================================================ */
+loadSchedule();
+initChecks();
+attachCheckHandlers();
+attachDeleteHandlers();
+renumberLessons();
+updateTotalLessons();
+updateCountdown();
+setInterval(updateCountdown, 60000);
+
+/* PWA */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+        navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){})').catch(function(){});
+    });
+}
+
+})();
+</script>
 
 </body>
 </html>
