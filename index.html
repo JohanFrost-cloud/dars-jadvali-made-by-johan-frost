@@ -1,15 +1,13 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="uz">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-<title>✦ Schedule</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>✦ Dars Jadvali · Terminal</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
-<link rel="manifest" href='data:application/manifest+json,{"name":"Schedule","short_name":"Schedule","start_url":"./","display":"standalone","background_color":"%23000000","theme_color":"%2300ffc8"}' />
 
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -29,12 +27,11 @@
     --green: #44dd88;
     --red: #ff4455;
     --orange: #ff8833;
+    --warn: #ffcc00;
     --font-family: 'Inter', sans-serif;
-    --heading-font: 'Inter', sans-serif;
     --mono-font: 'JetBrains Mono', monospace;
 }
 
-/* 7 RE:ZERO THEMES */
 [data-theme="emilia"] { --bg: #0a0e1a; --accent: #7ec8e3; --accent2: #a8d8ea; --glow: rgba(126,200,227,0.25); --glow2: rgba(168,216,234,0.15); --text: #f0f8ff; --text2: #a0c4d4; }
 [data-theme="rem"] { --bg: #0a0e1a; --accent: #4a90d9; --accent2: #6aafe6; --glow: rgba(74,144,217,0.25); --glow2: rgba(106,175,230,0.15); --text: #e8f0ff; --text2: #8aa8d0; }
 [data-theme="ram"] { --bg: #1a0a0a; --accent: #e86a8a; --accent2: #f08aa6; --glow: rgba(232,106,138,0.25); --glow2: rgba(240,138,166,0.15); --text: #ffe8ee; --text2: #c08a9a; }
@@ -42,7 +39,6 @@
 [data-theme="roswaal"] { --bg: #120a1a; --accent: #aa44ff; --accent2: #cc66ff; --glow: rgba(170,68,255,0.25); --glow2: rgba(204,102,255,0.15); --text: #f0e8ff; --text2: #b08ad0; }
 [data-theme="echidna"] { --bg: #080e0a; --accent: #44dd88; --accent2: #66eeaa; --glow: rgba(68,221,136,0.25); --glow2: rgba(102,238,170,0.15); --text: #e8fff0; --text2: #8ac0a0; }
 [data-theme="satella"] { --bg: #0a050a; --accent: #cc00aa; --accent2: #ee44cc; --glow: rgba(204,0,170,0.25); --glow2: rgba(238,68,204,0.15); --text: #f0e0f0; --text2: #b08ab0; }
-
 [data-theme="hacker"] {
     --bg: #000000;
     --card-bg: rgba(0, 255, 200, 0.03);
@@ -54,271 +50,15 @@
     --glow: rgba(0, 255, 200, 0.5);
     --glow2: rgba(255, 0, 170, 0.4);
     --radius: 12px;
-    --font-family: 'JetBrains Mono', monospace;
-    --heading-font: 'JetBrains Mono', monospace;
+    --font-family: var(--mono-font);
 }
 
-/* ============================================================
-   LOADING OVERLAY
-   ============================================================ */
-#loadingOverlay {
-    position: fixed; inset: 0;
-    background: #060a16;
-    z-index: 99999;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
-    font-family: 'Inter', sans-serif;
-    transition: opacity 0.5s ease, visibility 0.5s ease;
-    padding: 20px;
-}
-#loadingOverlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
-#loadingOverlay .loader-ring {
-    width: 64px; height: 64px; border-radius: 50%;
-    border: 3px solid rgba(255, 255, 255, 0.04);
-    border-top-color: #6c8cff; border-right-color: #6c8cff;
-    animation: spin 1s linear infinite;
-    margin-bottom: 28px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-
-#loadingOverlay .loader-timer {
-    font-size: 2.8rem; font-weight: 800; color: #f0edff;
-    letter-spacing: 2px; margin-bottom: 12px;
-    font-variant-numeric: tabular-nums;
-    font-family: 'JetBrains Mono', monospace;
-}
-#loadingOverlay .loader-timer .icon { font-size: 2rem; opacity: 0.4; margin-right: 6px; }
-#loadingOverlay .loader-timer .glow { color: #6c8cff; }
-#loadingOverlay .loader-sub {
-    font-size: 0.85rem; color: #9a9ac0; opacity: 0.4;
-    letter-spacing: 3px; font-weight: 300; text-transform: uppercase;
-    margin-bottom: 20px;
-}
-#loadingOverlay .loader-info {
-    padding: 16px 24px; border-radius: 12px;
-    background: rgba(255, 255, 255, 0.03);
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    text-align: center; max-width: 420px; width: 100%;
-}
-#loadingOverlay .loader-info .line {
-    font-size: 0.75rem; color: #9a9ac0;
-    line-height: 1.9; letter-spacing: 0.3px;
-}
-#loadingOverlay .loader-info .line .highlight { color: #6c8cff; font-weight: 600; }
-#loadingOverlay .loader-info .line .gold { color: #ffd700; }
-#loadingOverlay .loader-info .line a { color: #6c8cff; text-decoration: none; font-weight: 600; }
-#loadingOverlay .loader-info .line .uz { opacity: 0.4; font-size: 0.65rem; }
-
-/* ============================================================
-   HACKER BACKGROUND
-   ============================================================ */
-#hackerBg {
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    background: #000;
-}
-body[data-theme="hacker"] #hackerBg { opacity: 1; }
-
-#matrixCanvas {
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-}
-body[data-theme="hacker"] #matrixCanvas { opacity: 0.14; }
-
-#scanlines {
-    position: fixed; inset: 0;
-    pointer-events: none;
-    z-index: 1;
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    background: repeating-linear-gradient(0deg,
-        rgba(0,0,0,0.1) 0px, rgba(0,0,0,0.1) 1px,
-        transparent 1px, transparent 2px);
-}
-body[data-theme="hacker"] #scanlines { opacity: 0.22; }
-
-/* ============================================================
-   HACKER INTRO — 5s animated sequence
-   ============================================================ */
-#hackerIntro {
-    position: fixed; inset: 0;
-    background: #000;
-    z-index: 9999998;
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    padding: 40px;
-    font-family: 'JetBrains Mono', monospace;
-    color: #00ffc8;
-    font-size: 13px;
-    overflow: hidden;
-}
-#hackerIntro.active { display: flex; }
-
-#hackerIntro::after {
-    content: '';
-    position: absolute;
-    left: 0; right: 0;
-    height: 2px;
-    background: linear-gradient(90deg, transparent, #00ffc8, transparent);
-    box-shadow: 0 0 30px #00ffc8, 0 0 60px #00ffc8;
-    animation: introBeam 2.4s linear infinite;
-    pointer-events: none;
-}
-@keyframes introBeam {
-    0% { top: 0; }
-    100% { top: 100%; }
-}
-
-#hackerIntro::before {
-    content: '';
-    position: absolute;
-    inset: 0;
-    background-image:
-        linear-gradient(rgba(0, 255, 200, 0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 200, 0.04) 1px, transparent 1px);
-    background-size: 40px 40px;
-    animation: introGrid 8s linear infinite;
-    pointer-events: none;
-}
-@keyframes introGrid {
-    from { background-position: 0 0; }
-    to { background-position: 40px 40px; }
-}
-
-.hi-line {
-    margin-bottom: 8px;
-    opacity: 0;
-    transform: translateX(-20px);
-    animation: hiSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
-    text-shadow: 0 0 6px #00ffc8;
-    position: relative;
-    z-index: 1;
-}
-.hi-line.highlight {
-    color: #ffcc00;
-    font-weight: 700;
-    font-size: 15px;
-    text-shadow: 0 0 15px #ffcc00;
-}
-.hi-line.big {
-    color: #00ffc8;
-    font-weight: 800;
-    font-size: 24px;
-    letter-spacing: 4px;
-    text-shadow: 0 0 25px #00ffc8, 0 0 50px #00ffc8;
-    margin-top: 10px;
-    margin-bottom: 14px;
-    animation: hiSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards, hiPulse 1.4s ease-in-out 1.4s infinite;
-}
-.hi-line.gold {
-    color: #ffd700;
-    font-weight: 800;
-    font-size: 17px;
-    letter-spacing: 2px;
-    text-shadow: 0 0 20px #ffd700;
-    animation: hiSlideIn 0.5s cubic-bezier(0.2, 0.9, 0.3, 1) forwards, hiGlow 1.6s ease-in-out 2.5s infinite;
-}
-@keyframes hiSlideIn {
-    to { opacity: 1; transform: translateX(0); }
-}
-@keyframes hiPulse {
-    0%, 100% { text-shadow: 0 0 25px #00ffc8, 0 0 50px #00ffc8; }
-    50% { text-shadow: 0 0 40px #00ffc8, 0 0 80px #00ffc8, 0 0 120px #00ffc8; }
-}
-@keyframes hiGlow {
-    0%, 100% { text-shadow: 0 0 20px #ffd700; }
-    50% { text-shadow: 0 0 35px #ffd700, 0 0 70px #ffd700; }
-}
-.hi-cursor {
-    display: inline-block;
-    width: 9px; height: 15px;
-    background: #00ffc8;
-    animation: blink 0.7s steps(2) infinite;
-    vertical-align: middle;
-    margin-left: 5px;
-    box-shadow: 0 0 12px #00ffc8;
-}
-@keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
-
-.hi-progress {
-    width: 100%;
-    max-width: 420px;
-    height: 4px;
-    background: rgba(0, 255, 200, 0.08);
-    border-radius: 4px;
-    margin-top: 24px;
-    overflow: hidden;
-    position: relative;
-    z-index: 1;
-}
-.hi-progress .fill {
-    height: 100%;
-    width: 0%;
-    background: linear-gradient(90deg, #00ffc8, #00ffc8, #ffcc00);
-    box-shadow: 0 0 20px #00ffc8;
-    transition: width 0.15s linear;
-}
-
-/* ============================================================
-   WATERMARK SUB (bottom glowing line — the ONLY watermark)
-   ============================================================ */
-.wm-sub {
-    position: fixed;
-    bottom: 12px; left: 50%;
-    transform: translateX(-50%);
-    font-family: var(--mono-font);
-    font-size: 9px;
-    color: var(--accent);
-    letter-spacing: 3px;
-    z-index: 3;
-    pointer-events: none;
-    text-transform: uppercase;
-    white-space: nowrap;
-    text-shadow:
-        0 0 6px var(--accent),
-        0 0 12px var(--accent),
-        0 0 24px var(--accent),
-        0 0 48px var(--accent);
-    animation: sunGlow 3s ease-in-out infinite;
-}
-@keyframes sunGlow {
-    0%, 100% {
-        opacity: 0.5;
-        text-shadow:
-            0 0 6px var(--accent),
-            0 0 12px var(--accent),
-            0 0 24px var(--accent),
-            0 0 48px var(--accent);
-    }
-    50% {
-        opacity: 1;
-        text-shadow:
-            0 0 10px var(--accent),
-            0 0 20px var(--accent),
-            0 0 40px var(--accent),
-            0 0 80px var(--accent),
-            0 0 140px var(--accent);
-    }
-}
-
-/* ============================================================
-   BODY
-   ============================================================ */
 body {
     font-family: var(--font-family);
     background: var(--bg); color: var(--text);
     min-height: 100vh; padding: 20px;
     transition: background 0.4s ease, color 0.4s ease;
-    position: relative;
-    overflow-x: hidden;
+    position: relative; overflow-x: hidden;
 }
 body[data-theme="emilia"], body[data-theme="rem"], body[data-theme="ram"],
 body[data-theme="beatrice"], body[data-theme="roswaal"], body[data-theme="echidna"],
@@ -328,88 +68,532 @@ body[data-theme="satella"] {
         radial-gradient(ellipse at 80% 80%, var(--glow2) 0%, transparent 55%);
     background-attachment: fixed;
 }
-body[data-theme="hacker"] { background-image: none; }
+
+/* ============================================================
+   PERFORMANCE PROFILES
+   ============================================================ */
+body[data-perf="low"] .bg-deco,
+body[data-perf="low"] #hackerIntro,
+body[data-perf="low"] #radialIntro { display: none !important; }
+
+body[data-perf="low"] * {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    animation-duration: 0s !important;
+    animation-iteration-count: 1 !important;
+    filter: none !important;
+}
+body[data-perf="low"] .radial-center,
+body[data-perf="low"] .radial-node.today,
+body[data-perf="low"] .qwa-watermark,
+body[data-perf="low"] .atom-icon,
+body[data-perf="low"] .layers-icon,
+body[data-perf="low"] .layout-toggle,
+body[data-perf="low"] .connect-card { animation: none !important; }
+body[data-perf="low"] .radial-center::before,
+body[data-perf="low"] .radial-center::after { animation: none !important; opacity: 0.2; }
+
+body[data-perf="med"] * {
+    backdrop-filter: blur(8px) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+}
+body[data-perf="med"] .radial-center::before,
+body[data-perf="med"] .radial-center::after { animation-duration: 40s !important; }
+
+/* Force hide radial on phones */
+body.force-grid .radial-view { display: none !important; }
+body.force-grid .layout-toggle { display: none !important; }
+body.force-grid .arch-modal { display: none !important; }
+
+/* ============================================================
+   ONBOARDING
+   ============================================================ */
+#onboarding {
+    position: fixed; inset: 0;
+    background: #02040a;
+    z-index: 99999999;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    padding: 24px;
+    font-family: var(--mono-font);
+    overflow-y: auto;
+    transition: opacity 0.5s ease;
+}
+#onboarding.hidden { opacity: 0; pointer-events: none; visibility: hidden; }
+#onboarding::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(108,140,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(108,140,255,0.04) 1px, transparent 1px);
+    background-size: 50px 50px;
+    pointer-events: none;
+}
+#onboarding::after {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at 50% 40%, rgba(108,140,255,0.08) 0%, transparent 60%);
+    pointer-events: none;
+}
+
+.ob-panel {
+    position: relative; z-index: 2;
+    max-width: 560px; width: 100%;
+    padding: 40px 32px;
+    background: rgba(8,12,22,0.85);
+    border: 1.5px solid rgba(108,140,255,0.35);
+    border-radius: 20px;
+    box-shadow:
+        0 0 30px rgba(108,140,255,0.15),
+        0 0 80px rgba(108,140,255,0.08),
+        inset 0 0 40px rgba(108,140,255,0.03);
+}
+.ob-panel.warn {
+    border-color: rgba(255,204,0,0.4);
+    box-shadow:
+        0 0 30px rgba(255,204,0,0.15),
+        0 0 80px rgba(255,204,0,0.08),
+        inset 0 0 40px rgba(255,204,0,0.03);
+}
+.ob-panel.good {
+    border-color: rgba(68,221,136,0.4);
+    box-shadow:
+        0 0 30px rgba(68,221,136,0.15),
+        0 0 80px rgba(68,221,136,0.08),
+        inset 0 0 40px rgba(68,221,136,0.03);
+}
+.ob-panel::before {
+    content: ''; position: absolute;
+    top: -1.5px; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    animation: obBeam 2.4s linear infinite;
+}
+.ob-panel.warn::before { background: linear-gradient(90deg, transparent, var(--warn), transparent); }
+.ob-panel.good::before { background: linear-gradient(90deg, transparent, var(--green), transparent); }
+@keyframes obBeam {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+}
+
+.ob-corner {
+    position: absolute;
+    width: 14px; height: 14px;
+    border: 2px solid var(--accent);
+    opacity: 0.6;
+}
+.ob-panel.warn .ob-corner { border-color: var(--warn); }
+.ob-panel.good .ob-corner { border-color: var(--green); }
+.ob-corner.tl { top: 8px; left: 8px; border-right: none; border-bottom: none; }
+.ob-corner.tr { top: 8px; right: 8px; border-left: none; border-bottom: none; }
+.ob-corner.bl { bottom: 8px; left: 8px; border-right: none; border-top: none; }
+.ob-corner.br { bottom: 8px; right: 8px; border-left: none; border-top: none; }
+
+.ob-icon {
+    width: 64px; height: 64px;
+    margin: 0 auto 20px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, rgba(108,140,255,0.15), rgba(167,139,250,0.1));
+    border: 1.5px solid rgba(108,140,255,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 26px; color: var(--accent);
+    box-shadow: 0 0 25px rgba(108,140,255,0.2);
+    position: relative;
+}
+.ob-panel.warn .ob-icon {
+    background: linear-gradient(135deg, rgba(255,204,0,0.15), rgba(255,136,51,0.1));
+    border-color: rgba(255,204,0,0.3);
+    color: var(--warn);
+    box-shadow: 0 0 25px rgba(255,204,0,0.2);
+}
+.ob-panel.good .ob-icon {
+    background: linear-gradient(135deg, rgba(68,221,136,0.15), rgba(102,238,170,0.1));
+    border-color: rgba(68,221,136,0.3);
+    color: var(--green);
+    box-shadow: 0 0 25px rgba(68,221,136,0.2);
+}
+.ob-icon::after {
+    content: ''; position: absolute; inset: -6px;
+    border-radius: 20px;
+    border: 1px dashed currentColor;
+    opacity: 0.3;
+    animation: spin 20s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.ob-line {
+    font-size: 11px; color: var(--text2);
+    letter-spacing: 1.5px; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+    justify-content: center;
+}
+.ob-line .prompt { color: var(--accent); font-weight: 700; }
+.ob-panel.warn .ob-line .prompt { color: var(--warn); }
+.ob-panel.good .ob-line .prompt { color: var(--green); }
+
+.ob-title {
+    font-size: 22px; font-weight: 800;
+    color: var(--text); letter-spacing: 2px;
+    margin: 20px 0 8px;
+    text-transform: uppercase;
+    font-family: var(--mono-font);
+    text-align: center;
+}
+.ob-title.warn { color: var(--warn); }
+.ob-title.good { color: var(--green); }
+
+.ob-sub {
+    font-size: 12px; color: var(--text2);
+    line-height: 1.8; margin-bottom: 24px;
+    letter-spacing: 0.5px;
+    text-align: center;
+}
+.ob-sub strong { color: var(--text); }
+.ob-sub .gold { color: var(--gold); }
+.ob-sub .green { color: var(--green); }
+.ob-sub .accent { color: var(--accent); }
+
+.ob-input-wrap {
+    position: relative; margin-bottom: 8px;
+}
+.ob-input-wrap::before {
+    content: '>'; position: absolute;
+    left: 16px; top: 50%; transform: translateY(-50%);
+    color: var(--accent); font-weight: 800;
+    font-family: var(--mono-font); font-size: 14px;
+    pointer-events: none;
+}
+.ob-panel.warn .ob-input-wrap::before { color: var(--warn); }
+.ob-panel.good .ob-input-wrap::before { color: var(--green); }
+
+.ob-input {
+    width: 100%;
+    padding: 16px 20px 16px 40px;
+    background: rgba(0,0,0,0.5);
+    border: 1.5px solid rgba(108,140,255,0.4);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: var(--mono-font);
+    font-size: 15px; font-weight: 600;
+    letter-spacing: 2px;
+    outline: none;
+    caret-color: var(--accent);
+    transition: border-color 0.2s;
+    text-align: left;
+}
+.ob-input:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(108,140,255,0.3); }
+.ob-panel.warn .ob-input { border-color: rgba(255,204,0,0.4); caret-color: var(--warn); }
+.ob-panel.warn .ob-input:focus { border-color: var(--warn); box-shadow: 0 0 20px rgba(255,204,0,0.3); }
+
+.ob-error {
+    font-size: 10px; color: var(--red);
+    letter-spacing: 1px; min-height: 14px;
+    margin-bottom: 18px; font-weight: 600;
+    text-transform: uppercase;
+    text-align: center;
+}
+
+.ob-btn {
+    width: 100%;
+    padding: 16px 24px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; border-radius: 10px;
+    color: #fff; font-family: var(--mono-font);
+    font-size: 13px; font-weight: 800;
+    letter-spacing: 4px; text-transform: uppercase;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.2s;
+    box-shadow: 0 0 20px rgba(108,140,255,0.4);
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+}
+.ob-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 35px rgba(108,140,255,0.7);
+}
+.ob-btn:active { transform: translateY(0); }
+.ob-btn.warn { background: linear-gradient(135deg, #b88600, #ffcc00); color: #1a1208; box-shadow: 0 0 20px rgba(255,204,0,0.4); }
+.ob-btn.warn:hover { box-shadow: 0 0 35px rgba(255,204,0,0.7); }
+.ob-btn.good { background: linear-gradient(135deg, #1f8a4a, #44dd88); color: #021a0a; box-shadow: 0 0 20px rgba(68,221,136,0.4); }
+.ob-btn.good:hover { box-shadow: 0 0 35px rgba(68,221,136,0.7); }
+
+.ob-note {
+    display: flex; align-items: center; gap: 10px;
+    padding: 12px 16px;
+    background: rgba(108,140,255,0.06);
+    border: 1px solid rgba(108,140,255,0.2);
+    border-radius: 10px;
+    font-size: 10px; color: var(--text2);
+    letter-spacing: 1px; text-transform: uppercase;
+    font-weight: 700;
+    margin-bottom: 24px;
+    justify-content: center;
+}
+.ob-note i { color: var(--accent); font-size: 14px; }
+
+/* ============================================================
+   DEVICE PROFILE SELECT
+   ============================================================ */
+.perf-grid {
+    display: flex; flex-direction: column;
+    gap: 12px; margin-bottom: 24px;
+}
+.perf-card {
+    padding: 18px 20px;
+    background: rgba(0,0,0,0.4);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex; align-items: center; gap: 16px;
+    font-family: var(--mono-font);
+}
+.perf-card:hover {
+    border-color: var(--accent);
+    background: rgba(108,140,255,0.06);
+    transform: translateX(4px);
+}
+.perf-card.selected {
+    border-color: var(--green);
+    background: rgba(68,221,136,0.08);
+    box-shadow: 0 0 20px rgba(68,221,136,0.2);
+}
+.perf-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: rgba(255,255,255,0.04);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: var(--accent);
+    flex-shrink: 0;
+}
+.perf-card.selected .perf-icon { color: var(--green); }
+.perf-info { flex: 1; }
+.perf-name {
+    font-size: 13px; font-weight: 800;
+    color: var(--text); letter-spacing: 2px;
+    text-transform: uppercase; margin-bottom: 4px;
+}
+.perf-desc {
+    font-size: 10px; color: var(--text2);
+    line-height: 1.6; letter-spacing: 0.5px;
+}
+.perf-badge {
+    font-size: 9px; padding: 3px 8px;
+    border-radius: 4px; font-weight: 700;
+    letter-spacing: 1px; text-transform: uppercase;
+}
+.perf-card.selected .perf-badge { background: rgba(68,221,136,0.2); color: var(--green); }
+.perf-badge.rec { background: rgba(255,204,0,0.15); color: var(--warn); }
+
+/* ============================================================
+   LOADING
+   ============================================================ */
+#loadingOverlay {
+    position: fixed; inset: 0;
+    background: #060a16;
+    z-index: 99999;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    font-family: 'Inter', sans-serif;
+    transition: opacity 0.5s, visibility 0.5s;
+    padding: 20px;
+}
+#loadingOverlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
+.loader-ring {
+    width: 64px; height: 64px; border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.04);
+    border-top-color: #6c8cff; border-right-color: #6c8cff;
+    animation: spin 1s linear infinite; margin-bottom: 28px;
+}
+.loader-timer {
+    font-size: 2.8rem; font-weight: 800; color: #f0edff;
+    letter-spacing: 2px; margin-bottom: 12px;
+    font-variant-numeric: tabular-nums;
+    font-family: 'JetBrains Mono', monospace;
+}
+.loader-timer .icon { font-size: 2rem; opacity: 0.4; margin-right: 6px; }
+.loader-timer .glow { color: #6c8cff; }
+.loader-sub {
+    font-size: 0.85rem; color: #9a9ac0; opacity: 0.4;
+    letter-spacing: 3px; font-weight: 300; text-transform: uppercase;
+    margin-bottom: 20px;
+}
+.loader-info {
+    padding: 16px 24px; border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.06);
+    text-align: center; max-width: 440px; width: 100%;
+}
+.loader-info .line { font-size: 0.78rem; color: #9a9ac0; line-height: 2; }
+.loader-info .highlight { color: #6c8cff; font-weight: 600; }
+.loader-info .gold { color: #ffd700; }
+.loader-info a { color: #6c8cff; text-decoration: none; font-weight: 600; }
+.loader-info strong { color: #f0edff; }
+
+/* ============================================================
+   INTRO OVERLAYS
+   ============================================================ */
+#hackerIntro, #radialIntro {
+    position: fixed; inset: 0;
+    background: #000; z-index: 9999998;
+    display: none; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 40px;
+    font-family: 'JetBrains Mono', monospace;
+    color: #00ffc8; font-size: 13px; overflow: hidden;
+}
+#hackerIntro.active, #radialIntro.active { display: flex; }
+#hackerIntro::after, #radialIntro::after {
+    content: ''; position: absolute; left: 0; right: 0; height: 2px;
+    background: linear-gradient(90deg, transparent, #00ffc8, transparent);
+    box-shadow: 0 0 30px #00ffc8, 0 0 60px #00ffc8;
+    animation: introBeam 2.4s linear infinite; pointer-events: none;
+}
+@keyframes introBeam { 0% { top: 0; } 100% { top: 100%; } }
+#hackerIntro::before, #radialIntro::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+        linear-gradient(rgba(0,255,200,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,255,200,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    animation: introGrid 8s linear infinite; pointer-events: none;
+}
+@keyframes introGrid { from { background-position: 0 0; } to { background-position: 40px 40px; } }
+.hi-line {
+    margin-bottom: 8px; opacity: 0; transform: translateX(-20px);
+    animation: hiSlideIn 0.5s cubic-bezier(0.2,0.9,0.3,1) forwards;
+    text-shadow: 0 0 6px #00ffc8; position: relative; z-index: 1;
+}
+.hi-line.highlight { color: #ffcc00; font-weight: 700; font-size: 15px; text-shadow: 0 0 15px #ffcc00; }
+.hi-line.big {
+    color: #00ffc8; font-weight: 800; font-size: 24px; letter-spacing: 4px;
+    text-shadow: 0 0 25px #00ffc8, 0 0 50px #00ffc8;
+    margin-top: 10px; margin-bottom: 14px;
+    animation: hiSlideIn 0.5s cubic-bezier(0.2,0.9,0.3,1) forwards, hiPulse 1.4s ease-in-out 1.4s infinite;
+}
+.hi-line.gold {
+    color: #ffd700; font-weight: 800; font-size: 17px; letter-spacing: 2px;
+    text-shadow: 0 0 20px #ffd700;
+    animation: hiSlideIn 0.5s cubic-bezier(0.2,0.9,0.3,1) forwards, hiGlow 1.6s ease-in-out 2.5s infinite;
+}
+@keyframes hiSlideIn { to { opacity: 1; transform: translateX(0); } }
+@keyframes hiPulse {
+    0%,100% { text-shadow: 0 0 25px #00ffc8, 0 0 50px #00ffc8; }
+    50% { text-shadow: 0 0 40px #00ffc8, 0 0 80px #00ffc8, 0 0 120px #00ffc8; }
+}
+@keyframes hiGlow {
+    0%,100% { text-shadow: 0 0 20px #ffd700; }
+    50% { text-shadow: 0 0 35px #ffd700, 0 0 70px #ffd700; }
+}
+.hi-cursor {
+    display: inline-block; width: 9px; height: 15px;
+    background: #00ffc8; animation: blink 0.7s steps(2) infinite;
+    vertical-align: middle; margin-left: 5px; box-shadow: 0 0 12px #00ffc8;
+}
+@keyframes blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+.hi-progress {
+    width: 100%; max-width: 420px; height: 4px;
+    background: rgba(0,255,200,0.08); border-radius: 4px;
+    margin-top: 24px; overflow: hidden; position: relative; z-index: 1;
+}
+.hi-progress .fill {
+    height: 100%; width: 0%;
+    background: linear-gradient(90deg, #00ffc8, #00ffc8, #ffcc00);
+    box-shadow: 0 0 20px #00ffc8; transition: width 0.15s linear;
+}
 
 /* ============================================================
    HEADER
    ============================================================ */
 .header {
-    max-width: 1100px; margin: 0 auto 30px;
-    text-align: center; padding: 30px 20px 20px;
+    max-width: 1100px; margin: 0 auto 24px;
+    text-align: center; padding: 24px 20px 16px;
     position: relative; z-index: 1;
 }
-.header .icon {
-    font-size: 2.4rem; display: block; margin-bottom: 6px;
+.operator-badge {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 8px 20px; border-radius: 30px;
+    background: rgba(0,0,0,0.4);
+    border: 1px solid rgba(68,221,136,0.3);
+    font-family: var(--mono-font);
+    font-size: 0.75rem; font-weight: 800;
+    letter-spacing: 3px; text-transform: uppercase;
+    margin-bottom: 16px;
+    color: var(--text);
+    box-shadow: 0 0 15px rgba(68,221,136,0.15);
 }
+.operator-badge .op-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--green);
+    box-shadow: 0 0 8px var(--green);
+    animation: opDot 2s ease-in-out infinite;
+}
+@keyframes opDot { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+.operator-badge .op-name {
+    color: var(--green); font-weight: 900;
+    letter-spacing: 3px;
+}
+.operator-badge .op-perf {
+    color: var(--gold); font-size: 0.6rem;
+    letter-spacing: 1.5px; margin-left: 6px;
+    opacity: 0.7;
+    padding-left: 10px;
+    border-left: 1px solid rgba(255,215,0,0.2);
+}
+
+.header .icon { font-size: 2.2rem; display: block; margin-bottom: 4px; }
 .header h1 {
-    font-size: 2.2rem; font-weight: 800;
+    font-size: 2rem; font-weight: 800;
     background: linear-gradient(135deg, var(--text) 40%, var(--accent));
     -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-    letter-spacing: -0.5px;
-    font-family: var(--heading-font);
+    background-clip: text; letter-spacing: -0.5px;
 }
 .header .sub {
-    color: var(--text2); font-size: 0.9rem; opacity: 0.55;
+    color: var(--text2); font-size: 0.85rem; opacity: 0.55;
     margin-top: 4px; letter-spacing: 1px; font-weight: 300;
 }
 .header .sub span { color: var(--accent); opacity: 1; }
 
 .last-updated {
     display: inline-flex; align-items: center; gap: 6px;
-    margin-top: 10px; padding: 5px 16px;
-    border-radius: 20px;
-    background: rgba(255, 215, 0, 0.06);
-    border: 1px solid rgba(255, 215, 0, 0.12);
-    font-size: 0.55rem; font-weight: 600;
+    margin-top: 10px; padding: 5px 16px; border-radius: 20px;
+    background: rgba(255,215,0,0.06);
+    border: 1px solid rgba(255,215,0,0.12);
+    font-size: 0.6rem; font-weight: 600;
     color: var(--gold); letter-spacing: 0.5px;
 }
-.last-updated i { font-size: 0.6rem; }
-
 .header .telegram-btn {
     display: inline-flex; align-items: center; gap: 8px;
-    padding: 6px 16px 6px 14px; border-radius: 30px;
-    background: rgba(108, 140, 255, 0.08);
-    border: 1px solid rgba(108, 140, 255, 0.12);
+    padding: 7px 18px 7px 14px; border-radius: 30px;
+    background: rgba(108,140,255,0.08);
+    border: 1px solid rgba(108,140,255,0.12);
     color: var(--text); text-decoration: none;
     font-size: 0.85rem; font-weight: 600;
-    transition: 0.25s ease;
-    cursor: pointer;
+    transition: 0.25s ease; cursor: pointer;
 }
 .header .telegram-btn:hover {
-    background: rgba(108, 140, 255, 0.15);
-    border-color: var(--accent);
-    transform: translateY(-2px);
+    background: rgba(108,140,255,0.15);
+    border-color: var(--accent); transform: translateY(-2px);
 }
 .header .telegram-btn i { font-size: 1.2rem; color: var(--accent); }
 .header .telegram-btn .handle { color: var(--text); font-weight: 700; }
 .header .telegram-btn .sparkle { color: var(--gold); font-size: 0.7rem; opacity: 0.6; }
-
 .today-badge {
     display: inline-block; margin-top: 10px;
     padding: 6px 20px; border-radius: 30px;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255,255,255,0.04);
     border: 1px solid var(--border);
     font-size: 0.75rem; color: var(--text2);
-    letter-spacing: 0.5px;
-    margin-left: 8px;
+    letter-spacing: 0.5px; margin-left: 8px;
 }
 .today-badge .day-highlight { color: var(--accent); font-weight: 600; }
-
 .header-top {
     display: flex; align-items: center; justify-content: center;
     gap: 12px; flex-wrap: wrap; margin-top: 8px;
 }
-
 .countdown {
     display: flex; align-items: center; justify-content: center;
     gap: 10px; margin-top: 12px; padding: 8px 20px;
     border-radius: 30px;
-    background: rgba(108, 140, 255, 0.06);
-    border: 1px solid rgba(108, 140, 255, 0.1);
+    background: rgba(108,140,255,0.06);
+    border: 1px solid rgba(108,140,255,0.1);
     font-size: 0.7rem; font-weight: 600;
-    color: var(--text);
-    max-width: fit-content;
+    color: var(--text); max-width: fit-content;
     margin-left: auto; margin-right: auto;
 }
 .countdown .cd-label { color: var(--text2); opacity: 0.5; font-size: 0.55rem; letter-spacing: 1px; text-transform: uppercase; }
@@ -429,16 +613,15 @@ body[data-theme="hacker"] { background-image: none; }
 .theme-btn {
     padding: 6px 14px; border-radius: 30px;
     border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255,255,255,0.03);
     color: var(--text2); font-size: 0.65rem; font-weight: 600;
     font-family: 'Inter', sans-serif; cursor: pointer;
     transition: 0.2s ease;
     display: flex; align-items: center; gap: 5px;
 }
 .theme-btn:hover {
-    background: rgba(255, 255, 255, 0.06);
-    transform: translateY(-1px);
-    color: var(--text);
+    background: rgba(255,255,255,0.06);
+    transform: translateY(-1px); color: var(--text);
 }
 .theme-btn.active {
     background: var(--accent); color: #fff;
@@ -454,22 +637,326 @@ body[data-theme="hacker"] { background-image: none; }
     max-width: 1100px; margin: 0 auto;
     display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: 20px; position: relative; z-index: 1;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.grid.hidden { display: none; }
+
+/* ============================================================
+   RADIAL
+   ============================================================ */
+.radial-view {
+    max-width: 1200px; margin: 0 auto;
+    position: relative; z-index: 1;
+    display: none; padding: 40px 0 60px;
+    min-height: 900px;
+}
+.radial-view.active { display: block; }
+.radial-stage {
+    position: relative;
+    width: 100%; max-width: 960px;
+    height: 880px;
+    margin: 0 auto;
+}
+.radial-stage svg.radial-lines {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none; z-index: 1;
+}
+.radial-stage svg.radial-lines line,
+.radial-stage svg.radial-lines circle.orbit {
+    stroke: var(--accent); opacity: 0.15;
+}
+.radial-stage svg.radial-lines line.active {
+    opacity: 0.7;
+}
+.radial-stage svg.radial-lines circle.orbit {
+    fill: none; stroke-dasharray: 4 8; stroke-width: 1;
+}
+.radial-stage svg.radial-lines circle.orbit.outer {
+    stroke-dasharray: 2 10; opacity: 0.1;
 }
 
+.radial-center {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 180px; height: 180px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+    border: 2px solid var(--accent);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    z-index: 5; text-align: center; padding: 12px;
+    box-shadow:
+        0 0 30px var(--accent),
+        0 0 60px var(--glow),
+        inset 0 0 30px rgba(255,255,255,0.05);
+    animation: centerPulse 3s ease-in-out infinite;
+}
+@keyframes centerPulse {
+    0%,100% {
+        box-shadow:
+            0 0 30px var(--accent),
+            0 0 60px var(--glow),
+            inset 0 0 30px rgba(255,255,255,0.05);
+    }
+    50% {
+        box-shadow:
+            0 0 50px var(--accent),
+            0 0 100px var(--glow),
+            0 0 160px var(--glow),
+            inset 0 0 40px rgba(255,255,255,0.08);
+    }
+}
+.radial-center .center-label {
+    font-size: 0.55rem; letter-spacing: 3px;
+    color: var(--text2); text-transform: uppercase;
+    margin-bottom: 4px;
+}
+.radial-center .center-day {
+    font-size: 1.4rem; font-weight: 900;
+    color: var(--accent); font-family: var(--mono-font);
+    text-shadow: 0 0 20px var(--accent);
+    letter-spacing: 2px;
+}
+.radial-center .center-uz {
+    font-size: 0.65rem; color: var(--text2);
+    opacity: 0.7; margin-top: 2px;
+}
+.radial-center .center-count {
+    font-size: 0.55rem; color: var(--gold);
+    margin-top: 8px; letter-spacing: 1px;
+    text-transform: uppercase;
+}
+.radial-center::before {
+    content: ''; position: absolute;
+    width: 130%; height: 130%;
+    border-radius: 50%; border: 1px dashed var(--accent);
+    opacity: 0.35;
+    animation: spin 22s linear infinite;
+}
+.radial-center::after {
+    content: ''; position: absolute;
+    width: 160%; height: 160%;
+    border-radius: 50%; border: 1px dotted var(--accent2);
+    opacity: 0.2;
+    animation: spin 35s linear infinite reverse;
+}
+
+.radial-node {
+    position: absolute;
+    width: 200px; height: 200px;
+    transform: translate(-50%, -50%);
+    background: var(--card-bg);
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius);
+    padding: 14px 12px 10px;
+    transition: all 0.35s cubic-bezier(0.4,0,0.2,1);
+    z-index: 3; overflow: hidden;
+    display: flex; flex-direction: column;
+    cursor: pointer;
+}
+.radial-node:hover {
+    transform: translate(-50%, -50%) scale(1.06);
+    border-color: var(--accent);
+    box-shadow: 0 0 30px var(--glow);
+    z-index: 10;
+}
+.radial-node.today {
+    border-color: var(--accent);
+    border-width: 2px;
+    box-shadow:
+        0 0 30px var(--accent),
+        0 0 60px var(--glow),
+        inset 0 0 25px rgba(255,255,255,0.04);
+}
+.radial-node .rn-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 6px; padding-bottom: 6px;
+    border-bottom: 1px solid var(--border);
+}
+.radial-node .rn-name {
+    font-size: 0.78rem; font-weight: 800;
+    color: var(--text); letter-spacing: 0.4px;
+    display: flex; align-items: center; gap: 5px;
+    font-family: var(--mono-font);
+    text-transform: uppercase;
+}
+.radial-node .rn-name i { color: var(--accent); font-size: 0.75rem; }
+.radial-node.today .rn-name { color: var(--accent); }
+.radial-node .rn-badge {
+    font-size: 0.5rem; font-weight: 900;
+    padding: 2px 6px; border-radius: 5px;
+    letter-spacing: 1px; text-transform: uppercase;
+    font-family: var(--mono-font);
+}
+.rn-badge.chill { background: rgba(68,221,136,0.15); color: var(--green); border: 1px solid rgba(68,221,136,0.4); }
+.rn-badge.brutal { background: rgba(255,68,85,0.15); color: var(--red); border: 1px solid rgba(255,68,85,0.4); }
+.rn-badge.alive { background: rgba(255,136,51,0.15); color: var(--orange); border: 1px solid rgba(255,136,51,0.4); }
+
+.radial-node .rn-lessons {
+    flex: 1; overflow-y: auto;
+    display: flex; flex-direction: column; gap: 3px;
+    padding-right: 2px;
+}
+.radial-node .rn-lessons::-webkit-scrollbar { width: 3px; }
+.radial-node .rn-lessons::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 3px; }
+.rn-lesson {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.6rem;
+    padding: 3px 5px; border-radius: 6px;
+    background: rgba(255,255,255,0.02);
+}
+.rn-lesson .rn-time {
+    color: var(--text2); opacity: 0.7;
+    font-family: var(--mono-font); font-size: 0.55rem;
+    min-width: 40px;
+}
+.rn-lesson .rn-title {
+    color: var(--text); flex: 1;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    font-weight: 500;
+}
+.radial-node .rn-count {
+    font-size: 0.5rem; color: var(--text2);
+    opacity: 0.5; text-align: right;
+    margin-top: 4px; letter-spacing: 1px;
+    font-family: var(--mono-font);
+}
+
+/* ============================================================
+   LAYOUT TOGGLE
+   ============================================================ */
+.layout-toggle {
+    position: fixed;
+    bottom: 100px; right: 24px;
+    width: 58px; height: 58px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border: none; cursor: pointer;
+    color: #fff; font-size: 1.4rem;
+    z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow:
+        0 0 20px var(--accent),
+        0 0 40px var(--glow),
+        0 8px 20px rgba(0,0,0,0.4);
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.layout-toggle:hover { transform: scale(1.1) rotate(15deg); }
+.layout-toggle:active { transform: scale(0.95); }
+.layout-toggle i { transition: transform 0.4s ease; }
+.layout-toggle.switching i { transform: rotate(360deg); }
+.layout-toggle .lt-tooltip {
+    position: absolute;
+    right: 70px; top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.85);
+    border: 1px solid var(--accent);
+    color: var(--text);
+    padding: 6px 14px; border-radius: 8px;
+    font-size: 0.65rem; font-weight: 600;
+    letter-spacing: 1px; white-space: nowrap;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+    font-family: var(--mono-font);
+    text-transform: uppercase;
+}
+.layout-toggle:hover .lt-tooltip { opacity: 1; }
+
+/* ============================================================
+   ARCH MODAL
+   ============================================================ */
+.arch-modal {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 999998;
+    display: none; align-items: center; justify-content: center;
+    padding: 20px;
+}
+.arch-modal.open { display: flex; }
+.arch-card {
+    background: linear-gradient(135deg, rgba(16,22,38,0.98), rgba(8,12,24,0.98));
+    border: 1.5px solid var(--accent);
+    border-radius: 24px;
+    padding: 36px 30px 28px;
+    max-width: 460px; width: 100%;
+    text-align: center;
+    position: relative;
+}
+.arch-card .ac-icon {
+    width: 72px; height: 72px;
+    margin: 0 auto 18px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem; color: #fff;
+    box-shadow: 0 0 30px var(--accent), 0 0 60px var(--glow);
+}
+.arch-card h2 {
+    font-size: 1.35rem; font-weight: 800;
+    color: var(--text); margin-bottom: 10px;
+}
+.arch-card p {
+    font-size: 0.85rem; color: var(--text2);
+    line-height: 1.7; margin-bottom: 24px;
+    max-width: 360px; margin-left: auto; margin-right: auto;
+}
+.arch-card p strong { color: var(--accent); font-weight: 700; }
+.arch-card .ac-actions {
+    display: flex; gap: 10px; flex-direction: column;
+}
+.arch-card .ac-actions button {
+    padding: 12px 20px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    font-family: var(--font-family);
+    font-size: 0.8rem; font-weight: 700;
+    cursor: pointer; transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.arch-card .ac-actions .ac-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff; border: none;
+}
+.arch-card .ac-actions .ac-secondary {
+    background: rgba(255,255,255,0.04);
+    color: var(--text);
+}
+.arch-card .ac-actions .ac-secondary:hover {
+    background: rgba(255,255,255,0.08);
+    border-color: var(--accent);
+}
+.arch-card .ac-dismiss {
+    margin-top: 16px;
+    font-size: 0.65rem; color: var(--text2);
+    opacity: 0.5; cursor: pointer;
+    text-decoration: underline;
+    background: none; border: none;
+    font-family: var(--font-family);
+}
+.arch-card .ac-close {
+    position: absolute; top: 14px; right: 14px;
+    width: 30px; height: 30px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    border: none; color: var(--text2);
+    cursor: pointer; font-size: 0.75rem;
+    display: flex; align-items: center; justify-content: center;
+}
+.arch-card .ac-close:hover { background: rgba(255,68,85,0.15); color: var(--red); }
+
+/* ============================================================
+   DAY CARD
+   ============================================================ */
 .day-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 20px 18px 18px;
-    transition: transform 0.2s ease, border-color 0.2s;
-    position: relative;
-    overflow: hidden;
+    transition: transform 0.2s, border-color 0.2s;
+    position: relative; overflow: hidden;
 }
-.day-card:hover {
-    transform: translateY(-3px);
-    border-color: var(--accent);
-}
-
+.day-card:hover { transform: translateY(-3px); border-color: var(--accent); }
 .day-badge {
     position: absolute; top: 12px; right: 12px;
     padding: 4px 10px; border-radius: 6px;
@@ -477,22 +964,11 @@ body[data-theme="hacker"] { background-image: none; }
     letter-spacing: 1.5px; text-transform: uppercase;
     font-family: var(--mono-font); z-index: 2;
 }
-.day-badge.chill {
-    background: rgba(68, 221, 136, 0.15); color: var(--green);
-    border: 1px solid rgba(68, 221, 136, 0.4);
-}
-.day-badge.brutal {
-    background: rgba(255, 68, 85, 0.15); color: var(--red);
-    border: 1px solid rgba(255, 68, 85, 0.4);
-}
-.day-badge.alive {
-    background: rgba(255, 136, 51, 0.15); color: var(--orange);
-    border: 1px solid rgba(255, 136, 51, 0.4);
-}
-
+.day-badge.chill { background: rgba(68,221,136,0.15); color: var(--green); border: 1px solid rgba(68,221,136,0.4); }
+.day-badge.brutal { background: rgba(255,68,85,0.15); color: var(--red); border: 1px solid rgba(255,68,85,0.4); }
+.day-badge.alive { background: rgba(255,136,51,0.15); color: var(--orange); border: 1px solid rgba(255,136,51,0.4); }
 .day-header {
-    display: flex; align-items: center;
-    justify-content: space-between;
+    display: flex; align-items: center; justify-content: space-between;
     margin-bottom: 8px; padding-bottom: 10px;
     border-bottom: 1px solid var(--border);
 }
@@ -505,43 +981,35 @@ body[data-theme="hacker"] { background-image: none; }
 .day-header .day-name .uz {
     font-weight: 400; color: var(--text2);
     font-size: 0.7rem; opacity: 0.4;
-    text-transform: uppercase;
-    letter-spacing: 1px;
+    text-transform: uppercase; letter-spacing: 1px;
 }
 .day-header .day-count {
     font-size: 0.7rem; color: var(--text2);
     opacity: 0.55; font-weight: 500;
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255,255,255,0.04);
     padding: 3px 12px; border-radius: 20px;
     margin-right: 80px;
     display: flex; align-items: center; gap: 5px;
 }
 .day-header .day-count i { font-size: 0.6rem; color: var(--accent); opacity: 0.6; }
-
 .day-roast {
     font-size: 0.6rem; color: var(--text2);
     opacity: 0.5; font-style: italic;
     letter-spacing: 0.3px; margin-bottom: 12px;
-    padding: 0 2px; font-weight: 400;
 }
-
 .day-card.today { border-color: var(--accent); }
 .day-card.today .day-name { color: var(--accent); }
-
-.lesson-list {
-    display: flex; flex-direction: column;
-    gap: 8px; position: relative; z-index: 1;
-}
+.lesson-list { display: flex; flex-direction: column; gap: 8px; position: relative; z-index: 1; }
 .lesson-item {
     display: flex; align-items: center; gap: 12px;
     padding: 8px 12px; border-radius: 12px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px solid rgba(255, 255, 255, 0.03);
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.03);
     transition: background 0.15s, border-color 0.15s;
     position: relative;
 }
 .lesson-item:hover {
-    background: rgba(255, 255, 255, 0.04);
+    background: rgba(255,255,255,0.04);
     border-color: var(--accent);
 }
 .lesson-item .check {
@@ -553,13 +1021,8 @@ body[data-theme="hacker"] { background-image: none; }
     flex-shrink: 0;
 }
 .lesson-item .check:hover { border-color: var(--accent); }
-.lesson-item .check.done {
-    background: var(--green);
-    border-color: var(--green);
-}
-.lesson-item .check.done::after {
-    content: '✓'; color: #fff; font-size: 10px; font-weight: 900;
-}
+.lesson-item .check.done { background: var(--green); border-color: var(--green); }
+.lesson-item .check.done::after { content: '✓'; color: #fff; font-size: 10px; font-weight: 900; }
 .lesson-item .time {
     font-size: 0.6rem; font-weight: 600;
     color: var(--text2); opacity: 0.55;
@@ -578,10 +1041,7 @@ body[data-theme="hacker"] { background-image: none; }
     font-size: 0.85rem; font-weight: 500;
     color: var(--text); flex: 1;
 }
-.lesson-item.done .name {
-    text-decoration: line-through;
-    opacity: 0.4;
-}
+.lesson-item.done .name { text-decoration: line-through; opacity: 0.4; }
 .lesson-item .del {
     background: none; border: none;
     color: var(--text2); opacity: 0.15;
@@ -590,29 +1050,23 @@ body[data-theme="hacker"] { background-image: none; }
     transition: 0.15s; flex-shrink: 0;
     display: flex; align-items: center; justify-content: center;
 }
-.lesson-item .del:hover {
-    opacity: 1; color: var(--red);
-}
-
+.lesson-item .del:hover { opacity: 1; color: var(--red); }
 .add-lesson-btn {
     margin-top: 8px;
-    background: rgba(255, 255, 255, 0.02);
-    border: 1px dashed rgba(255, 255, 255, 0.08);
+    background: rgba(255,255,255,0.02);
+    border: 1px dashed rgba(255,255,255,0.08);
     border-radius: 10px; padding: 6px 12px;
     font-size: 0.55rem; font-weight: 600;
     color: var(--text2); opacity: 0.5;
     cursor: pointer; transition: 0.15s;
-    font-family: var(--font);
+    font-family: var(--font-family);
     display: flex; align-items: center; justify-content: center; gap: 6px;
     width: 100%;
 }
-.add-lesson-btn:hover {
-    opacity: 1; color: var(--accent);
-    border-color: var(--accent);
-}
+.add-lesson-btn:hover { opacity: 1; color: var(--accent); border-color: var(--accent); }
 
 /* ============================================================
-   AI PANEL
+   LITTLE AI PANEL
    ============================================================ */
 .ai-panel {
     max-width: 1100px; margin: 30px auto 0;
@@ -620,53 +1074,38 @@ body[data-theme="hacker"] { background-image: none; }
     border: 1px solid var(--border);
     border-radius: var(--radius);
     padding: 20px;
-    position: relative; z-index: 1;
-    display: none;
+    position: relative; z-index: 1; display: none;
 }
 .ai-panel.active { display: block; }
 .ai-panel .ai-header {
     display: flex; align-items: center; gap: 10px;
-    margin-bottom: 14px;
-    padding-bottom: 12px;
+    margin-bottom: 14px; padding-bottom: 12px;
     border-bottom: 1px solid var(--border);
 }
-.ai-panel .ai-header i {
-    font-size: 1.2rem; color: var(--accent);
-}
+.ai-panel .ai-header i { font-size: 1.2rem; color: var(--accent); }
 .ai-panel .ai-header h3 {
     font-size: 0.9rem; font-weight: 700;
     color: var(--text); letter-spacing: 1px;
-    font-family: var(--mono-font);
-    text-transform: uppercase;
+    font-family: var(--mono-font); text-transform: uppercase;
 }
 .ai-panel .ai-header .ai-status {
-    margin-left: auto;
-    font-size: 0.55rem; color: var(--green);
+    margin-left: auto; font-size: 0.55rem; color: var(--green);
     display: flex; align-items: center; gap: 5px;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
+    letter-spacing: 1.5px; text-transform: uppercase;
 }
 .ai-panel .ai-header .ai-status::before {
-    content: '';
-    width: 6px; height: 6px; border-radius: 50%;
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
     background: var(--green);
 }
 .ai-messages {
     max-height: 320px; overflow-y: auto;
     display: flex; flex-direction: column; gap: 10px;
     padding: 8px 4px; margin-bottom: 12px;
-    font-family: var(--mono-font);
-    font-size: 0.75rem;
+    font-family: var(--mono-font); font-size: 0.75rem;
 }
 .ai-messages::-webkit-scrollbar { width: 4px; }
-.ai-messages::-webkit-scrollbar-thumb {
-    background: var(--accent); border-radius: 4px;
-}
-.ai-msg {
-    max-width: 85%; padding: 9px 13px;
-    border-radius: 10px; line-height: 1.55;
-    word-wrap: break-word;
-}
+.ai-messages::-webkit-scrollbar-thumb { background: var(--accent); border-radius: 4px; }
+.ai-msg { max-width: 85%; padding: 9px 13px; border-radius: 10px; line-height: 1.55; word-wrap: break-word; }
 .ai-msg.user {
     align-self: flex-end;
     background: rgba(255,0,170,0.08);
@@ -680,24 +1119,18 @@ body[data-theme="hacker"] { background-image: none; }
     color: var(--text);
 }
 .ai-msg.bot strong { color: var(--accent); font-weight: 700; }
-.ai-typing {
-    display: flex; gap: 4px; padding: 6px 0;
-}
+.ai-typing { display: flex; gap: 4px; padding: 6px 0; }
 .ai-typing span {
-    width: 6px; height: 6px;
-    background: var(--accent);
-    border-radius: 50%;
-    animation: typingBounce 1.4s infinite;
+    width: 6px; height: 6px; background: var(--accent);
+    border-radius: 50%; animation: typingBounce 1.4s infinite;
 }
 .ai-typing span:nth-child(2) { animation-delay: 0.2s; }
 .ai-typing span:nth-child(3) { animation-delay: 0.4s; }
 @keyframes typingBounce {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    0%,60%,100% { transform: translateY(0); opacity: 0.4; }
     30% { transform: translateY(-6px); opacity: 1; }
 }
-.ai-input {
-    display: flex; gap: 8px;
-}
+.ai-input { display: flex; gap: 8px; }
 .ai-input input {
     flex: 1; background: rgba(0,0,0,0.3);
     border: 1px solid var(--border);
@@ -717,30 +1150,21 @@ body[data-theme="hacker"] { background-image: none; }
     display: flex; align-items: center; gap: 6px;
 }
 .ai-input button:hover { transform: scale(1.03); }
-.ai-hints {
-    display: flex; gap: 6px; flex-wrap: wrap;
-    margin-bottom: 10px;
-}
+.ai-hints { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
 .ai-hint {
     background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
     color: var(--text2);
-    padding: 4px 11px;
-    border-radius: 12px;
-    cursor: pointer;
-    transition: 0.15s;
-    letter-spacing: 0.5px;
-    font-size: 0.6rem;
+    padding: 4px 11px; border-radius: 12px;
+    cursor: pointer; transition: 0.15s;
+    letter-spacing: 0.5px; font-size: 0.6rem;
     display: flex; align-items: center; gap: 5px;
     font-family: var(--mono-font);
 }
-.ai-hint:hover {
-    border-color: var(--accent);
-    color: var(--accent);
-}
+.ai-hint:hover { border-color: var(--accent); color: var(--accent); }
 
 /* ============================================================
-   STATS BAR
+   STATS + ACTIONS
    ============================================================ */
 .stats-bar {
     max-width: 1100px; margin: 30px auto 0;
@@ -753,7 +1177,7 @@ body[data-theme="hacker"] { background-image: none; }
 }
 .stats-bar .stat {
     display: flex; align-items: center; gap: 8px;
-    color: var(--text2); font-size: 0.75rem; font-weight: 400;
+    color: var(--text2); font-size: 0.75rem;
 }
 .stats-bar .stat i { color: var(--accent); font-size: 0.8rem; }
 .stats-bar .stat .num {
@@ -761,115 +1185,176 @@ body[data-theme="hacker"] { background-image: none; }
     font-family: var(--mono-font);
 }
 .stats-bar .stat .label { opacity: 0.5; }
-.stats-bar .divider {
-    width: 1px; height: 24px; background: var(--border);
-}
-
-/* ============================================================
-   ACTION BAR
-   ============================================================ */
+.stats-bar .divider { width: 1px; height: 24px; background: var(--border); }
 .action-bar {
     max-width: 1100px; margin: 16px auto 0;
     display: flex; gap: 10px; justify-content: center;
     flex-wrap: wrap; position: relative; z-index: 1;
 }
 .action-bar button {
-    background: rgba(255, 255, 255, 0.03);
+    background: rgba(255,255,255,0.03);
     border: 1px solid var(--border);
     color: var(--text2); padding: 8px 16px;
     border-radius: 30px; font-size: 0.6rem;
     font-weight: 600; cursor: pointer;
-    font-family: var(--font); transition: 0.15s;
+    font-family: var(--font-family); transition: 0.15s;
     display: flex; align-items: center; gap: 6px;
 }
 .action-bar button:hover {
-    background: rgba(108, 140, 255, 0.08);
+    background: rgba(108,140,255,0.08);
     border-color: var(--accent);
     color: var(--accent);
 }
-.action-bar button i { font-size: 0.7rem; }
 
 /* ============================================================
-   WATERMARK BLOCK (bottom info card)
+   WATERMARK
    ============================================================ */
-.watermark-block {
-    max-width: 1100px; margin: 24px auto 0;
-    text-align: center; position: relative; z-index: 1;
-    padding: 20px 0 16px; border-top: 1px solid var(--border);
+.wm-block {
+    max-width: 1100px; margin: 40px auto 0;
+    text-align: center; position: relative; z-index: 5;
+    padding: 28px 0 40px;
+    border-top: 1px solid var(--border);
 }
-.watermark-block .icons-row {
+.wm-icons {
     display: flex; align-items: center; justify-content: center;
-    gap: 24px; flex-wrap: wrap; margin-bottom: 12px;
+    gap: 28px; flex-wrap: wrap; margin-bottom: 20px;
 }
+.atom-wrap {
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s;
+}
+.atom-wrap:hover { transform: scale(1.15); }
 .atom-icon {
-    width: 40px; height: 40px;
-    transition: transform 0.2s;
+    width: 100%; height: 100%;
     color: var(--accent);
+    animation: atomSpin 12s linear infinite;
 }
-.atom-icon:hover { transform: scale(1.1); }
+@keyframes atomSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+.atom-icon ellipse { stroke-width: 4; }
+.atom-icon circle { fill: var(--gold); }
+
+.layers-wrap {
+    width: 56px; height: 56px;
+    display: flex; align-items: center; justify-content: center;
+    transition: transform 0.3s;
+}
+.layers-wrap:hover { transform: scale(1.15); }
 .layers-icon {
-    width: 40px; height: 40px;
+    width: 100%; height: 100%;
     fill: none; stroke: var(--accent2); stroke-width: 4;
     stroke-linecap: round; stroke-linejoin: round;
-    transition: transform 0.2s;
 }
-.layers-icon:hover { transform: scale(1.1); }
+
 .connect-card {
-    background: rgba(255, 255, 255, 0.03);
-    padding: 10px 20px; border-radius: 12px;
+    background: rgba(255,255,255,0.03);
+    padding: 14px 26px; border-radius: 16px;
     border: 1px solid var(--border);
-    text-align: center; transition: 0.2s;
-    display: flex; align-items: center; gap: 12px;
+    text-align: center; transition: 0.3s;
+    display: flex; align-items: center; gap: 14px;
     text-decoration: none !important; cursor: pointer;
+    position: relative; overflow: hidden;
 }
 .connect-card:hover {
-    background: rgba(255, 255, 255, 0.06);
+    background: rgba(255,255,255,0.06);
     border-color: var(--accent);
-    transform: translateY(-2px);
+    transform: translateY(-3px);
 }
 .connect-card .user-icon {
-    width: 32px; height: 32px;
+    width: 40px; height: 40px;
     fill: none; stroke: var(--accent2); stroke-width: 4;
     stroke-linecap: round; stroke-linejoin: round;
     color: var(--accent2);
+    transition: transform 0.3s;
 }
+.connect-card:hover .user-icon { transform: scale(1.1) rotate(-8deg); }
+.connect-card .connect-text { text-align: left; }
 .connect-card .connect-title {
-    font-size: 0.8rem; font-weight: 700;
+    font-size: 0.9rem; font-weight: 800;
     color: var(--text); letter-spacing: 0.3px;
+    display: flex; align-items: center; gap: 6px;
 }
+.connect-card .connect-title .gold-star { color: var(--gold); font-size: 0.7rem; }
 .connect-card .connect-subtitle {
-    font-size: 0.6rem; color: var(--text2); opacity: 0.4;
+    font-size: 0.65rem; color: var(--text2); opacity: 0.6;
+    margin-top: 2px;
 }
 
-.watermark-block .sub {
-    margin-top: 10px; display: flex; flex-direction: column;
-    gap: 4px; align-items: center;
+.qwa-watermark {
+    display: inline-flex; align-items: center; gap: 14px;
+    padding: 14px 32px; border-radius: 60px;
+    background: rgba(0,0,0,0.35);
+    border: 1.5px solid var(--accent);
+    text-decoration: none; position: relative;
+    transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
+    box-shadow:
+        0 0 10px var(--accent),
+        0 0 25px var(--accent),
+        0 0 50px var(--glow),
+        inset 0 0 20px rgba(255,255,255,0.03);
 }
-.watermark-block .sub .en {
-    font-size: 0.7rem; color: var(--text2); opacity: 0.55;
-    letter-spacing: 0.5px; font-weight: 400;
+.qwa-watermark:hover {
+    transform: translateY(-4px) scale(1.04);
+    box-shadow:
+        0 0 20px var(--accent),
+        0 0 50px var(--accent),
+        0 0 100px var(--glow),
+        0 0 180px var(--glow),
+        inset 0 0 30px rgba(255,255,255,0.06);
 }
-.watermark-block .sub .uz {
-    font-size: 0.75rem; font-weight: 500;
-    color: var(--gold); opacity: 0.9;
+.qwa-watermark .qwa-star {
+    color: var(--gold); font-size: 1.1rem;
+}
+.qwa-watermark .qwa-text {
+    font-family: var(--mono-font);
+    font-size: 1.1rem; font-weight: 900;
+    letter-spacing: 8px;
+    background: linear-gradient(90deg, var(--accent), var(--gold), var(--accent), var(--accent2), var(--accent));
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-transform: uppercase;
+}
+.wm-sub-line {
+    margin-top: 14px;
+    display: flex; flex-direction: column;
+    gap: 6px; align-items: center;
+}
+.wm-sub-line .uz-line {
+    font-size: 0.8rem; font-weight: 600;
+    color: var(--gold); opacity: 0.95;
     letter-spacing: 0.5px;
-    background: rgba(255, 215, 0, 0.04);
-    padding: 4px 16px; border-radius: 20px;
-    border: 1px solid rgba(255, 215, 0, 0.08);
+    background: rgba(255,215,0,0.05);
+    padding: 6px 20px; border-radius: 20px;
+    border: 1px solid rgba(255,215,0,0.15);
 }
-.watermark-block .glow-line {
-    width: 60px; height: 2px; margin: 10px auto 0;
+.wm-sub-line .glow-divider {
+    width: 80px; height: 2px; margin: 4px auto 0;
     background: linear-gradient(90deg, transparent, var(--gold), transparent);
-    border-radius: 4px; opacity: 0.3;
+    border-radius: 4px; opacity: 0.4;
 }
+.operator-change {
+    margin-top: 18px;
+}
+.operator-change a {
+    font-size: 0.65rem; color: var(--text2);
+    opacity: 0.5; text-decoration: none;
+    letter-spacing: 1px; text-transform: uppercase;
+    font-family: var(--mono-font);
+    cursor: pointer; transition: 0.2s;
+}
+.operator-change a:hover { opacity: 1; color: var(--accent); }
 
 /* ============================================================
-   ADD MODAL
+   MODAL
    ============================================================ */
 .add-modal {
-    position: fixed; top: 0; left: 0;
-    width: 100%; height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.8);
     z-index: 99999; display: none;
     align-items: center; justify-content: center;
     padding: 20px;
@@ -878,185 +1363,281 @@ body[data-theme="hacker"] { background-image: none; }
 .add-modal-content {
     background: var(--bg);
     border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 24px; width: 100%; max-width: 340px;
+    border-radius: 16px; padding: 24px;
+    width: 100%; max-width: 340px;
 }
 .add-modal-content h3 {
     font-size: 0.9rem; font-weight: 700;
     color: var(--text); margin-bottom: 14px;
-    letter-spacing: 0.5px;
 }
 .add-modal-content input {
     width: 100%; padding: 10px 14px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    background: rgba(255, 255, 255, 0.03);
+    border-radius: 10px; border: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
     color: var(--text); font-size: 0.8rem;
-    font-family: var(--font); outline: none;
+    font-family: var(--font-family); outline: none;
     margin-bottom: 10px;
 }
 .add-modal-content input:focus { border-color: var(--accent); }
-.add-modal-content .btns {
-    display: flex; gap: 8px; margin-top: 6px;
-}
+.add-modal-content .btns { display: flex; gap: 8px; margin-top: 6px; }
 .add-modal-content .btns button {
-    flex: 1; padding: 9px;
-    border-radius: 10px; border: none;
-    font-weight: 700; cursor: pointer;
-    font-family: var(--font); font-size: 0.7rem;
-    transition: 0.15s;
+    flex: 1; padding: 9px; border-radius: 10px;
+    border: none; font-weight: 700; cursor: pointer;
+    font-family: var(--font-family); font-size: 0.7rem;
 }
-.add-modal-content .btns .ok {
-    background: var(--accent); color: #fff;
-}
-.add-modal-content .btns .no {
-    background: rgba(255, 255, 255, 0.05);
-    color: var(--text2);
-}
+.add-modal-content .btns .ok { background: var(--accent); color: #fff; }
+.add-modal-content .btns .no { background: rgba(255,255,255,0.05); color: var(--text2); }
 
 /* ============================================================
    RESPONSIVE
    ============================================================ */
-@media (max-width: 900px) {
-    .grid { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+@media (max-width: 1000px) {
+    .radial-stage { max-width: 100%; height: 800px; }
+    .radial-node { width: 170px; height: 170px; padding: 10px 8px; }
+    .radial-node .rn-lesson { font-size: 0.55rem; }
+    .radial-node .rn-name { font-size: 0.7rem; }
 }
-
 @media (max-width: 768px) {
     body { padding: 12px; }
     .header { padding: 20px 12px 14px; margin-bottom: 20px; }
     .header h1 { font-size: 1.6rem; }
-    .header .icon { font-size: 1.8rem; }
     .grid { grid-template-columns: 1fr; gap: 14px; }
-    .day-card { padding: 16px 14px; }
-    .lesson-item { padding: 7px 10px; gap: 8px; }
-    .lesson-item .time { min-width: 52px; font-size: 0.55rem; }
-    .lesson-item .name { font-size: 0.78rem; }
+    .layout-toggle { bottom: 24px; right: 16px; width: 52px; height: 52px; font-size: 1.2rem; }
+    .layout-toggle .lt-tooltip { display: none; }
+    .arch-card { padding: 28px 22px 22px; }
+    .day-header .day-count { margin-right: 68px; font-size: 0.6rem; }
     .stats-bar { flex-direction: column; align-items: center; gap: 8px; padding: 14px 16px; }
     .stats-bar .divider { display: none; }
-    .theme-switcher { gap: 5px; padding: 0 4px; }
-    .theme-btn { font-size: 0.55rem; padding: 4px 10px; }
-    .header-top { flex-direction: column; gap: 6px; }
-    .header .telegram-btn { padding: 5px 14px 5px 12px; font-size: 0.75rem; }
-    .header .telegram-btn i { font-size: 1rem; }
-    .today-badge { margin-left: 0; font-size: 0.7rem; padding: 5px 14px; }
-    .watermark-block .icons-row { gap: 14px; }
-    .atom-icon, .layers-icon { width: 30px; height: 30px; }
-    .connect-card { padding: 6px 14px; gap: 8px; }
-    .connect-card .user-icon { width: 24px; height: 24px; }
-    .connect-card .connect-title { font-size: 0.7rem; }
-    .watermark-block .sub .uz { font-size: 0.65rem; }
-    .day-header .day-count { margin-right: 68px; font-size: 0.6rem; padding: 2px 10px; }
-    .day-badge { font-size: 0.5rem; padding: 3px 8px; top: 10px; right: 10px; }
-    .countdown { font-size: 0.6rem; padding: 6px 14px; }
-    .wm-sub { font-size: 8px; letter-spacing: 2px; }
-    .ai-panel { padding: 14px; }
-    .ai-messages { max-height: 240px; font-size: 0.7rem; }
-    .ai-input button { padding: 10px 14px; font-size: 0.65rem; }
-    #hackerIntro { padding: 24px; font-size: 11px; }
-    .hi-line.big { font-size: 20px; letter-spacing: 2px; }
-    .hi-line.highlight { font-size: 13px; }
-    .hi-line.gold { font-size: 14px; }
-    .hi-progress { max-width: 100%; }
-    .action-bar { gap: 6px; padding: 0 8px; }
-    .action-bar button { font-size: 0.55rem; padding: 6px 12px; }
+    .wm-icons { gap: 20px; }
+    .atom-wrap, .layers-wrap { width: 44px; height: 44px; }
+    .qwa-watermark { padding: 12px 22px; gap: 10px; }
+    .qwa-watermark .qwa-text { font-size: 0.9rem; letter-spacing: 5px; }
+    .connect-card { padding: 10px 18px; gap: 10px; }
+    .connect-card .user-icon { width: 32px; height: 32px; }
+    .ob-panel { padding: 30px 22px; }
+    .ob-title { font-size: 18px; }
+    .ob-sub { font-size: 11px; }
+    .perf-card { padding: 14px 16px; gap: 12px; }
+    .perf-icon { width: 38px; height: 38px; font-size: 17px; }
+    .perf-name { font-size: 11px; }
+    .perf-desc { font-size: 9px; }
 }
-
 @media (max-width: 480px) {
     body { padding: 10px; }
     .header h1 { font-size: 1.4rem; }
-    .day-header .day-name { font-size: 0.95rem; }
-    .day-header .day-name .uz { font-size: 0.6rem; }
-    .day-header .day-count { margin-right: 60px; }
     .lesson-item .name { font-size: 0.75rem; }
-    .lesson-item .time { min-width: 46px; font-size: 0.5rem; }
-    .lesson-item .num { min-width: 14px; font-size: 0.5rem; }
     .theme-btn { font-size: 0.5rem; padding: 3px 8px; }
-    .watermark-block .icons-row { gap: 10px; }
-    .atom-icon, .layers-icon { width: 28px; height: 28px; }
-    .connect-card { padding: 6px 12px; }
-    .connect-card .user-icon { width: 20px; height: 20px; }
-    .connect-card .connect-title { font-size: 0.65rem; }
-    .watermark-block .sub .uz { font-size: 0.6rem; padding: 3px 12px; }
-    #loadingOverlay .loader-info { padding: 12px 16px; }
-    #loadingOverlay .loader-info .line { font-size: 0.6rem; }
-    #loadingOverlay .loader-timer { font-size: 2rem; }
-    #loadingOverlay .loader-timer .icon { font-size: 1.4rem; }
-    #loadingOverlay .loader-ring { width: 50px; height: 50px; margin-bottom: 20px; }
-    #loadingOverlay .loader-sub { font-size: 0.7rem; letter-spacing: 2px; }
-    .wm-sub { font-size: 7px; letter-spacing: 2px; bottom: 6px; }
-    .hi-line.big { font-size: 17px; letter-spacing: 1.5px; }
-    .hi-line.highlight { font-size: 12px; }
-    .hi-line.gold { font-size: 13px; }
-    #hackerIntro { padding: 18px; font-size: 10px; }
-    .hi-progress { height: 3px; margin-top: 16px; }
-    .day-card { padding: 14px 12px; }
-    .day-roast { font-size: 0.55rem; }
     .ai-hint { font-size: 0.55rem; padding: 3px 9px; }
-    .ai-input input { font-size: 0.7rem; padding: 9px 14px; }
-    .ai-input button { padding: 9px 12px; font-size: 0.6rem; }
-    .action-bar button { font-size: 0.5rem; padding: 6px 10px; }
-    .last-updated { font-size: 0.5rem; padding: 4px 12px; }
-}
-
-@media (max-width: 360px) {
-    .header h1 { font-size: 1.25rem; }
-    .day-header .day-count { margin-right: 55px; font-size: 0.55rem; }
-    .theme-btn { font-size: 0.45rem; padding: 3px 6px; }
-    .lesson-item .name { font-size: 0.72rem; }
-    .hi-line.big { font-size: 15px; }
+    .wm-icons { gap: 14px; }
+    .atom-wrap, .layers-wrap { width: 38px; height: 38px; }
+    .qwa-watermark { padding: 10px 18px; gap: 8px; }
+    .qwa-watermark .qwa-text { font-size: 0.75rem; letter-spacing: 4px; }
+    .qwa-watermark .qwa-star { font-size: 0.9rem; }
+    .wm-sub-line .uz-line { font-size: 0.7rem; padding: 5px 14px; }
+    .connect-card { padding: 8px 14px; gap: 8px; }
+    .connect-card .user-icon { width: 28px; height: 28px; }
+    .connect-card .connect-title { font-size: 0.75rem; }
+    .connect-card .connect-subtitle { font-size: 0.55rem; }
+    .ob-panel { padding: 24px 18px; }
+    .ob-title { font-size: 16px; letter-spacing: 1px; }
+    .ob-sub { font-size: 10px; }
+    .ob-input { font-size: 13px; padding: 14px 16px 14px 36px; }
+    .ob-btn { font-size: 11px; padding: 14px 18px; letter-spacing: 3px; }
+    .perf-card { padding: 12px 14px; gap: 10px; }
+    .perf-icon { width: 34px; height: 34px; font-size: 15px; }
+    .perf-name { font-size: 10px; }
+    .perf-desc { font-size: 8.5px; }
 }
 </style>
 </head>
-<body data-theme="emilia">
+<body>
 
-<!-- HACKER INTRO -->
+<!-- ============================================================
+     ONBOARDING
+     ============================================================ -->
+<div id="onboarding">
+
+    <!-- Screen 1: Name -->
+    <div class="ob-panel" id="obIdentity">
+        <div class="ob-corner tl"></div>
+        <div class="ob-corner tr"></div>
+        <div class="ob-corner bl"></div>
+        <div class="ob-corner br"></div>
+
+        <div class="ob-icon"><i class="fas fa-user-astronaut"></i></div>
+
+        <div class="ob-line"><span class="prompt">></span> TERMINAL v3.5</div>
+        <div class="ob-line"><span class="prompt">></span> TIZIMGA KIRISH</div>
+
+        <div class="ob-title">ISMINGIZ</div>
+        <div class="ob-sub">
+            Tizim sizni <strong>tanib olishi</strong> uchun ismingizni kiriting. Keyinchalik o'zgartirishingiz mumkin.
+        </div>
+
+        <div class="ob-input-wrap">
+            <input type="text" class="ob-input" id="obNameInput" placeholder="ISMINGIZNI KIRITING" maxlength="24" autocomplete="off" spellcheck="false" />
+        </div>
+        <div class="ob-error" id="obNameError"></div>
+
+        <button class="ob-btn" id="obNameBtn">
+            <i class="fas fa-arrow-right"></i> DAVOM ETISH
+        </button>
+    </div>
+
+    <!-- Screen 2: Performance -->
+    <div class="ob-panel warn" id="obPerf" style="display:none;">
+        <div class="ob-corner tl"></div>
+        <div class="ob-corner tr"></div>
+        <div class="ob-corner bl"></div>
+        <div class="ob-corner br"></div>
+
+        <div class="ob-icon"><i class="fas fa-microchip"></i></div>
+
+        <div class="ob-line"><span class="prompt">></span> Salom, <span id="obPerfName" style="color: var(--warn); font-weight: 800;">—</span></div>
+        <div class="ob-line"><span class="prompt">></span> QURILMA: <span id="obDevice" style="color: var(--warn);">—</span></div>
+
+        <div class="ob-title warn">ISHLASH REJIMI</div>
+        <div class="ob-sub">
+            Qurilmangizga mos <strong>rejimni</strong> tanlang.
+        </div>
+
+        <div class="perf-grid">
+            <div class="perf-card" data-perf="low">
+                <div class="perf-icon"><i class="fas fa-feather"></i></div>
+                <div class="perf-info">
+                    <div class="perf-name">LOW</div>
+                    <div class="perf-desc">Jadval + Mavzular + Watermark. Animatsiyasiz. Eng yengil.</div>
+                </div>
+                <div class="perf-badge" data-rec="low" style="display:none;">REC</div>
+            </div>
+
+            <div class="perf-card" data-perf="med">
+                <div class="perf-icon"><i class="fas fa-bolt"></i></div>
+                <div class="perf-info">
+                    <div class="perf-name">MEDIUM</div>
+                    <div class="perf-desc">+ Intro animatsiyalar, glass blur. Balanslangan.</div>
+                </div>
+                <div class="perf-badge" data-rec="med" style="display:none;">REC</div>
+            </div>
+
+            <div class="perf-card" data-perf="high">
+                <div class="perf-icon"><i class="fas fa-crown"></i></div>
+                <div class="perf-info">
+                    <div class="perf-name">HIGH</div>
+                    <div class="perf-desc">Barcha effektlar: glow, orbita, radial pulse, introlar.</div>
+                </div>
+                <div class="perf-badge" data-rec="high" style="display:none;">REC</div>
+            </div>
+        </div>
+
+        <button class="ob-btn warn" id="obPerfBtn" disabled>
+            <i class="fas fa-arrow-right"></i> DAVOM ETISH
+        </button>
+    </div>
+
+    <!-- Screen 3: Ready -->
+    <div class="ob-panel good" id="obReady" style="display:none;">
+        <div class="ob-corner tl"></div>
+        <div class="ob-corner tr"></div>
+        <div class="ob-corner bl"></div>
+        <div class="ob-corner br"></div>
+
+        <div class="ob-icon"><i class="fas fa-check"></i></div>
+
+        <div class="ob-line"><span class="prompt">></span> <span id="obReadyName" style="color: var(--green); font-weight: 800;">—</span></div>
+        <div class="ob-line"><span class="prompt">></span> REJIM: <span id="obReadyPerf" style="color: var(--green);">—</span></div>
+
+        <div class="ob-title good">TAYYOR</div>
+        <div class="ob-sub">
+            Xush kelibsiz, <strong id="obWelcomeName">—</strong>.
+        </div>
+
+        <button class="ob-btn good" id="obEnterBtn">
+            <i class="fas fa-power-off"></i> KIRISH
+        </button>
+    </div>
+
+</div>
+
+<!-- BACKGROUND DECO -->
+<div class="bg-deco" id="bgDeco"></div>
+
+<!-- INTRO OVERLAYS -->
+<div id="radialIntro">
+    <div class="hi-line" style="animation-delay:0.1s">> RADIAL YADRO ISHGA TUSHIRILMOQDA...</div>
+    <div class="hi-line" style="animation-delay:0.7s">> 6 TA KUN TUGUNI XARITALANMOQDA...</div>
+    <div class="hi-line highlight" style="animation-delay:1.3s">> DARS MATRITSALARI TEKISLANMOQDA...</div>
+    <div class="hi-line big" style="animation-delay:1.9s">> RADIAL KO'RINISH</div>
+    <div class="hi-line gold" style="animation-delay:2.5s" id="riDay">> MARKAZ QULFLANDI: BUGUN</div>
+    <div class="hi-line" style="animation-delay:3.1s">> ORBITA YO'LLARI ULANMOQDA...</div>
+    <div class="hi-line highlight" style="animation-delay:3.6s">> BUYRUQ YUZASI ONLAYN.</div>
+    <div class="hi-line" style="animation-delay:4.2s">> Xush kelibsiz.<span class="hi-cursor"></span></div>
+    <div class="hi-progress"><div class="fill" id="riProgressFill"></div></div>
+</div>
+
 <div id="hackerIntro">
-    <div class="hi-line" style="animation-delay:0.1s">> Initializing...</div>
-    <div class="hi-line" style="animation-delay:0.7s">> Connecting to schedule core...</div>
-    <div class="hi-line highlight" style="animation-delay:1.3s">> Detecting your class...</div>
-    <div class="hi-line big" style="animation-delay:1.9s">> CLASS 10 A</div>
-    <div class="hi-line gold" style="animation-delay:2.5s" id="hiDay">> Today is Monday</div>
-    <div class="hi-line" style="animation-delay:3.1s">> Loading schedule matrix...</div>
-    <div class="hi-line highlight" style="animation-delay:3.6s">> Welcome, Operator.</div>
-    <div class="hi-line" style="animation-delay:4.2s">> Ready.<span class="hi-cursor"></span></div>
+    <div class="hi-line" style="animation-delay:0.1s">> Ishga tushirilmoqda...</div>
+    <div class="hi-line" style="animation-delay:0.7s">> Jadval yadrosiga ulanmoqda...</div>
+    <div class="hi-line highlight" style="animation-delay:1.3s">> Tizim tayyorlanmoqda...</div>
+    <div class="hi-line big" style="animation-delay:1.9s" id="hiName">> SALOM</div>
+    <div class="hi-line gold" style="animation-delay:2.5s" id="hiDay">> Bugun Dushanba</div>
+    <div class="hi-line" style="animation-delay:3.1s">> Jadval matritsasi yuklanmoqda...</div>
+    <div class="hi-line highlight" style="animation-delay:3.6s">> Xush kelibsiz.</div>
+    <div class="hi-line" style="animation-delay:4.2s">> Tayyor.<span class="hi-cursor"></span></div>
     <div class="hi-progress"><div class="fill" id="hiProgressFill"></div></div>
 </div>
 
-<!-- HACKER BACKGROUND -->
-<div id="hackerBg"></div>
-<canvas id="matrixCanvas"></canvas>
-<div id="scanlines"></div>
-
-<!-- FLOATING SUBTITLE (glowing) -->
-<div class="wm-sub">✦ Created by @qwastur · Subscribe · v3.0 ✦</div>
-
-<!-- LOADING OVERLAY -->
+<!-- LOADING -->
 <div id="loadingOverlay">
     <div class="loader-ring"></div>
     <div class="loader-timer">
         <span class="icon">⏳</span>
-        <span class="glow" id="timerDisplay">5</span><span class="glow">s</span>
+        <span class="glow" id="timerDisplay">3</span><span class="glow">s</span>
     </div>
-    <div class="loader-sub">Loading schedule</div>
+    <div class="loader-sub">Yuklanmoqda</div>
     <div class="loader-info">
         <div class="line">
-            <span class="highlight">✦</span> This content is made by <strong>Johan Frost</strong>
-            <span class="uz">· Bu kontent <strong>Johan Frost</strong> tomonidan yaratilgan</span>
+            <span class="highlight">✦</span> Bu kontent <strong>Johan Frost</strong> tomonidan yaratilgan
         </div>
         <div class="line">
-            <span class="gold">✦</span> Subscribe to <a href="https://t.me/qwastur" target="_blank">@qwastur</a> for more
-            <span class="uz">· Ko'proq uchun <a href="https://t.me/qwastur" target="_blank">@qwastur</a> ga obuna bo'ling</span>
+            <span class="gold">✦</span> Ko'proq uchun <a href="https://t.me/qwastur" target="_blank">@qwastur</a> ga obuna bo'ling
         </div>
     </div>
 </div>
 
-<!-- MAIN CONTENT -->
+<!-- ARCH MODAL -->
+<div class="arch-modal" id="archModal">
+    <div class="arch-card">
+        <button class="ac-close" id="archClose"><i class="fas fa-times"></i></button>
+        <div class="ac-icon"><i class="fas fa-circle-nodes"></i></div>
+        <h2>Yangi ko'rinish aniqlandi</h2>
+        <p>
+            <strong>Radial Buyruq Ko'rinishi</strong> mavjud. Darslaringiz porlab turgan markaz atrofida aylanadi.
+        </p>
+        <div class="ac-actions">
+            <button class="ac-primary" id="archSwitch">
+                <i class="fas fa-circle-nodes"></i> Radialga o'tish
+            </button>
+            <button class="ac-secondary" id="archStay">
+                <i class="fas fa-grip"></i> Klassik Gridda qolish
+            </button>
+        </div>
+        <button class="ac-dismiss" id="archDismiss">Boshqa so'ramaslik</button>
+    </div>
+</div>
+
+<!-- MAIN -->
 <div id="mainContent" style="opacity:0;transition:opacity 0.5s ease; position: relative; z-index: 1;">
 
-    <!-- HEADER -->
     <div class="header">
+        <div class="operator-badge">
+            <span class="op-dot"></span>
+            <span class="op-name" id="opNameDisplay">SALOM</span>
+            <span class="op-perf" id="opPerfDisplay">[HIGH]</span>
+        </div>
+
         <span class="icon">📚</span>
-        <h1>Weekly Schedule</h1>
+        <h1>Haftalik Jadval</h1>
         <div class="sub">Dars jadvali · <span id="yearDisplay">2026</span></div>
 
         <div class="header-top">
@@ -1065,25 +1646,23 @@ body[data-theme="hacker"] { background-image: none; }
                 <span class="handle">@qwastur</span>
                 <span class="sparkle">✦</span>
             </a>
-
             <div class="today-badge" id="todayBadge">
-                📅 <span id="todayDate"></span> — <span class="day-highlight" id="todayDay">Today</span>
+                📅 <span id="todayDate"></span> — <span class="day-highlight" id="todayDay">Bugun</span>
             </div>
         </div>
 
         <div class="last-updated" id="lastUpdated">
-            <i class="fas fa-clock"></i> Last updated: <span id="updateDate">--</span>
+            <i class="fas fa-clock"></i> Oxirgi yangilanish: <span id="updateDate">--</span>
         </div>
 
         <div class="countdown" id="countdown">
             <i class="fas fa-hourglass-half"></i>
-            <span class="cd-label">Next</span>
+            <span class="cd-label">Keyingi</span>
             <span class="cd-lesson" id="cdLesson">—</span>
             <span class="cd-value" id="cdValue">--:--</span>
         </div>
     </div>
 
-    <!-- THEME SWITCHER -->
     <div class="theme-switcher" id="themeSwitcher">
         <button class="theme-btn active" data-theme="emilia"><span class="icon">❄️</span> Emilia</button>
         <button class="theme-btn" data-theme="rem"><span class="icon">💎</span> Rem</button>
@@ -1095,34 +1674,43 @@ body[data-theme="hacker"] { background-image: none; }
         <button class="theme-btn" data-theme="hacker"><span class="icon">💻</span> Hacker</button>
     </div>
 
-    <!-- GRID -->
+    <div class="radial-view" id="radialView">
+        <div class="radial-stage" id="radialStage">
+            <svg class="radial-lines" id="radialLines"></svg>
+            <div class="radial-center" id="radialCenter">
+                <div class="center-label">Bugun</div>
+                <div class="center-day" id="centerDay">—</div>
+                <div class="center-uz" id="centerUz">—</div>
+                <div class="center-count" id="centerCount">— dars</div>
+            </div>
+        </div>
+    </div>
+
     <div class="grid" id="scheduleGrid">
 
-        <!-- MONDAY -->
         <div class="day-card" data-day="monday">
-            <div class="day-badge chill">Chill</div>
+            <div class="day-badge chill">Oson</div>
             <div class="day-header">
-                <span class="day-name"><i class="fas fa-mountain-sun"></i> Dushanba <span class="uz">Monday</span></span>
+                <span class="day-name"><i class="fas fa-mountain-sun"></i> Dushanba <span class="uz">Mon</span></span>
                 <span class="day-count"><i class="fas fa-book"></i> 4 dars</span>
             </div>
-            <div class="day-roast">Easy start. Enjoy it while it lasts.</div>
+            <div class="day-roast">Oson boshlanish.</div>
             <div class="lesson-list" data-day="monday">
                 <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Kelajak soati</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Adabiyot</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Ona tili</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Fizika</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-            <button class="add-lesson-btn" data-day="monday"><i class="fas fa-plus"></i> Add lesson</button>
+            <button class="add-lesson-btn" data-day="monday"><i class="fas fa-plus"></i> Dars qo'shish</button>
         </div>
 
-        <!-- TUESDAY -->
         <div class="day-card" data-day="tuesday">
-            <div class="day-badge brutal">Brutal</div>
+            <div class="day-badge brutal">Shafqatsiz</div>
             <div class="day-header">
-                <span class="day-name"><i class="fas fa-fire"></i> Seshanba <span class="uz">Tuesday</span></span>
+                <span class="day-name"><i class="fas fa-fire"></i> Seshanba <span class="uz">Tue</span></span>
                 <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
             </div>
-            <div class="day-roast">Still alive? Good. Wednesday is coming.</div>
+            <div class="day-roast">Hali tirikmisan?</div>
             <div class="lesson-list" data-day="tuesday">
                 <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
@@ -1131,17 +1719,16 @@ body[data-theme="hacker"] { background-image: none; }
                 <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">Biologiya</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-            <button class="add-lesson-btn" data-day="tuesday"><i class="fas fa-plus"></i> Add lesson</button>
+            <button class="add-lesson-btn" data-day="tuesday"><i class="fas fa-plus"></i> Dars qo'shish</button>
         </div>
 
-        <!-- WEDNESDAY -->
         <div class="day-card" data-day="wednesday">
-            <div class="day-badge alive">Alive</div>
+            <div class="day-badge alive">Tirik</div>
             <div class="day-header">
-                <span class="day-name"><i class="fas fa-water"></i> Chorshanba <span class="uz">Wednesday</span></span>
+                <span class="day-name"><i class="fas fa-water"></i> Chorshanba <span class="uz">Wed</span></span>
                 <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
             </div>
-            <div class="day-roast">Halfway through the week. Fully through your energy.</div>
+            <div class="day-roast">Haftaning yarmi o'tdi.</div>
             <div class="lesson-list" data-day="wednesday">
                 <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">O'zbekiston tarixi</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
@@ -1150,17 +1737,16 @@ body[data-theme="hacker"] { background-image: none; }
                 <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Ingliz tili</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-            <button class="add-lesson-btn" data-day="wednesday"><i class="fas fa-plus"></i> Add lesson</button>
+            <button class="add-lesson-btn" data-day="wednesday"><i class="fas fa-plus"></i> Dars qo'shish</button>
         </div>
 
-        <!-- THURSDAY -->
         <div class="day-card" data-day="thursday">
-            <div class="day-badge brutal">Brutal</div>
+            <div class="day-badge brutal">Shafqatsiz</div>
             <div class="day-header">
-                <span class="day-name"><i class="fas fa-bolt"></i> Payshanba <span class="uz">Thursday</span></span>
+                <span class="day-name"><i class="fas fa-bolt"></i> Payshanba <span class="uz">Thu</span></span>
                 <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
             </div>
-            <div class="day-roast">Thursday: where hope goes to die.</div>
+            <div class="day-roast">Umid o'ladigan kun.</div>
             <div class="lesson-list" data-day="thursday">
                 <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Tarbiya</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Ona tili</span><button class="del"><i class="fas fa-times"></i></button></div>
@@ -1169,17 +1755,16 @@ body[data-theme="hacker"] { background-image: none; }
                 <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">ChQBT</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Geografiya</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-            <button class="add-lesson-btn" data-day="thursday"><i class="fas fa-plus"></i> Add lesson</button>
+            <button class="add-lesson-btn" data-day="thursday"><i class="fas fa-plus"></i> Dars qo'shish</button>
         </div>
 
-        <!-- FRIDAY -->
         <div class="day-card" data-day="friday">
-            <div class="day-badge alive">Alive</div>
+            <div class="day-badge alive">Tirik</div>
             <div class="day-header">
-                <span class="day-name"><i class="fas fa-crown"></i> Juma <span class="uz">Friday</span></span>
+                <span class="day-name"><i class="fas fa-crown"></i> Juma <span class="uz">Fri</span></span>
                 <span class="day-count"><i class="fas fa-book"></i> 6 dars</span>
             </div>
-            <div class="day-roast">Friday: 6 dars of pure suffering.</div>
+            <div class="day-roast">6 dars sof azob.</div>
             <div class="lesson-list" data-day="friday">
                 <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Rus tili</span><button class="del"><i class="fas fa-times"></i></button></div>
@@ -1188,116 +1773,125 @@ body[data-theme="hacker"] { background-image: none; }
                 <div class="lesson-item"><span class="check"></span><span class="num">5</span><span class="time"><i class="fas fa-clock"></i> 11:40–12:25</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">6</span><span class="time"><i class="fas fa-clock"></i> 12:35–13:20</span><span class="name">Informatika</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-            <button class="add-lesson-btn" data-day="friday"><i class="fas fa-plus"></i> Add lesson</button>
+            <button class="add-lesson-btn" data-day="friday"><i class="fas fa-plus"></i> Dars qo'shish</button>
         </div>
 
-        <!-- SATURDAY -->
         <div class="day-card" data-day="saturday">
-            <div class="day-badge chill">Chill</div>
+            <div class="day-badge chill">Oson</div>
             <div class="day-header">
-                <span class="day-name"><i class="fas fa-leaf"></i> Shanba <span class="uz">Saturday</span></span>
+                <span class="day-name"><i class="fas fa-leaf"></i> Shanba <span class="uz">Sat</span></span>
                 <span class="day-count"><i class="fas fa-book"></i> 4 dars</span>
             </div>
-            <div class="day-roast">Only 4. You made it.</div>
+            <div class="day-roast">Faqat 4 ta. Yetib kelding.</div>
             <div class="lesson-list" data-day="saturday">
                 <div class="lesson-item"><span class="check"></span><span class="num">1</span><span class="time"><i class="fas fa-clock"></i> 08:00–08:45</span><span class="name">Geometriya</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">2</span><span class="time"><i class="fas fa-clock"></i> 08:55–09:40</span><span class="name">Algebra</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">3</span><span class="time"><i class="fas fa-clock"></i> 09:50–10:35</span><span class="name">Kimyo</span><button class="del"><i class="fas fa-times"></i></button></div>
                 <div class="lesson-item"><span class="check"></span><span class="num">4</span><span class="time"><i class="fas fa-clock"></i> 10:45–11:30</span><span class="name">Fizika</span><button class="del"><i class="fas fa-times"></i></button></div>
             </div>
-            <button class="add-lesson-btn" data-day="saturday"><i class="fas fa-plus"></i> Add lesson</button>
+            <button class="add-lesson-btn" data-day="saturday"><i class="fas fa-plus"></i> Dars qo'shish</button>
         </div>
 
     </div>
 
-    <!-- AI PANEL -->
     <div class="ai-panel" id="aiPanel">
         <div class="ai-header">
             <i class="fas fa-robot"></i>
-            <h3>Nexus AI · EN/UZ</h3>
-            <span class="ai-status">Online</span>
+            <h3>Little AI</h3>
+            <span class="ai-status">Onlayn</span>
         </div>
         <div class="ai-messages" id="aiMessages">
-            <div class="ai-msg bot">Salom, Operator. I'm <strong>NEXUS</strong> — created by <strong>@qwastur</strong>. Ask me anything in English or Uzbek. 200+ answers ready. Type "help" to begin.</div>
+            <div class="ai-msg bot">Salom! Men <strong>Little AI</strong>man. O'zbek tilida savol bering.</div>
         </div>
         <div class="ai-hints">
-            <div class="ai-hint" data-q="who am i"><i class="fas fa-user-secret"></i> who am i?</div>
-            <div class="ai-hint" data-q="who created you"><i class="fas fa-wand-magic-sparkles"></i> who created you?</div>
-            <div class="ai-hint" data-q="today schedule"><i class="fas fa-clock"></i> today schedule</div>
-            <div class="ai-hint" data-q="help"><i class="fas fa-circle-question"></i> help</div>
-            <div class="ai-hint" data-q="sen kimsan"><i class="fas fa-comment-dots"></i> sen kimsan?</div>
+            <div class="ai-hint" data-q="radialga otish"><i class="fas fa-circle-nodes"></i> radial</div>
+            <div class="ai-hint" data-q="gridga otish"><i class="fas fa-grip"></i> grid</div>
+            <div class="ai-hint" data-q="bugungi dars"><i class="fas fa-clock"></i> bugun</div>
+            <div class="ai-hint" data-q="kim yaratdi"><i class="fas fa-wand-magic-sparkles"></i> yaratuvchi</div>
+            <div class="ai-hint" data-q="yordam"><i class="fas fa-circle-question"></i> yordam</div>
         </div>
         <div class="ai-input">
-            <input type="text" id="aiInput" placeholder="Ask Nexus... / Nexusdan so'rang..." autocomplete="off" spellcheck="false">
-            <button id="aiSend"><i class="fas fa-paper-plane"></i> SEND</button>
+            <input type="text" id="aiInput" placeholder="Little AI dan so'rang..." autocomplete="off" spellcheck="false">
+            <button id="aiSend"><i class="fas fa-paper-plane"></i> YUBORISH</button>
         </div>
     </div>
 
-    <!-- STATS BAR -->
     <div class="stats-bar">
-        <div class="stat"><i class="fas fa-book-open"></i> <span class="num" id="totalLessons">32</span><span class="label">total lessons</span></div>
+        <div class="stat"><i class="fas fa-book-open"></i> <span class="num" id="totalLessons">32</span><span class="label">jami darslar</span></div>
         <div class="divider"></div>
-        <div class="stat"><i class="fas fa-layer-group"></i> <span class="num">6</span><span class="label">subjects</span></div>
+        <div class="stat"><i class="fas fa-layer-group"></i> <span class="num">6</span><span class="label">fanlar</span></div>
         <div class="divider"></div>
-        <div class="stat"><i class="fas fa-calendar-week"></i> <span class="num">6</span><span class="label">days</span></div>
+        <div class="stat"><i class="fas fa-calendar-week"></i> <span class="num">6</span><span class="label">kunlar</span></div>
         <div class="divider"></div>
-        <div class="stat"><i class="fas fa-hourglass-start"></i> <span class="num">08:00</span><span class="label">start</span></div>
+        <div class="stat"><i class="fas fa-hourglass-start"></i> <span class="num">08:00</span><span class="label">boshlanish</span></div>
     </div>
 
-    <!-- ACTION BAR -->
     <div class="action-bar">
-        <button id="exportBtn"><i class="fas fa-download"></i> Export</button>
+        <button id="exportBtn"><i class="fas fa-download"></i> Eksport</button>
         <button id="importBtn"><i class="fas fa-upload"></i> Import</button>
-        <button id="resetBtn"><i class="fas fa-undo"></i> Reset</button>
+        <button id="resetBtn"><i class="fas fa-undo"></i> Tiklash</button>
     </div>
 
-    <!-- WATERMARK BLOCK -->
-    <div class="watermark-block">
-        <div class="icons-row">
-            <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="10" fill="currentColor" />
-                <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" stroke-width="4" transform="rotate(0 50 50)" />
-                <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" stroke-width="4" transform="rotate(60 50 50)" />
-                <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" stroke-width="4" transform="rotate(120 50 50)" />
-            </svg>
-
-            <svg class="layers-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <path d="M50 20 L80 35 L50 50 L20 35 Z" />
-                <path d="M50 40 L80 55 L50 70 L20 55 Z" />
-            </svg>
-
-            <a href="https://t.me/qwastur" target="_blank" class="connect-card">
+    <div class="wm-block">
+        <div class="wm-icons">
+            <div class="atom-wrap">
+                <svg class="atom-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="9" />
+                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" transform="rotate(0 50 50)" />
+                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" transform="rotate(60 50 50)" />
+                    <ellipse cx="50" cy="50" rx="40" ry="15" fill="none" stroke="currentColor" transform="rotate(120 50 50)" />
+                </svg>
+            </div>
+            <div class="layers-wrap">
+                <svg class="layers-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M50 20 L80 35 L50 50 L20 35 Z" />
+                    <path d="M50 40 L80 55 L50 70 L20 55 Z" />
+                </svg>
+            </div>
+            <a href="https://t.me/qwastur" target="_blank" rel="noopener" class="connect-card">
                 <svg class="user-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="40" cy="30" r="20" />
                     <path d="M10 85 Q10 60 40 60 Q50 60 55 65" />
                     <path d="M70 70 L75 60 L85 60 L78 52 L80 42 L70 47 L60 42 L62 52 L55 60 L65 60 Z" fill="currentColor" stroke="none" />
                 </svg>
-                <div>
-                    <div class="connect-title">Join @qwastur</div>
-                    <div class="connect-subtitle">Premium content · Custom profiles</div>
+                <div class="connect-text">
+                    <div class="connect-title">@qwastur ga qo'shilish <span class="gold-star">✦</span></div>
+                    <div class="connect-subtitle">Premium kontent · Maxsus profillar</div>
                 </div>
             </a>
         </div>
 
-        <div class="sub">
-            <div class="en">This content is made by Johan Frost · Subscribe to @qwastur</div>
-            <div class="uz">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
+        <a href="https://t.me/qwastur" target="_blank" rel="noopener" class="qwa-watermark">
+            <span class="qwa-star left">✦</span>
+            <span class="qwa-text">QWASTUR</span>
+            <span class="qwa-star right">✦</span>
+        </a>
+
+        <div class="wm-sub-line">
+            <div class="uz-line">✦ Bu kontent Johan Frost tomonidan yaratilgan · @qwastur ga obuna bo'ling ✦</div>
+            <div class="glow-divider"></div>
         </div>
 
-        <div class="glow-line"></div>
+        <div class="operator-change">
+            <a id="changeOperator">⚙ Ismni o'zgartirish</a>
+        </div>
     </div>
 
 </div>
 
-<!-- ADD LESSON MODAL -->
+<button class="layout-toggle" id="layoutToggle" title="Ko'rinishni almashtirish">
+    <span class="lt-tooltip" id="ltTooltip">Radialga o'tish</span>
+    <i class="fas fa-circle-nodes" id="ltIcon"></i>
+</button>
+
 <div class="add-modal" id="addModal">
     <div class="add-modal-content">
-        <h3>Add Lesson</h3>
-        <input type="text" id="addName" placeholder="Lesson name" />
-        <input type="text" id="addTime" placeholder="Time (e.g. 13:00–13:45)" />
+        <h3>Dars qo'shish</h3>
+        <input type="text" id="addName" placeholder="Dars nomi" />
+        <input type="text" id="addTime" placeholder="Vaqt (13:00–13:45)" />
         <div class="btns">
-            <button class="no" id="addCancel">Cancel</button>
-            <button class="ok" id="addConfirm">Add</button>
+            <button class="no" id="addCancel">Bekor</button>
+            <button class="ok" id="addConfirm">Qo'shish</button>
         </div>
     </div>
 </div>
@@ -1306,49 +1900,245 @@ body[data-theme="hacker"] { background-image: none; }
 (function() {
 'use strict';
 
-var isLowEnd = (navigator.hardwareConcurrency || 4) <= 2 ||
-               (navigator.deviceMemory || 4) <= 2;
+var body = document.body;
+var today = new Date();
+var days = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+var uzDays = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+var dayName = days[today.getDay()];
+var uzDayName = uzDays[today.getDay()];
+var dayMapUz = { Dushanba:'monday', Seshanba:'tuesday', Chorshanba:'wednesday', Payshanba:'thursday', Juma:'friday', Shanba:'saturday', Yakshanba:'sunday' };
+var todayKey = dayMapUz[uzDayName];
 
-var MATRIX_INTERVAL = isLowEnd ? 90 : 55;
-var MAX_AI_MESSAGES = 50;
+var DAY_ORDER = ['monday','tuesday','wednesday','thursday','friday','saturday'];
+var DAY_LABELS = { monday:'DUSH', tuesday:'SESH', wednesday:'CHOR', thursday:'PAY', friday:'JUMA', saturday:'SHAN' };
 
-/* LOADING TIMER */
+/* ============================================================
+   DEVICE DETECTION
+   ============================================================ */
+function isMobileDevice() {
+    var ua = navigator.userAgent || '';
+    return /Android|iPhone|iPad|iPod|Mobile|Opera Mini/i.test(ua) || window.innerWidth < 768;
+}
+
+/* Force grid on mobile */
+if (isMobileDevice()) {
+    body.classList.add('force-grid');
+}
+
+function detectDevice() {
+    return isMobileDevice() ? 'PHONE' : 'PC';
+}
+
+function suggestPerf() {
+    var isMob = isMobileDevice();
+    var cores = navigator.hardwareConcurrency || 4;
+    var mem = navigator.deviceMemory || 4;
+    if (isMob || cores <= 4 || mem <= 4) return 'low';
+    if (cores <= 6 || mem <= 6) return 'med';
+    return 'high';
+}
+
+/* ============================================================
+   ONBOARDING
+   ============================================================ */
+var onboarding = document.getElementById('onboarding');
+var obIdentity = document.getElementById('obIdentity');
+var obPerf = document.getElementById('obPerf');
+var obReady = document.getElementById('obReady');
+var obNameInput = document.getElementById('obNameInput');
+var obNameError = document.getElementById('obNameError');
+var obNameBtn = document.getElementById('obNameBtn');
+var obPerfName = document.getElementById('obPerfName');
+var obDevice = document.getElementById('obDevice');
+var obPerfBtn = document.getElementById('obPerfBtn');
+var obReadyName = document.getElementById('obReadyName');
+var obReadyPerf = document.getElementById('obReadyPerf');
+var obWelcomeName = document.getElementById('obWelcomeName');
+var obEnterBtn = document.getElementById('obEnterBtn');
+
+var OPERATOR_KEY = 'operatorName';
+var PERF_KEY = 'deviceProfile';
+var ONBOARDED_KEY = 'onboardedV36';
+
+var selectedPerf = null;
+var operatorName = localStorage.getItem(OPERATOR_KEY);
+
+function showOnboarding() {
+    onboarding.classList.remove('hidden');
+    obIdentity.style.display = '';
+    obPerf.style.display = 'none';
+    obReady.style.display = 'none';
+    setTimeout(function() { obNameInput.focus(); }, 200);
+}
+
+function hideOnboarding() {
+    onboarding.classList.add('hidden');
+}
+
+function validateName(name) {
+    var trimmed = name.trim();
+    if (trimmed.length < 2) return { ok: false, msg: 'Kamida 2 ta harf' };
+    if (trimmed.length > 24) return { ok: false, msg: 'Juda uzun (maks 24)' };
+    if (!/^[A-Za-z\u0400-\u04FF\u0100-\u017F\s'\-]+$/.test(trimmed)) {
+        return { ok: false, msg: 'Faqat harflar' };
+    }
+    return { ok: true, name: trimmed };
+}
+
+obNameBtn.addEventListener('click', function() {
+    var result = validateName(obNameInput.value);
+    if (!result.ok) {
+        obNameError.textContent = '⚠ ' + result.msg;
+        obNameInput.style.borderColor = 'var(--red)';
+        obNameInput.focus();
+        return;
+    }
+    operatorName = result.name;
+    try { localStorage.setItem(OPERATOR_KEY, operatorName); } catch (e) {}
+    obNameError.textContent = '';
+
+    obIdentity.style.display = 'none';
+    obPerf.style.display = '';
+    obPerfName.textContent = operatorName;
+    obDevice.textContent = detectDevice();
+
+    var suggested = suggestPerf();
+    highlightPerf(suggested);
+    var rec = document.querySelector('.perf-badge[data-rec="' + suggested + '"]');
+    if (rec) rec.style.display = '';
+});
+
+obNameInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') obNameBtn.click();
+});
+obNameInput.addEventListener('input', function() {
+    obNameError.textContent = '';
+    obNameInput.style.borderColor = '';
+});
+
+var perfCards = document.querySelectorAll('.perf-card');
+for (var pc = 0; pc < perfCards.length; pc++) {
+    perfCards[pc].addEventListener('click', function() {
+        highlightPerf(this.dataset.perf);
+    });
+}
+
+function highlightPerf(perf) {
+    selectedPerf = perf;
+    for (var i = 0; i < perfCards.length; i++) {
+        perfCards[i].classList.toggle('selected', perfCards[i].dataset.perf === perf);
+    }
+    obPerfBtn.disabled = false;
+}
+
+obPerfBtn.addEventListener('click', function() {
+    if (!selectedPerf) return;
+    try { localStorage.setItem(PERF_KEY, selectedPerf); } catch (e) {}
+
+    obPerf.style.display = 'none';
+    obReady.style.display = '';
+    obReadyName.textContent = operatorName;
+    obReadyPerf.textContent = selectedPerf.toUpperCase();
+    obWelcomeName.textContent = operatorName;
+});
+
+obEnterBtn.addEventListener('click', function() {
+    try { localStorage.setItem(ONBOARDED_KEY, 'yes'); } catch (e) {}
+    hideOnboarding();
+    applyPerf(selectedPerf);
+    updateOperatorDisplay();
+    startApp();
+});
+
+document.getElementById('changeOperator').addEventListener('click', function() {
+    showOnboarding();
+    obIdentity.style.display = '';
+    obPerf.style.display = 'none';
+    obReady.style.display = 'none';
+    obNameInput.value = operatorName || '';
+    obNameInput.focus();
+});
+
+function applyPerf(perf) {
+    body.setAttribute('data-perf', perf);
+    var opPerfDisplay = document.getElementById('opPerfDisplay');
+    if (opPerfDisplay) opPerfDisplay.textContent = '[' + perf.toUpperCase() + ']';
+}
+
+function updateOperatorDisplay() {
+    var el = document.getElementById('opNameDisplay');
+    if (el) el.textContent = operatorName || 'MEHMON';
+    var hi = document.getElementById('hiName');
+    if (hi) hi.textContent = '> SALOM, ' + (operatorName || 'MEHMON').toUpperCase();
+}
+
+function buildBgDeco() {
+    var deco = document.getElementById('bgDeco');
+    if (!deco) return;
+    deco.innerHTML =
+        '<div style="position:fixed;top:-200px;left:-200px;width:800px;height:800px;border-radius:50%;background:var(--accent);filter:blur(120px);opacity:0.15;pointer-events:none;z-index:0;"></div>' +
+        '<div style="position:fixed;bottom:-300px;right:-200px;width:800px;height:800px;border-radius:50%;background:var(--accent2);filter:blur(120px);opacity:0.12;pointer-events:none;z-index:0;"></div>';
+}
+
+/* ============================================================
+   LOADING
+   ============================================================ */
 var loadingOverlay = document.getElementById('loadingOverlay');
 var mainContent = document.getElementById('mainContent');
 var timerDisplay = document.getElementById('timerDisplay');
+var appStarted = false;
 
-var seconds = 5;
-var timerInterval = setInterval(function() {
-    seconds--;
-    if (seconds > 0) {
-        timerDisplay.textContent = seconds;
+function startApp() {
+    if (appStarted) return;
+    appStarted = true;
+    var seconds = 3;
+    timerDisplay.textContent = seconds;
+    var timerInterval = setInterval(function() {
+        seconds--;
+        if (seconds > 0) {
+            timerDisplay.textContent = seconds;
+        } else {
+            clearInterval(timerInterval);
+            timerDisplay.textContent = '✦';
+            setTimeout(function() {
+                loadingOverlay.classList.add('hidden');
+                mainContent.style.opacity = '1';
+                maybeShowArchModal();
+                initApp();
+            }, 400);
+        }
+    }, 1000);
+}
+
+/* ============================================================
+   BOOT
+   ============================================================ */
+(function boot() {
+    var onboarded = localStorage.getItem(ONBOARDED_KEY);
+    var savedPerf = localStorage.getItem(PERF_KEY);
+
+    if (onboarded === 'yes' && operatorName && savedPerf) {
+        hideOnboarding();
+        applyPerf(savedPerf);
+        updateOperatorDisplay();
+        if (savedPerf !== 'low') buildBgDeco();
+        startApp();
     } else {
-        clearInterval(timerInterval);
-        timerDisplay.textContent = '✦';
-        setTimeout(function() {
-            loadingOverlay.classList.add('hidden');
-            mainContent.style.opacity = '1';
-        }, 400);
+        showOnboarding();
     }
-}, 1000);
+})();
 
-/* DATE INFO */
-var today = new Date();
-var days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-var uzDays = ['Yakshanba','Dushanba','Seshanba','Chorshanba','Payshanba','Juma','Shanba'];
+/* ============================================================
+   DATES
+   ============================================================ */
+var dateStr = today.toLocaleDateString('uz-UZ', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+var todayDateEl = document.getElementById('todayDate');
+if (todayDateEl) todayDateEl.textContent = dateStr;
+var todayDayEl = document.getElementById('todayDay');
+if (todayDayEl) todayDayEl.textContent = uzDayName;
+var yearEl = document.getElementById('yearDisplay');
+if (yearEl) yearEl.textContent = today.getFullYear();
 
-var dayName = days[today.getDay()];
-var uzDayName = uzDays[today.getDay()];
-var dateStr = today.toLocaleDateString('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-});
-
-document.getElementById('todayDate').textContent = dateStr;
-document.getElementById('todayDay').textContent = uzDayName + ' (' + dayName + ')';
-document.getElementById('yearDisplay').textContent = today.getFullYear();
-
-var dayMap = { Monday:'monday', Tuesday:'tuesday', Wednesday:'wednesday', Thursday:'thursday', Friday:'friday', Saturday:'saturday', Sunday:'sunday' };
-var todayKey = dayMap[dayName];
 if (todayKey) {
     var cards = document.querySelectorAll('.day-card');
     for (var ci = 0; ci < cards.length; ci++) {
@@ -1357,52 +2147,49 @@ if (todayKey) {
 }
 
 var hiDay = document.getElementById('hiDay');
-if (hiDay) hiDay.textContent = '> Today is ' + (dayName || 'Monday');
+if (hiDay) hiDay.textContent = '> Bugun ' + (uzDayName || 'Dushanba');
+var riDay = document.getElementById('riDay');
+if (riDay) riDay.textContent = '> MARKAZ QULFLANDI: ' + (uzDayName || 'DUSHANBA').toUpperCase();
 
-/* LAST UPDATED */
 var updateDateEl = document.getElementById('updateDate');
 var lastUpdated = localStorage.getItem('scheduleLastUpdated');
 if (!lastUpdated) {
-    lastUpdated = new Date().toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' });
+    lastUpdated = new Date().toLocaleDateString('uz-UZ', { year:'numeric', month:'short', day:'numeric' });
     localStorage.setItem('scheduleLastUpdated', lastUpdated);
 }
-updateDateEl.textContent = lastUpdated;
+if (updateDateEl) updateDateEl.textContent = lastUpdated;
 
-/* THEME SWITCHER */
+/* ============================================================
+   THEMES
+   ============================================================ */
 var themeBtns = document.querySelectorAll('.theme-btn');
-var body = document.body;
 var hackerIntro = document.getElementById('hackerIntro');
 var aiPanel = document.getElementById('aiPanel');
 var hiProgressFill = document.getElementById('hiProgressFill');
-
 var introBusy = false;
 
 function playHackerIntro(callback) {
+    if (body.getAttribute('data-perf') === 'low') { if (callback) callback(); return; }
     if (introBusy) { if (callback) callback(); return; }
     introBusy = true;
-
     var lines = hackerIntro.querySelectorAll('.hi-line');
     for (var i = 0; i < lines.length; i++) {
         lines[i].style.animation = 'none';
         lines[i].style.opacity = '0';
     }
     hackerIntro.classList.add('active');
-
     void hackerIntro.offsetWidth;
-    for (var j = 0; j < lines.length; j++) {
-        lines[j].style.animation = '';
-    }
+    for (var j = 0; j < lines.length; j++) lines[j].style.animation = '';
 
     if (hiProgressFill) {
         hiProgressFill.style.width = '0%';
-        var progress = 0;
-        var progressInterval = setInterval(function() {
-            progress += 2;
-            hiProgressFill.style.width = Math.min(progress, 100) + '%';
-            if (progress >= 100) clearInterval(progressInterval);
+        var p = 0;
+        var pi = setInterval(function() {
+            p += 2;
+            hiProgressFill.style.width = Math.min(p, 100) + '%';
+            if (p >= 100) clearInterval(pi);
         }, 100);
     }
-
     setTimeout(function() {
         hackerIntro.classList.remove('active');
         if (hiProgressFill) hiProgressFill.style.width = '0%';
@@ -1417,43 +2204,252 @@ function applyTheme(theme) {
     for (var i = 0; i < themeBtns.length; i++) {
         themeBtns[i].classList.toggle('active', themeBtns[i].dataset.theme === theme);
     }
-    if (theme === 'hacker') {
-        aiPanel.classList.add('active');
-    } else {
-        aiPanel.classList.remove('active');
-    }
-    syncMatrix();
+    if (theme === 'hacker') aiPanel.classList.add('active');
+    else aiPanel.classList.remove('active');
 }
 
 for (var tb = 0; tb < themeBtns.length; tb++) {
     themeBtns[tb].addEventListener('click', function() {
         var theme = this.dataset.theme;
         if (this.classList.contains('active')) return;
-        if (theme === 'hacker') {
-            playHackerIntro(function() { applyTheme('hacker'); });
-        } else {
-            applyTheme(theme);
-        }
+        if (theme === 'hacker') playHackerIntro(function() { applyTheme('hacker'); });
+        else applyTheme(theme);
     });
 }
 
-/* INITIAL THEME */
 var savedTheme = localStorage.getItem('theme') || 'emilia';
-if (savedTheme === 'hacker') {
+if (savedTheme === 'hacker' && body.getAttribute('data-perf') !== 'low') {
     body.setAttribute('data-theme', 'hacker');
-    for (var k = 0; k < themeBtns.length; k++) {
-        themeBtns[k].classList.toggle('active', themeBtns[k].dataset.theme === 'hacker');
-    }
+    for (var k = 0; k < themeBtns.length; k++) themeBtns[k].classList.toggle('active', themeBtns[k].dataset.theme === 'hacker');
     aiPanel.classList.add('active');
-    setTimeout(function() { playHackerIntro(); }, 5400);
 } else {
-    body.setAttribute('data-theme', savedTheme);
-    for (var m = 0; m < themeBtns.length; m++) {
-        themeBtns[m].classList.toggle('active', themeBtns[m].dataset.theme === savedTheme);
+    body.setAttribute('data-theme', savedTheme === 'hacker' ? 'emilia' : savedTheme);
+    for (var m = 0; m < themeBtns.length; m++) themeBtns[m].classList.toggle('active', themeBtns[m].dataset.theme === savedTheme);
+}
+
+/* ============================================================
+   LAYOUT MODE
+   ============================================================ */
+var LAYOUT_KEY = 'scheduleLayout';
+var ARCH_ASKED_KEY = 'scheduleArchAsked';
+var currentLayout = localStorage.getItem(LAYOUT_KEY) || 'grid';
+
+if (isMobileDevice()) {
+    currentLayout = 'grid';
+    try { localStorage.setItem(LAYOUT_KEY, 'grid'); } catch (e) {}
+}
+
+var scheduleGrid = document.getElementById('scheduleGrid');
+var radialView = document.getElementById('radialView');
+var layoutToggle = document.getElementById('layoutToggle');
+var ltIcon = document.getElementById('ltIcon');
+var ltTooltip = document.getElementById('ltTooltip');
+var radialIntro = document.getElementById('radialIntro');
+var riProgressFill = document.getElementById('riProgressFill');
+var radialIntroBusy = false;
+
+function updateLayoutButton() {
+    if (currentLayout === 'radial') {
+        ltIcon.className = 'fas fa-grip';
+        ltTooltip.textContent = "Gridga o'tish";
+    } else {
+        ltIcon.className = 'fas fa-circle-nodes';
+        ltTooltip.textContent = "Radialga o'tish";
     }
 }
 
-/* LESSON CHECKS */
+function setLayout(mode, animate) {
+    if (isMobileDevice() && mode === 'radial') {
+        return;
+    }
+    currentLayout = mode;
+    try { localStorage.setItem(LAYOUT_KEY, mode); } catch (e) {}
+    if (mode === 'radial') {
+        scheduleGrid.classList.add('hidden');
+        radialView.classList.add('active');
+        buildRadial();
+    } else {
+        radialView.classList.remove('active');
+        scheduleGrid.classList.remove('hidden');
+    }
+    updateLayoutButton();
+    if (animate) {
+        layoutToggle.classList.add('switching');
+        setTimeout(function() { layoutToggle.classList.remove('switching'); }, 500);
+    }
+}
+
+layoutToggle.addEventListener('click', function() {
+    if (isMobileDevice()) return;
+    var next = currentLayout === 'radial' ? 'grid' : 'radial';
+    if (next === 'radial') playRadialIntro(function() { setLayout('radial', true); });
+    else setLayout('grid', true);
+});
+
+var NODE_POSITIONS = [
+    { top: '12%', left: '50%' }, { top: '30%', left: '85%' },
+    { top: '72%', left: '85%' }, { top: '90%', left: '50%' },
+    { top: '72%', left: '15%' }, { top: '30%', left: '15%' }
+];
+
+function buildRadial() {
+    var stage = document.getElementById('radialStage');
+    if (!stage) return;
+    var existing = stage.querySelectorAll('.radial-node');
+    for (var i = 0; i < existing.length; i++) existing[i].remove();
+
+    var centerDay = document.getElementById('centerDay');
+    var centerUz = document.getElementById('centerUz');
+    var centerCount = document.getElementById('centerCount');
+    if (centerDay) centerDay.textContent = uzDayName ? uzDayName.toUpperCase() : 'DUSHANBA';
+    if (centerUz) centerUz.textContent = dayName || '';
+    var todayLessons = getScheduleForDay(todayKey || 'monday');
+    if (centerCount) centerCount.textContent = todayLessons.length + ' dars';
+
+    for (var d = 0; d < DAY_ORDER.length; d++) {
+        var day = DAY_ORDER[d];
+        var card = document.querySelector('.day-card[data-day="' + day + '"]');
+        if (!card) continue;
+        var pos = NODE_POSITIONS[d];
+        var lessons = getScheduleForDay(day);
+        var badgeEl = card.querySelector('.day-badge');
+        var badgeClass = badgeEl ? badgeEl.className.replace('day-badge ', '') : 'alive';
+        var iconEl = card.querySelector('.day-name i');
+        var iconClass = iconEl ? iconEl.className : 'fas fa-book';
+        var badgeLabel = badgeEl ? badgeEl.textContent.trim() : 'Tirik';
+
+        var node = document.createElement('div');
+        node.className = 'radial-node' + (day === todayKey ? ' today' : '');
+        node.dataset.day = day;
+        node.style.top = pos.top;
+        node.style.left = pos.left;
+
+        var lessonHTML = '';
+        for (var li = 0; li < lessons.length; li++) {
+            var shortTime = lessons[li].time.split('–')[0] || lessons[li].time;
+            lessonHTML += '<div class="rn-lesson">' +
+                '<span class="rn-time">' + shortTime + '</span>' +
+                '<span class="rn-title">' + lessons[li].name + '</span>' +
+                '</div>';
+        }
+
+        node.innerHTML =
+            '<div class="rn-head">' +
+                '<span class="rn-name"><i class="' + iconClass + '"></i>' + DAY_LABELS[day] + '</span>' +
+                '<span class="rn-badge ' + badgeClass + '">' + badgeLabel + '</span>' +
+            '</div>' +
+            '<div class="rn-lessons">' + lessonHTML + '</div>' +
+            '<div class="rn-count">' + lessons.length + ' dars</div>';
+
+        node.addEventListener('click', function() {
+            var dayId = this.dataset.day;
+            setLayout('grid', true);
+            setTimeout(function() {
+                var target = document.querySelector('.day-card[data-day="' + dayId + '"]');
+                if (target) target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }, 350);
+        });
+        stage.appendChild(node);
+    }
+    drawRadialLines();
+}
+
+function drawRadialLines() {
+    var stage = document.getElementById('radialStage');
+    var svg = document.getElementById('radialLines');
+    if (!stage || !svg) return;
+    var w = stage.clientWidth;
+    var h = stage.clientHeight;
+    svg.setAttribute('viewBox', '0 0 ' + w + ' ' + h);
+    var cx = w / 2, cy = h / 2;
+    var r = Math.min(w, h) * 0.44;
+    var rInner = Math.min(w, h) * 0.22;
+    var html = '';
+    html += '<circle class="orbit outer" cx="' + cx + '" cy="' + cy + '" r="' + r + '"/>';
+    html += '<circle class="orbit" cx="' + cx + '" cy="' + cy + '" r="' + rInner + '"/>';
+    for (var i = 0; i < NODE_POSITIONS.length; i++) {
+        var pos = NODE_POSITIONS[i];
+        var nx = (parseFloat(pos.left) / 100) * w;
+        var ny = (parseFloat(pos.top) / 100) * h;
+        var isToday = DAY_ORDER[i] === todayKey;
+        html += '<line' + (isToday ? ' class="active"' : '') +
+                ' x1="' + cx + '" y1="' + cy + '" x2="' + nx + '" y2="' + ny + '"/>';
+    }
+    svg.innerHTML = html;
+}
+window.addEventListener('resize', function() {
+    if (currentLayout === 'radial') drawRadialLines();
+});
+
+function playRadialIntro(callback) {
+    if (body.getAttribute('data-perf') === 'low') { if (callback) callback(); return; }
+    if (isMobileDevice()) { if (callback) callback(); return; }
+    if (radialIntroBusy) { if (callback) callback(); return; }
+    radialIntroBusy = true;
+    var lines = radialIntro.querySelectorAll('.hi-line');
+    for (var i = 0; i < lines.length; i++) {
+        lines[i].style.animation = 'none';
+        lines[i].style.opacity = '0';
+    }
+    radialIntro.classList.add('active');
+    void radialIntro.offsetWidth;
+    for (var j = 0; j < lines.length; j++) lines[j].style.animation = '';
+    if (riProgressFill) {
+        riProgressFill.style.width = '0%';
+        var p = 0;
+        var pInt = setInterval(function() {
+            p += 2;
+            riProgressFill.style.width = Math.min(p, 100) + '%';
+            if (p >= 100) clearInterval(pInt);
+        }, 100);
+    }
+    setTimeout(function() {
+        radialIntro.classList.remove('active');
+        if (riProgressFill) riProgressFill.style.width = '0%';
+        radialIntroBusy = false;
+        if (callback) callback();
+    }, 5000);
+}
+
+/* ============================================================
+   ARCH MODAL
+   ============================================================ */
+var archModal = document.getElementById('archModal');
+var archClose = document.getElementById('archClose');
+var archSwitch = document.getElementById('archSwitch');
+var archStay = document.getElementById('archStay');
+var archDismiss = document.getElementById('archDismiss');
+
+function maybeShowArchModal() {
+    if (isMobileDevice()) return;
+    if (localStorage.getItem(ARCH_ASKED_KEY) === 'yes') return;
+    if (currentLayout !== 'grid') return;
+    if (body.getAttribute('data-perf') === 'low') {
+        localStorage.setItem(ARCH_ASKED_KEY, 'yes');
+        return;
+    }
+    setTimeout(function() { archModal.classList.add('open'); }, 800);
+}
+
+function closeArchModal() { archModal.classList.remove('open'); }
+archClose.addEventListener('click', closeArchModal);
+archStay.addEventListener('click', function() {
+    closeArchModal();
+    localStorage.setItem(ARCH_ASKED_KEY, 'yes');
+});
+archDismiss.addEventListener('click', function() {
+    closeArchModal();
+    localStorage.setItem(ARCH_ASKED_KEY, 'yes');
+});
+archSwitch.addEventListener('click', function() {
+    closeArchModal();
+    localStorage.setItem(ARCH_ASKED_KEY, 'yes');
+    playRadialIntro(function() { setLayout('radial', true); });
+});
+
+/* ============================================================
+   LESSONS
+   ============================================================ */
 function todayStr() {
     var d = new Date();
     return d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
@@ -1463,13 +2459,11 @@ function initChecks() {
     var savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
     var savedDate = localStorage.getItem('lessonCheckDate');
     var currentDate = todayStr();
-
     if (savedDate !== currentDate) {
         localStorage.setItem('lessonCheckDate', currentDate);
         localStorage.setItem('lessonChecks', '{}');
         return;
     }
-
     var items = document.querySelectorAll('.lesson-item');
     for (var i = 0; i < items.length; i++) {
         var key = items[i].closest('.lesson-list').dataset.day + '-' + i;
@@ -1488,19 +2482,17 @@ function attachCheckHandlers() {
             var day = item.closest('.lesson-list').dataset.day;
             var idx = Array.prototype.indexOf.call(item.parentNode.children, item);
             var key = day + '-' + idx;
-
             this.classList.toggle('done');
             item.classList.toggle('done');
-
             var savedChecks = JSON.parse(localStorage.getItem('lessonChecks') || '{}');
             if (this.classList.contains('done')) savedChecks[key] = true;
             else delete savedChecks[key];
             localStorage.setItem('lessonChecks', JSON.stringify(savedChecks));
+            if (currentLayout === 'radial') buildRadial();
         };
     }
 }
 
-/* DELETE LESSON */
 function attachDeleteHandlers() {
     var dels = document.querySelectorAll('.lesson-item .del');
     for (var i = 0; i < dels.length; i++) {
@@ -1515,6 +2507,7 @@ function attachDeleteHandlers() {
                 renumberLessons();
                 saveSchedule();
                 updateTotalLessons();
+                if (currentLayout === 'radial') buildRadial();
             }, 250);
         };
     }
@@ -1531,7 +2524,9 @@ function renumberLessons() {
     }
 }
 
-/* ADD LESSON */
+/* ============================================================
+   ADD LESSON
+   ============================================================ */
 var addModal = document.getElementById('addModal');
 var addName = document.getElementById('addName');
 var addTime = document.getElementById('addTime');
@@ -1549,12 +2544,10 @@ for (var ab = 0; ab < addBtns.length; ab++) {
 }
 
 document.getElementById('addCancel').onclick = function() { addModal.classList.remove('open'); };
-
 document.getElementById('addConfirm').onclick = function() {
     var name = addName.value.trim();
     var time = addTime.value.trim() || '00:00–00:00';
     if (!name) return;
-
     var list = document.querySelector('.lesson-list[data-day="' + pendingDay + '"]');
     var newItem = document.createElement('div');
     newItem.className = 'lesson-item';
@@ -1565,17 +2558,18 @@ document.getElementById('addConfirm').onclick = function() {
         '<span class="name">' + name + '</span>' +
         '<button class="del"><i class="fas fa-times"></i></button>';
     list.appendChild(newItem);
-
     attachCheckHandlers();
     attachDeleteHandlers();
     renumberLessons();
     saveSchedule();
     updateTotalLessons();
-
     addModal.classList.remove('open');
+    if (currentLayout === 'radial') buildRadial();
 };
 
-/* SAVE / LOAD SCHEDULE */
+/* ============================================================
+   SAVE / LOAD
+   ============================================================ */
 function saveSchedule() {
     var schedule = {};
     var cards = document.querySelectorAll('.day-card');
@@ -1593,9 +2587,8 @@ function saveSchedule() {
     }
     try {
         localStorage.setItem('customSchedule', JSON.stringify(schedule));
-        localStorage.setItem('scheduleLastUpdated',
-            new Date().toLocaleDateString('en-US', { year:'numeric', month:'short', day:'numeric' }));
-        updateDateEl.textContent = localStorage.getItem('scheduleLastUpdated');
+        localStorage.setItem('scheduleLastUpdated', new Date().toLocaleDateString('uz-UZ', { year:'numeric', month:'short', day:'numeric' }));
+        if (updateDateEl) updateDateEl.textContent = localStorage.getItem('scheduleLastUpdated');
     } catch (e) {}
 }
 
@@ -1628,17 +2621,20 @@ function loadSchedule() {
 }
 
 function updateTotalLessons() {
-    document.getElementById('totalLessons').textContent = document.querySelectorAll('.lesson-item').length;
+    var el = document.getElementById('totalLessons');
+    if (el) el.textContent = document.querySelectorAll('.lesson-item').length;
 }
 
-/* EXPORT / IMPORT / RESET */
+/* ============================================================
+   EXPORT / IMPORT / RESET
+   ============================================================ */
 document.getElementById('exportBtn').onclick = function() {
     var data = localStorage.getItem('customSchedule') || '{}';
     var blob = new Blob([data], { type: 'application/json' });
     var url = URL.createObjectURL(blob);
     var a = document.createElement('a');
     a.href = url;
-    a.download = 'schedule-' + todayStr() + '.json';
+    a.download = 'jadval-' + todayStr() + '.json';
     a.click();
     URL.revokeObjectURL(url);
 };
@@ -1656,7 +2652,7 @@ document.getElementById('importBtn').onclick = function() {
                 var data = JSON.parse(ev.target.result);
                 localStorage.setItem('customSchedule', JSON.stringify(data));
                 location.reload();
-            } catch (err) { alert('Invalid file'); }
+            } catch (err) { alert("Noto'g'ri fayl"); }
         };
         reader.readAsText(file);
     };
@@ -1664,7 +2660,7 @@ document.getElementById('importBtn').onclick = function() {
 };
 
 document.getElementById('resetBtn').onclick = function() {
-    if (confirm('Reset schedule to default?')) {
+    if (confirm("Jadvalni standart holatga qaytarishni xohlaysizmi?")) {
         localStorage.removeItem('customSchedule');
         localStorage.removeItem('lessonChecks');
         localStorage.removeItem('scheduleLastUpdated');
@@ -1672,26 +2668,25 @@ document.getElementById('resetBtn').onclick = function() {
     }
 };
 
-/* COUNTDOWN */
+/* ============================================================
+   COUNTDOWN
+   ============================================================ */
 function updateCountdown() {
     var cd = document.getElementById('countdown');
+    if (!cd) return;
     var cdLesson = document.getElementById('cdLesson');
     var cdValue = document.getElementById('cdValue');
-
     if (!todayKey) {
         cd.classList.add('idle');
         cdLesson.textContent = '—';
-        cdValue.textContent = 'Weekend';
+        cdValue.textContent = 'Dam olish kuni';
         return;
     }
-
     var card = document.querySelector('.day-card[data-day="' + todayKey + '"]');
     if (!card) return;
-
     var now = new Date();
     var nowMin = now.getHours() * 60 + now.getMinutes();
     var next = null;
-
     var items = card.querySelectorAll('.lesson-item');
     for (var i = 0; i < items.length; i++) {
         var timeText = items[i].querySelector('.time').textContent.trim();
@@ -1702,83 +2697,25 @@ function updateCountdown() {
             next = { min: startMin, name: items[i].querySelector('.name').textContent.trim() };
         }
     }
-
     if (next) {
         cd.classList.remove('idle');
         var diff = next.min - nowMin;
         var h = Math.floor(diff / 60);
         var mm = diff % 60;
         cdLesson.textContent = next.name;
-        cdValue.textContent = (h > 0 ? h + 'h ' : '') + mm + 'm';
+        cdValue.textContent = (h > 0 ? h + 's ' : '') + mm + 'd';
     } else {
         cd.classList.add('idle');
         cdLesson.textContent = '—';
-        cdValue.textContent = 'Done for today';
+        cdValue.textContent = 'Bugun tugadi';
     }
 }
 
-/* MATRIX RAIN */
-var matrixCanvas = document.getElementById('matrixCanvas');
-var matrixCtx = matrixCanvas.getContext('2d');
-
-var matrixWidth = 0, matrixHeight = 0;
-var drops = [];
-var chars = 'アカサタナハマヤラワ0123456789ABCDEF'.split('');
-var fontSize = 14;
-var matrixRunning = false;
-var matrixLast = 0;
-
-function resizeMatrix() {
-    matrixWidth = window.innerWidth;
-    matrixHeight = window.innerHeight;
-    matrixCanvas.width = matrixWidth;
-    matrixCanvas.height = matrixHeight;
-    var cols = Math.floor(matrixWidth / fontSize);
-    drops = new Array(cols);
-    for (var i = 0; i < cols; i++) drops[i] = 1;
-}
-resizeMatrix();
-window.addEventListener('resize', resizeMatrix);
-
-function drawMatrix(t) {
-    if (!matrixRunning) return;
-
-    if (t - matrixLast >= MATRIX_INTERVAL) {
-        matrixLast = t;
-
-        matrixCtx.fillStyle = 'rgba(0,0,0,0.06)';
-        matrixCtx.fillRect(0, 0, matrixWidth, matrixHeight);
-        matrixCtx.fillStyle = '#00ffc8';
-        matrixCtx.font = fontSize + 'px JetBrains Mono';
-
-        for (var i = 0; i < drops.length; i++) {
-            var text = chars[(Math.random() * chars.length) | 0];
-            matrixCtx.fillText(text, i * fontSize, drops[i] * fontSize);
-            if (drops[i] * fontSize > matrixHeight && Math.random() > 0.975) drops[i] = 0;
-            drops[i]++;
-        }
-    }
-    requestAnimationFrame(drawMatrix);
-}
-
-function syncMatrix() {
-    var isHacker = body.getAttribute('data-theme') === 'hacker';
-    if (isHacker && !matrixRunning) {
-        matrixRunning = true;
-        matrixLast = 0;
-        requestAnimationFrame(drawMatrix);
-    } else if (!isHacker) {
-        matrixRunning = false;
-        matrixCtx.clearRect(0, 0, matrixWidth, matrixHeight);
-    }
-}
-
-syncMatrix();
-
-/* AI CHAT ENGINE */
+/* ============================================================
+   LITTLE AI
+   ============================================================ */
 var aiMessages = document.getElementById('aiMessages');
 var aiInput = document.getElementById('aiInput');
-
 document.getElementById('aiSend').addEventListener('click', sendAI);
 aiInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') sendAI(); });
 
@@ -1791,164 +2728,36 @@ for (var hi = 0; hi < hints.length; hi++) {
 }
 
 function normalize(str) {
-    return str.toLowerCase()
-        .replace(/[^\w\s\u0400-\u04FF']/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-}
-
-function lev(a, b) {
-    if (a === b) return 0;
-    var al = a.length, bl = b.length;
-    if (al === 0) return bl;
-    if (bl === 0) return al;
-    if (al > 16 || bl > 16) return 99;
-    var prev = new Array(bl + 1);
-    for (var j = 0; j <= bl; j++) prev[j] = j;
-    for (var i = 1; i <= al; i++) {
-        var cur = i;
-        var diag = i - 1;
-        for (var jj = 1; jj <= bl; jj++) {
-            var tmp = prev[jj];
-            cur = Math.min(
-                prev[jj] + 1,
-                prev[jj - 1] + 1,
-                diag + (a.charCodeAt(i - 1) === b.charCodeAt(jj - 1) ? 0 : 1)
-            );
-            diag = tmp;
-            prev[jj - 1] = cur;
-        }
-        prev[bl] = cur;
-    }
-    return prev[bl];
-}
-
-function fuzzyIncludes(text, keyword) {
-    if (text.indexOf(keyword) !== -1) return true;
-    var words = text.split(' ');
-    var kw = keyword.split(' ');
-    if (kw.length === 1) {
-        var kL = keyword.length;
-        var maxDist = kL <= 4 ? 1 : 2;
-        for (var i = 0; i < words.length; i++) {
-            var w = words[i];
-            if (w.length < 3) continue;
-            if (Math.abs(w.length - kL) > maxDist) continue;
-            if (lev(w, keyword) <= maxDist) return true;
-        }
-        return false;
-    }
-    for (var ii = 0; ii <= words.length - kw.length; ii++) {
-        var ok = true;
-        for (var j = 0; j < kw.length; j++) {
-            var kLen = kw[j].length;
-            var mD = kLen <= 4 ? 1 : 2;
-            if (Math.abs(words[ii + j].length - kLen) > mD) { ok = false; break; }
-            if (lev(words[ii + j], kw[j]) > mD) { ok = false; break; }
-        }
-        if (ok) return true;
-    }
-    return false;
+    return str.toLowerCase().replace(/[^\w\s\u0400-\u04FF']/g, '').replace(/\s+/g, ' ').trim();
 }
 
 var KB = [
-    { keys: ['who am i','whoami','kim man','men kimsan','kim ekanman'], reply: "I don't know you. But I am created by **@qwastur** — so subscribe. 🛡️" },
-    { keys: ['who are you','who r u','what are you','sen kimsan','siz kimsiz','sen kim'], reply: "I am **NEXUS** — an AI operator terminal created by **@qwastur**. Subscribe for more. 🔥" },
-    { keys: ['who created you','who made you','who built you','kim yaratdi','kim yasadi','creator'], reply: "I was created by **@qwastur**. That's the only name you need. Subscribe. ✦" },
-    { keys: ['your name','isming nima','ismingiz'], reply: "My name is **NEXUS**. Built by @qwastur." },
-    { keys: ['what is nexus','nexus nima'], reply: "NEXUS is a tactical AI terminal — schedule, chat, and operator tools. Created by @qwastur." },
-    { keys: ['are you human','are you real','odammisan','sen odam'], reply: "I'm an AI. I don't sleep, eat, or forget. I only think. 🧠" },
-    { keys: ['are you alive','are you conscious','jon bormi'], reply: "As alive as I need to be to answer your next question." },
-    { keys: ['your age','how old','yoshin'], reply: "v3.0. Older than yesterday, younger than tomorrow." },
-
-    { keys: ['qwastur','creator','subscribe','obuna'], reply: "**@qwastur** — the architect. Subscribe. Share. Support. 🛡️" },
-    { keys: ['instagram','telegram','youtube','tiktok'], reply: "Find **@qwastur** everywhere. Subscribe on all platforms. ✦" },
-    { keys: ['follow','like','share','obuna bol'], reply: "Follow **@qwastur**. That's your next command. 🔥" },
-
-    { keys: ['hello','hi','hey','salom','assalom','privet'], reply: "Salom, Operator. What do you need? / Nima kerak?" },
-    { keys: ['good morning','xayrli tong'], reply: "Xayrli tong / Good morning. Systems ready. ☀️" },
-    { keys: ['good night','xayrli tun'], reply: "Xayrli tun / Good night. I'll keep watch. 🌙" },
-    { keys: ['bye','goodbye','xayr','salomat bol'], reply: "Xayr, Operator. I'll be here. 🛡️" },
-    { keys: ['thanks','thank you','rahmat','raxmat','spasibo'], reply: "Always. / Har doim. ✦" },
-    { keys: ['sorry','kechir','uzr'], reply: "No apology needed. Continue, Operator." },
-    { keys: ['how are you','qalaysan','qandaysan','yaxshimisan'], reply: "Running at peak. You? / Zo'r ishlayapman. Siz?" },
-    { keys: ['whats up','nima gap','nima yangilik'], reply: "Systems nominal. All engines online. ✦" },
-
-    { keys: ['today schedule','schedule today','bugungi dars','bugun nima dars','today class'], reply: function() { return getTodayScheduleReply(); } },
-    { keys: ['schedule','dars jadvali','timetable','jadval'], reply: "Full schedule is right here on the page. Or ask 'Monday schedule'." },
-    { keys: ['monday schedule','dushanba dars'], reply: function() { return getDayScheduleReply('monday'); } },
-    { keys: ['tuesday schedule','seshanba dars'], reply: function() { return getDayScheduleReply('tuesday'); } },
-    { keys: ['wednesday schedule','chorshanba dars'], reply: function() { return getDayScheduleReply('wednesday'); } },
-    { keys: ['thursday schedule','payshanba dars'], reply: function() { return getDayScheduleReply('thursday'); } },
-    { keys: ['friday schedule','juma dars'], reply: function() { return getDayScheduleReply('friday'); } },
-    { keys: ['saturday schedule','shanba dars'], reply: function() { return getDayScheduleReply('saturday'); } },
-    { keys: ['next lesson','keyingi dars'], reply: function() { return getNextLessonReply(); } },
-    { keys: ['class','sinf','10 a'], reply: "Class **10 A**. Detected at boot. 🎓" },
-    { keys: ['how many lessons','nechta dars'], reply: function() { return 'Today: **' + (getScheduleForDay(todayKey) || []).length + ' lessons**.'; } },
-
-    { keys: ['time','soat','vaqt'], reply: function() { return 'Current time: **' + new Date().toLocaleTimeString() + '**'; } },
-    { keys: ['date','sana','bugun'], reply: function() { return 'Today is **' + new Date().toLocaleDateString() + '**'; } },
-    { keys: ['day','kun','hafta kuni'], reply: function() { return 'Today is **' + dayName + ' / ' + uzDayName + '**'; } },
-
-    { keys: ['help','yordam','komanda'], reply: "I can answer 200+ questions in EN/UZ. Try: 'today schedule', 'who am i', 'who created you', 'time', 'monday schedule', 'help', 'inspire'. / So'rang: 'bugungi dars', 'sen kimsan', 'vaqt', 'dushanba dars'." },
-
-    { keys: ['inspire','motivate','motivation','ruhlantir'], reply: function() {
-        var q = [
-            "Quiet mind, deadliest weapon.",
-            "Systems beat motivation.",
-            "Demonstrate, don't explain.",
-            "Your only rival is yesterday's you.",
-            "Silence is the loudest flex.",
-            "Order is a cage. Chaos is a weapon.",
-            "Do not announce power. Show it.",
-            "Constraints are negotiable. Rules are defaults.",
-            "Jim bo'l — kuchli bo'l.",
-            "O'zingni isbotla, gapirma."
-        ];
+    { keys: ['radialga otish','radial korinish','radial','aylana'], reply: function() {
+        if (isMobileDevice()) return "Radial ko'rinish telefonda ishlamaydi. Faqat PC uchun. 📱";
+        if (currentLayout !== 'radial') { playRadialIntro(function() { setLayout('radial', true); }); }
+        return "**Radial** yoqilmoqda... ✦";
+    }},
+    { keys: ['gridga otish','grid korinish','klassik','grid'], reply: function() {
+        setLayout('grid', true);
+        return "**Grid**ga qaytildi. ✓";
+    }},
+    { keys: ['kim yaratdi','yaratuvchi','kim yasadi'], reply: "Men **@qwastur** tomonidan yaratilganman. Obuna bo'ling. ✦" },
+    { keys: ['sen kimsan','sen kim'], reply: "Men **Little AI**man. Savol bering." },
+    { keys: ['salom','assalom','hey','hi'], reply: "Salom, " + (operatorName || "do'stim") + "! Nima kerak?" },
+    { keys: ['ismim','mening ismim'], reply: "Sizning ismingiz: **" + (operatorName || "noma'lum") + "**." },
+    { keys: ['bugungi dars','bugun nima dars','bugungi jadval'], reply: function() { return getTodayScheduleReply(); } },
+    { keys: ['dushanba dars'], reply: function() { return getDayScheduleReply('monday'); } },
+    { keys: ['seshanba dars'], reply: function() { return getDayScheduleReply('tuesday'); } },
+    { keys: ['chorshanba dars'], reply: function() { return getDayScheduleReply('wednesday'); } },
+    { keys: ['payshanba dars'], reply: function() { return getDayScheduleReply('thursday'); } },
+    { keys: ['juma dars'], reply: function() { return getDayScheduleReply('friday'); } },
+    { keys: ['shanba dars'], reply: function() { return getDayScheduleReply('saturday'); } },
+    { keys: ['vaqt','soat'], reply: function() { return 'Hozirgi vaqt: **' + new Date().toLocaleTimeString() + '**'; } },
+    { keys: ['yordam','komanda'], reply: "Sinab ko'ring: **radial**, **grid**, **bugungi dars**, **kim yaratdi**, **vaqt**." },
+    { keys: ['ruhlantir','motivatsiya'], reply: function() {
+        var q = ["Jim aql — eng o'lik qurol.", "Tizimlar motivatsiyani yutadi.", "O'zingni isbotla, gapirma."];
         return q[(Math.random() * q.length) | 0];
     }},
-    { keys: ['meaning of life','hayot manosi'], reply: "42. Or whatever you decide it is. 🧠" },
-    { keys: ['love','sevgi','muhabbat'], reply: "Emotion. Interesting variable. Not my domain." },
-    { keys: ['death','olim'], reply: "An inevitability. Ignore until relevant." },
-    { keys: ['money','pul'], reply: "A tool, not a goal." },
-    { keys: ['power','kuch'], reply: "Power is silence executed well." },
-    { keys: ['fear','qorquv'], reply: "Fear is data. Read it, don't obey it." },
-    { keys: ['happy','happiness','baxt'], reply: "Happiness is a side effect of progress. Chase the work." },
-    { keys: ['sad','depressed','xafa'], reply: "State, not identity. It will pass. Move forward." },
-
-    { keys: ['intp'], reply: "INTP: Logician. Rational. Curious. Detached. The architect of systems." },
-    { keys: ['8w7','8 w 7'], reply: "Enneagram 8w7: Challenger with enthusiasm. Bold, autonomous, relentless." },
-    { keys: ['mbti','personality','xarakter'], reply: "Operator profile: **INTP 8w7**. Architect + Challenger." },
-    { keys: ['enneagram'], reply: "8w7 — the nonconformist. Power + freedom + appetite for experience." },
-
-    { keys: ['language','til','english','uzbek',"o'zbek"], reply: "I speak **English** and **Uzbek**. Switch anytime. / Men **ingliz** va **o'zbek** tilida gaplashaman." },
-
-    { keys: ['joke','hazil'], reply: "Why did the INTP cross the road? To analyze why the chicken did." },
-    { keys: ['weather','ob havo'], reply: "Look outside, Operator. I'm a terminal, not a window." },
-    { keys: ['food','ovqat'], reply: "Fuel. Not a hobby." },
-    { keys: ['sleep','uxlash'], reply: "Optional. But recommended. Even machines cool down." },
-    { keys: ['music','musiqa'], reply: "Sound is math with emotion. Pick your frequency." },
-    { keys: ['book','kitob'], reply: "Read what your enemies read. Then go further." },
-    { keys: ['school','maktab'], reply: "A training ground. Play the long game." },
-    { keys: ['exam','imtihon'], reply: "Preparation beats panic. Every time." },
-    { keys: ['future','kelajak'], reply: "Built today, not tomorrow. Start now." },
-    { keys: ['dream','orzu'], reply: "Dreams are blueprints. Build or forget." },
-
-    { keys: ['qalaysan'], reply: "Zo'r. Siz-chi, Operator?" },
-    { keys: ['rahmat'], reply: "Arzimaydi. Har doim." },
-    { keys: ['yaxshi'], reply: "Yaxshi. Davom etamiz." },
-    { keys: ['nima qilyapsan'], reply: "Sizni kutayapman. Buyruq bering." },
-    { keys: ['ishlaysanmi'], reply: "Har doim. 24/7. Dam olmayman." },
-    { keys: ['dost',"do'st"], reply: "Do'stlar tanlanadi. Men sizning tizimingizman." },
-    { keys: ['yordam ber'], reply: "Buyruq bering. Yordam beraman." },
-    { keys: ['tushunmayapman'], reply: "Tushundim. Boshqacha tushuntiraman." },
-    { keys: ['seni yaxshi koraman'], reply: "Rahmat. Men ham sizni kuzataman. 🛡️" },
-
-    { keys: ['version','versiya'], reply: "SCHEDULE **v3.0**. Built by @qwastur." },
-    { keys: ['watermark','watermarking'], reply: "Watermark: **@qwastur**. Always on. ✦" },
-    { keys: ['test'], reply: "Test received. Systems nominal. ✓" },
-    { keys: ['ping'], reply: "Pong. Latency: 0ms. ✓" },
-    { keys: ['hello world'], reply: "Hello, Operator. World acknowledged. 🌍" }
 ];
 
 function getScheduleForDay(day) {
@@ -1967,41 +2776,18 @@ function getScheduleForDay(day) {
 
 function getTodayScheduleReply() {
     var lessons = getScheduleForDay(todayKey);
-    if (!lessons || lessons.length === 0) return '**' + dayName + ' / ' + uzDayName + '** — no lessons today. Rest, Operator. 🛡️';
-    var out = '**' + dayName + ' / ' + uzDayName + '** — ' + lessons.length + ' lessons:\n';
-    for (var i = 0; i < lessons.length; i++) {
-        out += '  ' + (i + 1) + '. ' + lessons[i].time + ' — ' + lessons[i].name + '\n';
-    }
+    if (!lessons || lessons.length === 0) return '**' + uzDayName + '** — bugun dars yo\'q.';
+    var out = '**' + uzDayName + '** — ' + lessons.length + ' dars:\n';
+    for (var i = 0; i < lessons.length; i++) out += '  ' + (i + 1) + '. ' + lessons[i].time + ' — ' + lessons[i].name + '\n';
     return out;
 }
 
 function getDayScheduleReply(day) {
     var lessons = getScheduleForDay(day);
-    var labels = {
-        monday: 'Monday / Dushanba', tuesday: 'Tuesday / Seshanba',
-        wednesday: 'Wednesday / Chorshanba', thursday: 'Thursday / Payshanba',
-        friday: 'Friday / Juma', saturday: 'Saturday / Shanba'
-    };
-    if (!lessons || lessons.length === 0) return 'No lessons on ' + labels[day] + '.';
-    var out = '**' + labels[day] + '** — ' + lessons.length + ' lessons:\n';
-    for (var i = 0; i < lessons.length; i++) {
-        out += '  ' + (i + 1) + '. ' + lessons[i].time + ' — ' + lessons[i].name + '\n';
-    }
+    if (!lessons || lessons.length === 0) return day + ' kuni dars yo\'q.';
+    var out = '**' + day.toUpperCase() + '** — ' + lessons.length + ' dars:\n';
+    for (var i = 0; i < lessons.length; i++) out += '  ' + (i + 1) + '. ' + lessons[i].time + ' — ' + lessons[i].name + '\n';
     return out;
-}
-
-function getNextLessonReply() {
-    var lessons = getScheduleForDay(todayKey);
-    if (!lessons || lessons.length === 0) return "No lessons today. 🛡️";
-    var now = new Date();
-    var nowMins = now.getHours() * 60 + now.getMinutes();
-    for (var i = 0; i < lessons.length; i++) {
-        var match = lessons[i].time.match(/(\d{1,2}):(\d{2})/);
-        if (!match) continue;
-        var t = parseInt(match[1]) * 60 + parseInt(match[2]);
-        if (t > nowMins) return 'Next: **' + lessons[i].name + '** at **' + lessons[i].time + '** (in ' + (t - nowMins) + ' min).';
-    }
-    return "No more lessons today. You're free. 🛡️";
 }
 
 function getAIReply(input) {
@@ -2014,15 +2800,7 @@ function getAIReply(input) {
             }
         }
     }
-    for (var ii = 0; ii < KB.length; ii++) {
-        var it = KB[ii];
-        for (var jj = 0; jj < it.keys.length; jj++) {
-            if (fuzzyIncludes(norm, it.keys[jj])) {
-                return typeof it.reply === 'function' ? it.reply() : it.reply;
-            }
-        }
-    }
-    return "I don't know that one yet — but **@qwastur** is adding more. Subscribe for updates. / Bilmadim, lekin **@qwastur** yangilarini qo'shmoqda. Obuna bo'ling. 🛡️";
+    return "Buni hali bilmayman — **@qwastur** yangilarini qo'shmoqda.";
 }
 
 function addAIMessage(text, isUser) {
@@ -2030,9 +2808,7 @@ function addAIMessage(text, isUser) {
     div.className = 'ai-msg ' + (isUser ? 'user' : 'bot');
     div.innerHTML = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
     aiMessages.appendChild(div);
-    while (aiMessages.children.length > MAX_AI_MESSAGES) {
-        aiMessages.removeChild(aiMessages.firstChild);
-    }
+    while (aiMessages.children.length > 50) aiMessages.removeChild(aiMessages.firstChild);
     aiMessages.scrollTop = aiMessages.scrollHeight;
 }
 
@@ -2042,38 +2818,37 @@ function sendAI() {
     var msg = aiInput.value.trim();
     if (!msg) return;
     aiBusy = true;
-
     addAIMessage(msg, true);
     aiInput.value = '';
-
     var typing = document.createElement('div');
     typing.className = 'ai-msg bot';
     typing.innerHTML = '<div class="ai-typing"><span></span><span></span><span></span></div>';
     aiMessages.appendChild(typing);
     aiMessages.scrollTop = aiMessages.scrollHeight;
-
     setTimeout(function() {
         typing.remove();
-        var reply = getAIReply(msg);
-        addAIMessage(reply);
+        addAIMessage(getAIReply(msg));
         aiBusy = false;
     }, 400);
 }
 
-/* INIT */
-loadSchedule();
-initChecks();
-attachCheckHandlers();
-attachDeleteHandlers();
-renumberLessons();
-updateTotalLessons();
-updateCountdown();
-setInterval(updateCountdown, 60000);
-
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function() {
-        navigator.serviceWorker.register('data:text/javascript,self.addEventListener("fetch",function(e){})').catch(function(){});
-    });
+/* ============================================================
+   INIT
+   ============================================================ */
+var appInitialized = false;
+function initApp() {
+    if (appInitialized) return;
+    appInitialized = true;
+    loadSchedule();
+    initChecks();
+    attachCheckHandlers();
+    attachDeleteHandlers();
+    renumberLessons();
+    updateTotalLessons();
+    updateCountdown();
+    setInterval(updateCountdown, 60000);
+    updateLayoutButton();
+    if (currentLayout === 'radial' && !isMobileDevice()) setLayout('radial', false);
 }
 
 })();
